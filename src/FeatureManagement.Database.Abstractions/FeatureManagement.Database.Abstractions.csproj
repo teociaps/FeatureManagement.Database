@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <Import Project="..\..\NuGet.props" />
+
+  <PropertyGroup>
+    <PackageId>FeatureManagement.Database.Abstractions</PackageId>
+    <Description>
+      An extension library of .NET Feature Management which provides abstractions for implementing feature flags through database.
+    </Description>
+    <PackageTags>
+      extension featuremanagement feature-flags database dotnet
+    </PackageTags>
+  </PropertyGroup>
+
+</Project>

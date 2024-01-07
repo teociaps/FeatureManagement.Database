@@ -1,0 +1,20 @@
+<Project>
+
+  <Import Project="./Common.props"/>
+
+  <PropertyGroup>
+    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+    <IsPackable>true</IsPackable>
+    <Authors>Matteo Ciapparelli</Authors>
+    <Copyright>Copyright © 2024 Matteo Ciapparelli</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/teociaps/FeatureManagement.Database</PackageProjectUrl>
+    <PackageLicenseUrl>https://licenses.nuget.org/MIT</PackageLicenseUrl>
+    <!--<PackageIcon>pkgicon.png</PackageIcon>-->
+    <!--<PackageIconUrl />-->
+    <RepositoryType>git</RepositoryType>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>
