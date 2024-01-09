@@ -1,20 +1,33 @@
 <Project>
 
-  <Import Project="./Common.props"/>
+  <Import Project=".\Common.props"/>
+
+  <!-- TODO: add version -->
 
   <PropertyGroup>
-    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+    <!--TODO: use script instead of <GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <IsPackable>true</IsPackable>
     <Authors>Matteo Ciapparelli</Authors>
     <Copyright>Copyright © 2024 Matteo Ciapparelli</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/teociaps/FeatureManagement.Database</PackageProjectUrl>
-    <PackageLicenseUrl>https://licenses.nuget.org/MIT</PackageLicenseUrl>
-    <!--<PackageIcon>pkgicon.png</PackageIcon>-->
-    <!--<PackageIconUrl />-->
     <RepositoryType>git</RepositoryType>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PackageProjectUrl>https://github.com/teociaps/FeatureManagement.Database</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon> <!-- TODO: change icon (64x64)-->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="LICENSE" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\images\icon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
 </Project>
