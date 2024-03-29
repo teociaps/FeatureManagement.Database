@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.1;.net8.0</TargetFrameworks>
   </PropertyGroup>
 
-  <Import Project="..\..\NuGet.props" />
+  <Import Project="..\..\build\NuGet.props" />
 
   <PropertyGroup>
     <PackageId>FeatureManagement.Database.Abstractions</PackageId>

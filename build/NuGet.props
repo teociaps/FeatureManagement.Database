@@ -1,11 +1,9 @@
 <Project>
 
-  <Import Project=".\Common.props"/>
-
-  <!-- TODO: add version -->
+  <Import Project="Common.props"/>
+  <Import Project="Versioning.props"/>
 
   <PropertyGroup>
-    <!--TODO: use script instead of <GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
     <IsPackable>true</IsPackable>
     <Authors>Matteo Ciapparelli</Authors>
     <Copyright>Copyright © 2024 Matteo Ciapparelli</Copyright>
@@ -18,7 +16,6 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\images\icon.png" Pack="true" PackagePath="\"/>
+    <None Include="..\..\build\icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

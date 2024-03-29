@@ -10,22 +10,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{80D694E3-6FD
 		src\Directory.Packages.props = src\Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{8AC5F3E4-AE6D-4EB6-9684-AE03EB29E19F}"
-	ProjectSection(SolutionItems) = preProject
-		Common.props = Common.props
-		FeatureManagement.Database.sln.licenseheader = FeatureManagement.Database.sln.licenseheader
-		NuGet.props = NuGet.props
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}"
 	ProjectSection(SolutionItems) = preProject
 		tests\Directory.Build.props = tests\Directory.Build.props
 		tests\Directory.Packages.props = tests\Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{19FE2037-FB03-4991-85E6-714602E17872}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{CF0EB3BF-D854-47F3-BBE6-B4536BF17A04}"
 	ProjectSection(SolutionItems) = preProject
-		images\icon.png = images\icon.png
+		build\Common.props = build\Common.props
+		build\icon.png = build\icon.png
+		build\NuGet.props = build\NuGet.props
+		build\Versioning.props = build\Versioning.props
 	EndProjectSection
 EndProject
 Global
