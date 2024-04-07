@@ -11,7 +11,7 @@ namespace FeatureManagement.Database.Abstractions;
 public class NullFeatureStore : IFeatureStore
 {
     /// <inheritdoc/>
-    public Task<Feature> GetOrNullAsync([NotNull] string featureName)
+    public Task<Feature> GetFeatureAsync([NotNull] string featureName)
     {
         return Task.FromResult(null as Feature);
     }

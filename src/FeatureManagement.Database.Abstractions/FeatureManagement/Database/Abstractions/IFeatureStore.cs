@@ -15,7 +15,7 @@ public interface IFeatureStore
     /// </summary>
     /// <param name="featureName">The name of the feature to retrieve.</param>
     /// <returns>The feature or <see langword="null"/> if not found.</returns>
-    Task<Feature> GetOrNullAsync([NotNull] string featureName);
+    Task<Feature> GetFeatureAsync([NotNull] string featureName);
 }
 
 // TODO: cache features (with cache options)

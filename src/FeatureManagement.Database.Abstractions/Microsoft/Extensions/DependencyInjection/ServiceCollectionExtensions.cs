@@ -1,4 +1,7 @@
-﻿using FeatureManagement.Database.Abstractions;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using FeatureManagement.Database.Abstractions;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
