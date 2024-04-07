@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using Microsoft.FeatureManagement;
+
 namespace FeatureManagement.Database;
 
 /// <summary>
@@ -19,9 +21,14 @@ public class Feature
     public string Name { get; set; }
 
     /// <summary>
-    /// The settings associated with the feature.
+    /// Describes whether any or all conditions in a set should be required to be true.
+    /// </summary>
+    public RequirementType RequirementType { get; set; }
+
+    /// <summary>
+    /// All settings associated with the feature.
     /// </summary>
     public virtual IEnumerable<FeatureSettings> Settings { get; set; }
 }
 
-// TODO: softdelete + auditing
+// TODO: softdelete + auditing?
