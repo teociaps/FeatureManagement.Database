@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{CF0EB3BF
 		build\Versioning.props = build\Versioning.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.Tests", "tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj", "{9AE83D01-5878-4213-AE34-8F5377A2DC88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,12 +36,17 @@ Global
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE83D01-5878-4213-AE34-8F5377A2DC88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE83D01-5878-4213-AE34-8F5377A2DC88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE83D01-5878-4213-AE34-8F5377A2DC88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE83D01-5878-4213-AE34-8F5377A2DC88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
+		{9AE83D01-5878-4213-AE34-8F5377A2DC88} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6910875A-378A-40F4-B89C-68DFDF955953}
