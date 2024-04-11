@@ -17,7 +17,7 @@ public class FeatureStore : IFeatureStore
             new Feature {
                 Name = "TestFeature",
                 RequirementType = Microsoft.FeatureManagement.RequirementType.All,
-                Settings = [ new FeatureSettings { FilterType = FeatureFilterType.TimeWindow, Parameters = "{\"Start\": \"Mon, 01 May 2023 13:59:59 GMT\",\"End\": \"Sat, 01 July 2023 00:00:00 GMT\"}" }]
+                Settings = [new FeatureSettings { FilterType = FeatureFilterType.TimeWindow, Parameters = """{"Start": "Mon, 01 May 2023 13:59:59 GMT", "End": "Sat, 01 July 2023 00:00:00 GMT"}""" }]
             }
         ];
     }
