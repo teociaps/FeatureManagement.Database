@@ -32,7 +32,7 @@ public class DatabaseFeatureDefinitionProviderTests
     {
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
         var featureProvider = NSubstitute.Substitute.For<DatabaseFeatureDefinitionProvider>(featureStore);
-        AsyncEnumerable.Empty<Feature>();
+
         var features = featureStore.GetFeaturesAsync();
 
         Assert.True(features is not null);
