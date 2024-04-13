@@ -42,37 +42,47 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // T
         if (featureName.Contains(ConfigurationPath.KeyDelimiter))
             throw new ArgumentException($"The value '{ConfigurationPath.KeyDelimiter}' is not allowed in the feature name.", nameof(featureName));
 
-        return _definitions.GetOrAdd(featureName, await ReadFeatureDefinitionFromStore(featureName));
+        var feature = await _featureStore.GetFeatureAsync(featureName);
+        return _definitions.GetOrAdd(featureName, GetDefinitionFromFeature(feature));
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
+    public async IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
     {
-        throw new NotImplementedException();
+        var features = _featureStore.GetFeaturesAsync();
+        await foreach (var feature in features)
+        {
+            yield return _definitions.GetOrAdd(feature.Name, GetDefinitionFromFeature(feature));
+        }
     }
 
-    private async Task<FeatureDefinition> ReadFeatureDefinitionFromStore(string featureName)
+    private static FeatureDefinition GetDefinitionFromFeature(Feature feature)
     {
-        var feature = await _featureStore.GetFeatureAsync(featureName);
-
         return new FeatureDefinition
         {
             Name = feature.Name,
             RequirementType = feature.RequirementType,
             EnabledFor = feature.Settings.Select(x =>
             {
-                // Transform string into IConfiguration
-                var configBuilder = new ConfigurationBuilder();
-                var parsedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(x.Parameters);
-                configBuilder.AddInMemoryCollection(parsedDictionary.AsEnumerable());
-                var configuration = configBuilder.Build();
-
                 return new FeatureFilterConfiguration()
                 {
                     Name = x.FilterType.ToString(),
-                    Parameters = configuration
+                    Parameters = ConvertStringToConfiguration(x.Parameters)
                 };
             })
         };
+    }
+
+    /// <summary>
+    /// Transform string into <see cref="IConfiguration"/>.
+    /// </summary>
+    /// <param name="config">The string to convert.</param>
+    /// <returns>The <see cref="IConfiguration"/>.</returns>
+    private static IConfiguration ConvertStringToConfiguration(string config)
+    {
+        var configBuilder = new ConfigurationBuilder();
+        var parsedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(config);
+        configBuilder.AddInMemoryCollection(parsedDictionary.AsEnumerable());
+        return configBuilder.Build();
     }
 }

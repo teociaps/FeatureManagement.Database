@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="NSubstitute" />
+    <PackageReference Include="System.Linq.Async" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>

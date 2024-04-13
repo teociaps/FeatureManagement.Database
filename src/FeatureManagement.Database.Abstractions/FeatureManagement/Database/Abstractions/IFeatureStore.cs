@@ -14,8 +14,16 @@ public interface IFeatureStore
     /// Gets a feature from database.
     /// </summary>
     /// <param name="featureName">The name of the feature to retrieve.</param>
-    /// <returns>The feature or <see langword="null"/> if not found.</returns>
+    /// <returns>The feature.</returns>
     Task<Feature> GetFeatureAsync([NotNull] string featureName);
+
+    /// <summary>
+    /// Gets all features from database.
+    /// </summary>
+    /// <returns>A list of features.</returns>
+    IAsyncEnumerable<Feature> GetFeaturesAsync();
 }
+
+// TODO: add cancellationToken
 
 // TODO: cache features (with cache options)

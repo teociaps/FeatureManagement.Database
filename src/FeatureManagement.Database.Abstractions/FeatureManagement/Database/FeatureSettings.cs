@@ -21,7 +21,7 @@ public class FeatureSettings
     /// <summary>
     /// The parameters associated with the feature settings.
     /// </summary>
-    public string Parameters { get; set; }
+    public string Parameters { get; set; } // TODO: make a class instead of string?
 
     /// <summary>
     /// The feature associated with the settings.
