@@ -21,7 +21,7 @@ public interface IFeatureStore
     /// Gets all features from database.
     /// </summary>
     /// <returns>A list of features.</returns>
-    IAsyncEnumerable<Feature> GetFeaturesAsync();
+    Task<IReadOnlyCollection<Feature>> GetFeaturesAsync();
 }
 
 // TODO: add cancellationToken

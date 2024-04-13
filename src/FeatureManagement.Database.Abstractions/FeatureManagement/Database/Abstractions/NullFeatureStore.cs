@@ -10,7 +10,7 @@ namespace FeatureManagement.Database.Abstractions;
 /// </summary>
 public class NullFeatureStore : IFeatureStore
 {
-    private readonly IAsyncEnumerable<Feature> _emptyFeatures = AsyncEnumerable.Empty<Feature>();
+    private readonly IReadOnlyCollection<Feature> _emptyFeatures = [];
 
     /// <inheritdoc/>
     public Task<Feature> GetFeatureAsync([NotNull] string featureName)
@@ -19,11 +19,8 @@ public class NullFeatureStore : IFeatureStore
     }
 
     /// <inheritdoc/>
-    public async IAsyncEnumerable<Feature> GetFeaturesAsync()
+    public Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
     {
-        await foreach (var feature in _emptyFeatures)
-        {
-            yield return feature;
-        }
+        return Task.FromResult(_emptyFeatures);
     }
 }

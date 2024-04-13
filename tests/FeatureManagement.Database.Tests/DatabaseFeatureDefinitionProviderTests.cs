@@ -33,10 +33,10 @@ public class DatabaseFeatureDefinitionProviderTests
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
         var featureProvider = NSubstitute.Substitute.For<DatabaseFeatureDefinitionProvider>(featureStore);
 
-        var features = featureStore.GetFeaturesAsync();
+        var features = await featureStore.GetFeaturesAsync();
 
         Assert.True(features is not null);
-        Assert.Equal(2, await features.CountAsync());
+        Assert.Equal(2, features.Count);
 
         var featureDefinitions = featureProvider.GetAllFeatureDefinitionsAsync();
 

@@ -8,7 +8,7 @@ namespace FeatureManagement.Database.Tests;
 
 public class FeatureStore : IFeatureStore
 {
-    private readonly Feature[] _features;
+    private readonly IReadOnlyCollection<Feature> _features;
 
     public FeatureStore()
     {
@@ -32,11 +32,8 @@ public class FeatureStore : IFeatureStore
         return Task.FromResult(_features.SingleOrDefault(x => x.Name == featureName));
     }
 
-    public async IAsyncEnumerable<Feature> GetFeaturesAsync()
+    public Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
     {
-        await foreach (var feature in _features.ToAsyncEnumerable())
-        {
-            yield return feature;
-        }
+        return Task.FromResult(_features);
     }
 }

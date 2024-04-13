@@ -49,8 +49,8 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // T
     /// <inheritdoc/>
     public async IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
     {
-        var features = _featureStore.GetFeaturesAsync();
-        await foreach (var feature in features)
+        var features = await _featureStore.GetFeaturesAsync();
+        foreach (var feature in features)
         {
             yield return _definitions.GetOrAdd(feature.Name, GetDefinitionFromFeature(feature));
         }
