@@ -20,7 +20,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // T
     /// <summary>
     /// The logger for the database feature definition provider.
     /// </summary>
-    protected ILogger Logger { get; init; }
+    public ILogger Logger { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DatabaseFeatureDefinitionProvider"/> class.
