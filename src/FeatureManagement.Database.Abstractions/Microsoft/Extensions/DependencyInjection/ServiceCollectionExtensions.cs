@@ -94,14 +94,8 @@ public static class ServiceCollectionExtensions
 
     private static void AddDatabaseFeatureDefinitionProvider(this IServiceCollection services)
     {
-        services.AddSingleton<IFeatureDefinitionProvider>(sp =>
-        {
-            var featureStore = sp.GetRequiredService<IFeatureStore>();
-            return new DatabaseFeatureDefinitionProvider(featureStore)
-            {
-                Logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger<DatabaseFeatureDefinitionProvider>()
-            };
-        });
+        services.AddLogging();
+        services.AddScoped<IFeatureDefinitionProvider, DatabaseFeatureDefinitionProvider>();
     }
 
     #endregion Private

@@ -49,21 +49,19 @@ public class ServiceCollectionTests
 
         serviceCollection.AddFeatureStore<FeatureStore>();
         serviceCollection.AddDatabaseFeatureManagement();
-        var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var featureDefinitionProviderDescriptor = serviceCollection.Single(s => s.ServiceType == typeof(IFeatureDefinitionProvider));
 
-        Assert.Equal(typeof(DatabaseFeatureDefinitionProvider), featureDefinitionProviderDescriptor.ImplementationFactory(serviceProvider).GetType());
-        Assert.Equal(ServiceLifetime.Singleton, featureDefinitionProviderDescriptor.Lifetime);
+        Assert.Equal(typeof(DatabaseFeatureDefinitionProvider), featureDefinitionProviderDescriptor.ImplementationType);
+        Assert.Equal(ServiceLifetime.Scoped, featureDefinitionProviderDescriptor.Lifetime);
     }
 
     [Fact]
-    public void RegisterDatabaseFeatureDefinitionProviderWithStoreIncluded()
+    public void RegisterDatabaseFeatureDefinitionProviderIncludingFeatureStore()
     {
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddDatabaseFeatureManagement<FeatureStore>();
-        var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var featureStoreDescriptor = serviceCollection.Single(s => s.ServiceType == typeof(IFeatureStore));
 
@@ -72,7 +70,8 @@ public class ServiceCollectionTests
 
         var featureDefinitionProviderDescriptor = serviceCollection.Single(s => s.ServiceType == typeof(IFeatureDefinitionProvider));
 
-        Assert.Equal(typeof(DatabaseFeatureDefinitionProvider), featureDefinitionProviderDescriptor.ImplementationFactory(serviceProvider).GetType());
-        Assert.Equal(ServiceLifetime.Singleton, featureDefinitionProviderDescriptor.Lifetime);
+        Assert.Equal(typeof(DatabaseFeatureDefinitionProvider), featureDefinitionProviderDescriptor.ImplementationType);
+        Assert.Equal(ServiceLifetime.Scoped, featureDefinitionProviderDescriptor.Lifetime);
+    }
     }
 }

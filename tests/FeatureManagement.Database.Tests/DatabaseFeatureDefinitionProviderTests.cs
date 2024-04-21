@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using FeatureManagement.Database.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace FeatureManagement.Database.Tests;
 
@@ -11,7 +12,8 @@ public class DatabaseFeatureDefinitionProviderTests
     public async Task GetFeatureDefinitionFromStore()
     {
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
-        var featureProvider = NSubstitute.Substitute.For<DatabaseFeatureDefinitionProvider>(featureStore);
+        var logger = NSubstitute.Substitute.For<ILogger<DatabaseFeatureDefinitionProvider>>();
+        var featureProvider = NSubstitute.Substitute.ForPartsOf<DatabaseFeatureDefinitionProvider>(featureStore, logger);
 
         var feature = await featureStore.GetFeatureAsync("FirstFeature");
 
@@ -31,7 +33,8 @@ public class DatabaseFeatureDefinitionProviderTests
     public async Task GetAllFeatureDefinitionsFromStore()
     {
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
-        var featureProvider = NSubstitute.Substitute.For<DatabaseFeatureDefinitionProvider>(featureStore);
+        var logger = NSubstitute.Substitute.For<ILogger<DatabaseFeatureDefinitionProvider>>();
+        var featureProvider = NSubstitute.Substitute.ForPartsOf<DatabaseFeatureDefinitionProvider>(featureStore, logger);
 
         var features = await featureStore.GetFeaturesAsync();
 
