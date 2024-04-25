@@ -3,11 +3,7 @@
 
 using FeatureManagement.Database;
 using FeatureManagement.Database.Abstractions;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -132,87 +128,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddLogging();
         services.AddScoped<IFeatureDefinitionProvider, DatabaseFeatureDefinitionProvider>();
-    }
-
-    //private static IServiceCollection Decorate<TService, TDecorator>(this IServiceCollection services, ServiceLifetime lifetime)
-    //    where TService : class
-    //    where TDecorator : TService
-    //{
-    //    return services.AddDecorator<TService>(
-    //        (serviceProvider, decoratedInstance) =>
-    //            ActivatorUtilities.CreateInstance<TDecorator>(serviceProvider, decoratedInstance),
-    //        lifetime);
-    //}
-
-    //private static IServiceCollection AddDecorator<TService>(this IServiceCollection services, Func<IServiceProvider, TService, TService> decoratorFactory, ServiceLifetime lifetime)
-    //    where TService : class
-    //{
-    //    var previousRegistration = services.LastOrDefault(descriptor => descriptor.ServiceType == typeof(TService));
-
-    //    // check null
-
-    //    var decoratedServiceFactory = previousRegistration.ImplementationFactory;
-    //    if (decoratedServiceFactory is null && previousRegistration.ImplementationInstance is not null)
-    //    {
-    //        decoratedServiceFactory = _ => previousRegistration.ImplementationInstance;
-    //    }
-    //    if (decoratedServiceFactory is null && previousRegistration.ImplementationType is not null)
-    //    {
-    //        decoratedServiceFactory = serviceProvider =>
-    //                        ActivatorUtilities.CreateInstance(serviceProvider, previousRegistration.ImplementationType);
-    //    }
-
-    //    var registration = new ServiceDescriptor(typeof(TService), factory: CreateDecorator, lifetime);
-
-    //    services.Add(registration);
-    //    return services;
-
-    //    TService CreateDecorator(IServiceProvider serviceProvider)
-    //    {
-    //        var decoratedInstance = (TService)decoratedServiceFactory(serviceProvider);
-    //        var decorator = decoratorFactory(serviceProvider, decoratedInstance);
-    //        return decorator;
-    //    }
-    //}
-
-    private static IServiceCollection Decorate<TService, TDecorator>(this IServiceCollection services)
-        where TDecorator : TService
-    {
-        if (services.TryDecorateDescriptors(typeof(TService), x => x.Decorate(typeof(TDecorator))))
-            return services;
-
-        return services;
-    }
-
-    private static ServiceDescriptor Decorate(this ServiceDescriptor descriptor, Type decoratorType)
-    {
-        return ServiceDescriptor.Describe(
-            serviceType: descriptor.ServiceType,
-            implementationFactory: CreateDecorator,
-            lifetime: descriptor.Lifetime);
-
-        object CreateDecorator(IServiceProvider provider)
-        {
-            var decoratedInstance = ActivatorUtilities.CreateInstance(provider, descriptor.ImplementationType);
-            var decorator = ActivatorUtilities.CreateInstance(provider, decoratorType, decoratedInstance);
-            return decorator;
-        }
-    }
-
-    private static bool TryDecorateDescriptors(this IServiceCollection services, Type serviceType, Func<ServiceDescriptor, ServiceDescriptor> decorator)
-    {
-        var descriptors = services.Where(descriptor => descriptor.ServiceType == serviceType).ToArray();
-        if (descriptors.Length == 0)
-            return false;
-
-        for (var i = descriptors.Length - 1; i >= 0; i--)
-        {
-            var descriptor = descriptors[i];
-
-            services.Replace(decorator(descriptor));
-        }
-
-        return true;
     }
 
     #endregion Private
