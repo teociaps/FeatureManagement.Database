@@ -4,18 +4,16 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
-using Newtonsoft.Json;
-using System.Collections.Concurrent;
+using System.Text.Json;
 
 namespace FeatureManagement.Database.Abstractions;
 
 /// <summary>
 /// A feature definition provider that pulls feature definitions from database.
 /// </summary>
-public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // TODO: register to DI
+public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
 {
     private readonly IFeatureStore _featureStore;
-    private readonly ConcurrentDictionary<string, FeatureDefinition> _definitions;
 
     /// <summary>
     /// The logger for the database feature definition provider.
@@ -44,7 +42,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // T
             throw new ArgumentException($"The value '{ConfigurationPath.KeyDelimiter}' is not allowed in the feature name.", nameof(featureName));
 
         var feature = await _featureStore.GetFeatureAsync(featureName);
-        return _definitions.GetOrAdd(featureName, GetDefinitionFromFeature(feature));
+        return GetDefinitionFromFeature(feature);
     }
 
     /// <inheritdoc/>
@@ -53,7 +51,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // T
         var features = await _featureStore.GetFeaturesAsync();
         foreach (var feature in features)
         {
-            yield return _definitions.GetOrAdd(feature.Name, GetDefinitionFromFeature(feature));
+            yield return GetDefinitionFromFeature(feature);
         }
     }
 
@@ -82,7 +80,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider // T
     private static IConfiguration ConvertStringToConfiguration(string config)
     {
         var configBuilder = new ConfigurationBuilder();
-        var parsedDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(config);
+        var parsedDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(config);
         configBuilder.AddInMemoryCollection(parsedDictionary.AsEnumerable());
         return configBuilder.Build();
     }

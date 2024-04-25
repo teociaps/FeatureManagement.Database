@@ -25,5 +25,3 @@ public interface IFeatureStore
 }
 
 // TODO: add cancellationToken
-
-// TODO: cache features (with cache options)
