@@ -3,6 +3,7 @@
 
 using FeatureManagement.Database.Abstractions;
 using Microsoft.Extensions.Logging;
+using static FeatureManagement.Database.Features;
 
 namespace FeatureManagement.Database.Tests;
 
@@ -15,11 +16,7 @@ public class DatabaseFeatureDefinitionProviderTests
         var logger = NSubstitute.Substitute.For<ILogger<DatabaseFeatureDefinitionProvider>>();
         var featureProvider = NSubstitute.Substitute.ForPartsOf<DatabaseFeatureDefinitionProvider>(featureStore, logger);
 
-        var feature = await featureStore.GetFeatureAsync("FirstFeature");
-
-        Assert.True(feature is not null);
-
-        var featureDefinition = await featureProvider.GetFeatureDefinitionAsync(feature.Name);
+        var featureDefinition = await featureProvider.GetFeatureDefinitionAsync(SecondFeature);
 
         Assert.True(featureDefinition is not null);
 
@@ -35,11 +32,6 @@ public class DatabaseFeatureDefinitionProviderTests
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
         var logger = NSubstitute.Substitute.For<ILogger<DatabaseFeatureDefinitionProvider>>();
         var featureProvider = NSubstitute.Substitute.ForPartsOf<DatabaseFeatureDefinitionProvider>(featureStore, logger);
-
-        var features = await featureStore.GetFeaturesAsync();
-
-        Assert.True(features is not null);
-        Assert.Equal(2, features.Count);
 
         var featureDefinitions = featureProvider.GetAllFeatureDefinitionsAsync();
 

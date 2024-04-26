@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
-using System;
 
 namespace FeatureManagement.Database.Tests;
 
@@ -121,7 +120,7 @@ public class ServiceCollectionTests
         var serviceCollection = new ServiceCollection();
 
         IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", false)
+            .AddJsonFile("FeatureManagement\\Database\\appsettings.json", false)
             .Build();
 
         serviceCollection.AddSingleton(config);
