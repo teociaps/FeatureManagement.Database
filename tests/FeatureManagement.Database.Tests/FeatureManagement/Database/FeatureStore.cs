@@ -38,3 +38,10 @@ public class FeatureStore : IFeatureStore
         return Task.FromResult(_features);
     }
 }
+
+public class FeatureNonStore
+{
+    public FeatureNonStore()
+    {
+    }
+}

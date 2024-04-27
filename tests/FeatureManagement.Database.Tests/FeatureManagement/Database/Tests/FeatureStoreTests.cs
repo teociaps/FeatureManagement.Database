@@ -10,26 +10,29 @@ public class FeatureStoreTests
     [Fact]
     public async Task GetFeatureFromStore()
     {
+        // Arrange
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
 
+        // Act
         var feature = await featureStore.GetFeatureAsync(FirstFeature);
 
+        // Assert
         Assert.True(feature is not null);
-
         Assert.Equal(FirstFeature, feature.Name);
         Assert.True(feature.Settings.Any());
         Assert.Equal(FeatureFilterType.TimeWindow, feature.Settings.First().FilterType);
-        //Assert.Equal("Mon, 01 May 2023 13:59:59 GMT", feature.Settings.First().Parameters["Start"]);
-        //Assert.Equal("Sat, 01 July 2023 00:00:00 GMT", feature.Settings.First().Parameters["End"]);
     }
 
     [Fact]
     public async Task GetAllFeaturesFromStore()
     {
+        // Arrange
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
 
+        // Act
         var features = await featureStore.GetFeaturesAsync();
 
+        // Assert
         Assert.True(features is not null);
         Assert.Equal(2, features.Count);
         Assert.NotEqual(features.First().Name, features.Last().Name);
@@ -40,8 +43,6 @@ public class FeatureStoreTests
 
             Assert.True(feature.Settings.Any());
             Assert.Equal(FeatureFilterType.TimeWindow, feature.Settings.First().FilterType);
-            //Assert.Equal("Mon, 01 May 2023 13:59:59 GMT", feature.Settings.First().Parameters["Start"]);
-            //Assert.Equal("Sat, 01 July 2023 00:00:00 GMT", feature.Settings.First().Parameters["End"]);
         }
     }
 }

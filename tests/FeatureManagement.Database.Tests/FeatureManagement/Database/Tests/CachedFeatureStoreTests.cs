@@ -18,6 +18,7 @@ public class CachedFeatureStoreTests
         // Arrange
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddCachedFeatureStore<FeatureStore>();
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
@@ -33,13 +34,12 @@ public class CachedFeatureStoreTests
 
         Assert.Equal(FirstFeature, feature.Name);
         Assert.Equal(feature.Name, cachedFeature.Name);
+
         Assert.True(feature.Settings.Any());
         Assert.Equivalent(feature.Settings, cachedFeature.Settings);
+
         Assert.Equal(FeatureFilterType.TimeWindow, feature.Settings.First().FilterType);
         Assert.Equal(feature.Settings.First().FilterType, cachedFeature.Settings.First().FilterType);
-
-        //Assert.Equal("Mon, 01 May 2023 13:59:59 GMT", feature.Settings.First().Parameters["Start"]);
-        //Assert.Equal("Sat, 01 July 2023 00:00:00 GMT", feature.Settings.First().Parameters["End"]);
     }
 
     [Fact]
@@ -48,6 +48,7 @@ public class CachedFeatureStoreTests
         // Arrange
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddCachedFeatureStore<FeatureStore>();
+
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
@@ -76,14 +77,35 @@ public class CachedFeatureStoreTests
             Assert.True(cachedFeature is not null);
 
             Assert.Equal(feature.Name, cachedFeature.Name);
+
             Assert.True(feature.Settings.Any());
             Assert.Equivalent(feature.Settings, cachedFeature.Settings);
+
             Assert.Equal(FeatureFilterType.TimeWindow, feature.Settings.First().FilterType);
             Assert.Equal(feature.Settings.First().FilterType, cachedFeature.Settings.First().FilterType);
-            //Assert.Equal("Mon, 01 May 2023 13:59:59 GMT", feature.Settings.First().Parameters["Start"]);
-            //Assert.Equal("Sat, 01 July 2023 00:00:00 GMT", feature.Settings.First().Parameters["End"]);
         }
     }
 
-    // TODO: test with expired cache must be null (set 2s expiration and wait 2s before check results)
+    [Fact]
+    public async Task GetFeatureFromCacheMustBeNullWhenCacheExpires()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddCachedFeatureStore<FeatureStore>();
+        serviceCollection.Configure<FeatureCacheOptions>(o => o.SlidingExpiration = TimeSpan.FromSeconds(1));
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
+        var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+
+        // Act
+        var feature = await cachedFeatureStore.GetFeatureAsync(FirstFeature);
+        await Task.Delay(1000);
+        var featureCache = await cache.GetAsync(FirstFeature);
+
+        // Assert
+        Assert.True(feature is not null);
+        Assert.True(featureCache is null);
+    }
 }
