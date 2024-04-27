@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using Microsoft.FeatureManagement;
 using System.Diagnostics.CodeAnalysis;
 
 namespace FeatureManagement.Database.Abstractions;
@@ -12,9 +11,17 @@ namespace FeatureManagement.Database.Abstractions;
 public interface IFeatureStore
 {
     /// <summary>
-    /// Gets a feature definition from database.
+    /// Gets a feature from database.
     /// </summary>
     /// <param name="featureName">The name of the feature to retrieve.</param>
-    /// <returns>The feature definition or <see langword="null"/> if not found.</returns>
-    Task<FeatureDefinition> GetOrNullAsync([NotNull] string featureName); // TODO: change FeatureDefinition return type
+    /// <returns>The feature.</returns>
+    Task<Feature> GetFeatureAsync([NotNull] string featureName);
+
+    /// <summary>
+    /// Gets all features from database.
+    /// </summary>
+    /// <returns>A list of features.</returns>
+    Task<IReadOnlyCollection<Feature>> GetFeaturesAsync();
 }
+
+// TODO: add cancellationToken

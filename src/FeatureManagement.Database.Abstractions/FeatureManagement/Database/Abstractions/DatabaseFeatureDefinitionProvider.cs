@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
+using System.Text.Json;
 
 namespace FeatureManagement.Database.Abstractions;
 
@@ -13,24 +16,72 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
     private readonly IFeatureStore _featureStore;
 
     /// <summary>
+    /// The logger for the database feature definition provider.
+    /// </summary>
+    protected ILogger<DatabaseFeatureDefinitionProvider> Logger { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DatabaseFeatureDefinitionProvider"/> class.
     /// </summary>
     /// <param name="featureStore">The service used to get the feature definitions.</param>
-    /// <exception cref="ArgumentNullException">Thrown when service is not provided.</exception>
-    public DatabaseFeatureDefinitionProvider(IFeatureStore featureStore)
+    /// <param name="logger">The logger.</param>
+    /// <exception cref="ArgumentNullException">Thrown when any service is not provided.</exception>
+    public DatabaseFeatureDefinitionProvider(IFeatureStore featureStore, ILogger<DatabaseFeatureDefinitionProvider> logger)
     {
         _featureStore = featureStore ?? throw new ArgumentNullException(nameof(featureStore));
+        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
+    public async virtual Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
     {
-        throw new NotImplementedException();
+        if (featureName is null)
+            throw new ArgumentNullException(nameof(featureName));
+
+        if (featureName.Contains(ConfigurationPath.KeyDelimiter))
+            throw new ArgumentException($"The value '{ConfigurationPath.KeyDelimiter}' is not allowed in the feature name.", nameof(featureName));
+
+        var feature = await _featureStore.GetFeatureAsync(featureName);
+        return GetDefinitionFromFeature(feature);
     }
 
     /// <inheritdoc/>
-    public Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
+    public async virtual IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
     {
-        throw new NotImplementedException();
+        var features = await _featureStore.GetFeaturesAsync();
+        foreach (var feature in features)
+        {
+            yield return GetDefinitionFromFeature(feature);
+        }
+    }
+
+    private static FeatureDefinition GetDefinitionFromFeature(Feature feature)
+    {
+        return new FeatureDefinition
+        {
+            Name = feature.Name,
+            RequirementType = feature.RequirementType,
+            EnabledFor = feature.Settings.Select(x =>
+            {
+                return new FeatureFilterConfiguration()
+                {
+                    Name = x.FilterType.ToString(),
+                    Parameters = ConvertStringToConfiguration(x.Parameters)
+                };
+            })
+        };
+    }
+
+    /// <summary>
+    /// Transform string into <see cref="IConfiguration"/>.
+    /// </summary>
+    /// <param name="config">The string to convert.</param>
+    /// <returns>The <see cref="IConfiguration"/>.</returns>
+    private static IConfiguration ConvertStringToConfiguration(string config)
+    {
+        var configBuilder = new ConfigurationBuilder();
+        var parsedDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(config);
+        configBuilder.AddInMemoryCollection(parsedDictionary.AsEnumerable());
+        return configBuilder.Build();
     }
 }
