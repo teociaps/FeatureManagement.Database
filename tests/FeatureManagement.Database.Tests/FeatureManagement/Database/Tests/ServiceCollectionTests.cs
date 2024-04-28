@@ -140,7 +140,7 @@ public class ServiceCollectionTests
         var serviceCollection = new ServiceCollection();
 
         IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("FeatureManagement\\Database\\appsettings.json", false)
+            .AddJsonFile("FeatureManagement/Database/appsettings.json", false)
             .Build();
 
         // Act

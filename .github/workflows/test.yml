@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+  pull_request:
+    branches: [dev, main]
+    types: [opened, reopened, edited]
+
+env:
+    TEST_PROJECTS_PATH: 'tests/*.Tests'
+    CONFIGURATION: 'Release'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          6.0.x
+          8.0.x
+
+    - name: Test
+      run: dotnet test ${{ env.TEST_PROJECTS_PATH }} --configuration ${{ env.CONFIGURATION }}
