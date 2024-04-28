@@ -1,0 +1,46 @@
+name: Pack and Deploy
+
+on:
+  release:
+    types:
+      - published
+
+env:
+    PROJECTS_PATH: 'src/FeatureManagement.*'
+    CONFIGURATION: 'Release'
+    PACKAGE_OUTPUT: ${{ github.workspace }}/artifacts
+    NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          .github
+          src
+          build
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          6.0.x
+          8.0.x
+
+    - name: Pack
+      run: |
+        dotnet pack ${{ env.PROJECTS_PATH }} --configuration ${{ env.CONFIGURATION }} --output ${{ env.PACKAGE_OUTPUT }}
+
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifacts
+        path: ${{ env.PACKAGE_OUTPUT }}
+
+    - name: Push to NuGet
+      run: |
+        dotnet nuget push ${{ env.PACKAGE_OUTPUT }}/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE_URL }}
