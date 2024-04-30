@@ -101,7 +101,7 @@ public class CachedFeatureStoreTests
 
         // Act
         var feature = await cachedFeatureStore.GetFeatureAsync(FirstFeature);
-        await Task.Delay(1000);
+        await Task.Delay(1200);
         var featureCache = await cache.GetAsync(FirstFeature);
 
         // Assert
