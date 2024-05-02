@@ -64,7 +64,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
             {
                 return new FeatureFilterConfiguration()
                 {
-                    Name = x.FilterType.ToString(),
+                    Name = x.GetFilterType(),
                     Parameters = ConvertStringToConfiguration(x.Parameters)
                 };
             })

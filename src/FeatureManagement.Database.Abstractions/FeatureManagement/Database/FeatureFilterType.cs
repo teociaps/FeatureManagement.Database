@@ -26,5 +26,10 @@ public enum FeatureFilterType
     /// <summary>
     /// Feature is enabled based on targeting criteria.
     /// </summary>
-    Targeting
+    Targeting,
+
+    /// <summary>
+    /// Feature is enabled based on custom configuration.
+    /// </summary>
+    Custom
 }
