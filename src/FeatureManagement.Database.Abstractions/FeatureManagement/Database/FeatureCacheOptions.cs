@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using Microsoft.Extensions.Options;
-
 namespace FeatureManagement.Database;
 
 /// <summary>
-/// Represents the feature cache-related settings, configurable through <c>appsettings.json</c>.
+/// Represents the feature cache-related settings used to cache data from the database.
 /// </summary>
 public class FeatureCacheOptions
 {

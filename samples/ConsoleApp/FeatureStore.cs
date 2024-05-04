@@ -3,7 +3,6 @@
 
 using ConsoleApp.FeatureFilters;
 using FeatureManagement.Database;
-using FeatureManagement.Database.Abstractions;
 using System.Diagnostics.CodeAnalysis;
 using static ConsoleApp.Features;
 

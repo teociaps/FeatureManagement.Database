@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
-namespace FeatureManagement.Database.Abstractions;
+namespace FeatureManagement.Database;
 
 /// <summary>
 /// Implementation of <see cref="IFeatureStore"/> used to cache the features.
@@ -67,7 +67,7 @@ public class CachedFeatureStore : IFeatureStore
         if (cachedData is null)
             return null;
 
-        return JsonSerializer.Deserialize<TData>(cachedData);
+        return await JsonSerializer.DeserializeAsync<TData>(new MemoryStream(cachedData));
     }
 
     private async Task SetCacheAsync<TData>(string key, TData data) where TData : class

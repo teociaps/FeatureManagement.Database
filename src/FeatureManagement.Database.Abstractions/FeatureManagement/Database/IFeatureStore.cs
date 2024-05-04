@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace FeatureManagement.Database.Abstractions;
+namespace FeatureManagement.Database;
 
 /// <summary>
 /// Used to read features configured in a database.
