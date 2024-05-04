@@ -4,7 +4,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
-using System.Text.Json;
 
 namespace FeatureManagement.Database.Abstractions;
 
@@ -33,7 +32,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
     }
 
     /// <inheritdoc/>
-    public async virtual Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
+    public virtual async Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
     {
         if (featureName is null)
             throw new ArgumentNullException(nameof(featureName));
@@ -46,7 +45,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
     }
 
     /// <inheritdoc/>
-    public async virtual IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
+    public virtual async IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
     {
         var features = await _featureStore.GetFeaturesAsync();
         foreach (var feature in features)
@@ -65,7 +64,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
             {
                 return new FeatureFilterConfiguration()
                 {
-                    Name = x.FilterType.ToString(),
+                    Name = x.GetFilterType(),
                     Parameters = ConvertStringToConfiguration(x.Parameters)
                 };
             })
@@ -80,8 +79,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
     private static IConfiguration ConvertStringToConfiguration(string config)
     {
         var configBuilder = new ConfigurationBuilder();
-        var parsedDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(config);
-        configBuilder.AddInMemoryCollection(parsedDictionary.AsEnumerable());
+        configBuilder.Sources.Add(new JsonStringConfigurationSource(config));
         return configBuilder.Build();
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace FeatureManagement.Database;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+namespace FeatureManagement.Database;
 
 internal static class Features
 {
