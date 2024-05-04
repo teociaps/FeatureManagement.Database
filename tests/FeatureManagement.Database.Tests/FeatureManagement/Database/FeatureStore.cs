@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using FeatureManagement.Database.Abstractions;
 using System.Diagnostics.CodeAnalysis;
 using static FeatureManagement.Database.Features;
 

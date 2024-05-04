@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 
-namespace FeatureManagement.Database.Abstractions;
+namespace FeatureManagement.Database;
 
 /// <summary>
 /// A feature definition provider that pulls feature definitions from database.

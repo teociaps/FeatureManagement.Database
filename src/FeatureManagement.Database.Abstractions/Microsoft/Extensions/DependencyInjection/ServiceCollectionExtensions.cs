@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using FeatureManagement.Database;
-using FeatureManagement.Database.Abstractions;
 using Microsoft.FeatureManagement;
 
 namespace Microsoft.Extensions.DependencyInjection;

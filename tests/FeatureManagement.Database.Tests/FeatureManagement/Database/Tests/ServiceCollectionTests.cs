@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using FeatureManagement.Database.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

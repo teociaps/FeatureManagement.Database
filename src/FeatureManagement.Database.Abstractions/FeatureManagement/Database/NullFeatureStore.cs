@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace FeatureManagement.Database.Abstractions;
+namespace FeatureManagement.Database;
 
 /// <summary>
 /// Null object pattern implementation of <see cref="IFeatureStore"/>.
@@ -15,7 +15,7 @@ public class NullFeatureStore : IFeatureStore
     /// <inheritdoc/>
     public Task<Feature> GetFeatureAsync([NotNull] string featureName)
     {
-        return Task.FromResult(null as Feature);
+        return Task.FromResult<Feature>(null);
     }
 
     /// <inheritdoc/>

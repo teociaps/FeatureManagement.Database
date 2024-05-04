@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34414.90
@@ -24,7 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{CF0EB3BF
 		build\Versioning.props = build\Versioning.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.Tests", "tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj", "{9AE83D01-5878-4213-AE34-8F5377A2DC88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.Tests", "tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj", "{9AE83D01-5878-4213-AE34-8F5377A2DC88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9C0234A4-16D6-4A68-8F89-9B083FA747C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{AA62B656-2A7B-4133-9280-8DF51CCF4105}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +35,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +52,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{AA62B656-2A7B-4133-9280-8DF51CCF4105} = {9C0234A4-16D6-4A68-8F89-9B083FA747C9}
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{9AE83D01-5878-4213-AE34-8F5377A2DC88} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 	EndGlobalSection
