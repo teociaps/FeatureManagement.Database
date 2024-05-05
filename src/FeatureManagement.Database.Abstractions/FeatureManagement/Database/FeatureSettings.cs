@@ -14,21 +14,6 @@ public class FeatureSettings
     public Guid Id { get; }
 
     /// <summary>
-    /// The filter type used for enabling the feature.
-    /// </summary>
-    public FeatureFilterType FilterType
-    {
-        get => _filterType;
-        set
-        {
-            ValidateCustomFilterType(value, _customFilterTypeName);
-            _filterType = value;
-        }
-    }
-
-    private FeatureFilterType _filterType;
-
-    /// <summary>
     /// <para>
     /// Used for custom filter types not defined in the <see cref="FeatureFilterType"/> enum.
     /// </para>
@@ -53,6 +38,22 @@ public class FeatureSettings
     }
 
     private string _customFilterTypeName;
+
+    /// <summary>
+    /// The filter type used for enabling the feature.
+    /// </summary>
+    public FeatureFilterType FilterType
+    {
+        get => _filterType;
+        set
+        {
+            ValidateCustomFilterType(value, _customFilterTypeName);
+            _filterType = value;
+        }
+    }
+
+    private FeatureFilterType _filterType;
+
 
     /// <summary>
     /// The parameters associated with the feature settings.
