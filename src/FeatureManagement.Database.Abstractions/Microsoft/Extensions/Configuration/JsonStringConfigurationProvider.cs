@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.Configuration;
 /// A JSON string based <see cref="ConfigurationProvider"/>.
 /// </summary>
 /// <param name="jsonString">The JSON string to be converted into <see cref="IConfiguration"/>.</param>
-public class JsonStringConfigurationProvider(string jsonString) : ConfigurationProvider
+internal sealed class JsonStringConfigurationProvider(string jsonString) : ConfigurationProvider
 {
     private readonly string _jsonString = jsonString;
     private readonly Dictionary<string, string> _data = new(StringComparer.OrdinalIgnoreCase);

@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.Configuration;
 /// Represents JSON string as an <see cref="IConfigurationSource"/>.
 /// </summary>
 /// <param name="jsonString">The JSON string to be converted into <see cref="IConfiguration"/>.</param>
-public class JsonStringConfigurationSource(string jsonString) : IConfigurationSource
+internal sealed class JsonStringConfigurationSource(string jsonString) : IConfigurationSource
 {
     private readonly string _jsonString = jsonString;
 

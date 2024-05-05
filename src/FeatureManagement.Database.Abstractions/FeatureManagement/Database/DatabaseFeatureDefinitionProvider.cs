@@ -34,8 +34,8 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
     /// <inheritdoc/>
     public virtual async Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
     {
-        if (featureName is null)
-            throw new ArgumentNullException(nameof(featureName));
+        if (string.IsNullOrWhiteSpace(featureName))
+            throw new ArgumentException($"The {nameof(featureName)} cannot be null or empty.", nameof(featureName));
 
         if (featureName.Contains(ConfigurationPath.KeyDelimiter))
             throw new ArgumentException($"The value '{ConfigurationPath.KeyDelimiter}' is not allowed in the feature name.", nameof(featureName));
@@ -50,6 +50,9 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
         var features = await _featureStore.GetFeaturesAsync();
         foreach (var feature in features)
         {
+            if (string.IsNullOrWhiteSpace(feature.Name))
+                continue;
+
             yield return GetDefinitionFromFeature(feature);
         }
     }
@@ -60,12 +63,12 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
         {
             Name = feature.Name,
             RequirementType = feature.RequirementType,
-            EnabledFor = feature.Settings.Select(x =>
+            EnabledFor = feature.Settings.Select(featureSetting =>
             {
                 return new FeatureFilterConfiguration()
                 {
-                    Name = x.GetFilterType(),
-                    Parameters = ConvertStringToConfiguration(x.Parameters)
+                    Name = featureSetting.GetFilterType(),
+                    Parameters = ConvertStringToConfiguration(featureSetting.Parameters)
                 };
             })
         };
