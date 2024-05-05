@@ -3,20 +3,13 @@
 
 using ConsoleApp;
 using ConsoleApp.FeatureFilters;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
-
-// Setup configuration
-IConfiguration configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
 
 // Setup application services + feature management
 IServiceCollection services = new ServiceCollection();
 
-services.AddSingleton(configuration)
-        .AddDatabaseFeatureManagement<FeatureStore>() //set 'true' to use cache
+services.AddDatabaseFeatureManagement<FeatureStore>(useCache: false) //set 'true' to use cache (with default values)
         .AddFeatureFilter<UsernameFilter>();
 
 // Get the feature manager from application services
