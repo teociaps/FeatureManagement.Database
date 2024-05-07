@@ -18,10 +18,4 @@
     <ProjectReference Include="..\..\src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
