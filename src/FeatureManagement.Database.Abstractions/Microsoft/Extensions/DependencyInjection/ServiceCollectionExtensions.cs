@@ -2,6 +2,8 @@
 // Licensed under the MIT license.
 
 using FeatureManagement.Database;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.FeatureManagement;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -14,7 +16,6 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Adds the <paramref name="implementationType"/> for <see cref="IFeatureStore"/> to the service collection.
     /// </summary>
-    /// <remarks>To use cache, see <see cref="AddCachedFeatureStore(IServiceCollection, Type)"/>.</remarks>
     /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
     /// <param name="implementationType">The implementation type of <see cref="IFeatureStore"/> to register.</param>
     /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
@@ -24,7 +25,10 @@ public static class ServiceCollectionExtensions
         implementationType ??= typeof(NullFeatureStore);
 
         if (typeof(IFeatureStore).IsAssignableFrom(implementationType))
-            return services.AddScoped(typeof(IFeatureStore), implementationType);
+        {
+            services.TryAddScoped(typeof(IFeatureStore), implementationType);
+            return services;
+        }
 
         throw new ArgumentException(
             "The provided implementation type must inherits from IFeatureStore.",
@@ -32,47 +36,16 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds an <typeparamref name="TFeatureStoreImplementation"/> for <see cref="IFeatureStore"/> to the service collection.
+    /// Adds an <typeparamref name="TFeatureStore"/> for <see cref="IFeatureStore"/> to the service collection.
     /// </summary>
-    /// <remarks>To use cache, see <see cref="AddCachedFeatureStore{TFeatureStoreImplementation}(IServiceCollection)"/>.</remarks>
+    /// <typeparam name="TFeatureStore">The service type used to retrieve data from database.</typeparam>
     /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <typeparam name="TFeatureStoreImplementation">The implementation type of <see cref="IFeatureStore"/> to register.</typeparam>
     /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
-    /// <exception cref="ArgumentException">Thrown if the provided <typeparamref name="TFeatureStoreImplementation"/> not implements the <see cref="IFeatureStore"/> interface.</exception>
-    public static IServiceCollection AddFeatureStore<TFeatureStoreImplementation>(this IServiceCollection services)
-        where TFeatureStoreImplementation : class, IFeatureStore
+    /// <exception cref="ArgumentException">Thrown if the provided <typeparamref name="TFeatureStore"/> not implements the <see cref="IFeatureStore"/> interface.</exception>
+    public static IServiceCollection AddFeatureStore<TFeatureStore>(this IServiceCollection services)
+        where TFeatureStore : class, IFeatureStore
     {
-        return services.AddFeatureStore(typeof(TFeatureStoreImplementation));
-    }
-
-    /// <summary>
-    /// Adds an <paramref name="implementationType"/> for <see cref="IFeatureStore"/> to the service collection
-    /// and register a service to manage features cache.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="implementationType">The implementation type of <see cref="IFeatureStore"/> to register.</param>
-    /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
-    public static IServiceCollection AddCachedFeatureStore(this IServiceCollection services, Type implementationType)
-    {
-        services.AddFeatureStore(implementationType);
-
-        services.AddOptions<FeatureCacheOptions>(FeatureCacheOptions.Name);
-        services.AddDistributedMemoryCache();
-
-        return services.Decorate<IFeatureStore, CachedFeatureStore>();
-    }
-
-    /// <summary>
-    /// Adds an <typeparamref name="TFeatureStoreImplementation"/> for <see cref="IFeatureStore"/> to the service collection
-    /// and register a service to manage features cache.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <typeparam name="TFeatureStoreImplementation">The implementation type of <see cref="IFeatureStore"/> to register.</typeparam>
-    /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
-    public static IServiceCollection AddCachedFeatureStore<TFeatureStoreImplementation>(this IServiceCollection services)
-        where TFeatureStoreImplementation : class, IFeatureStore
-    {
-        return services.AddCachedFeatureStore(typeof(TFeatureStoreImplementation));
+        return services.AddFeatureStore(typeof(TFeatureStore));
     }
 
     /// <summary>
@@ -80,12 +53,11 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The service collection that feature management services are added to.</param>
     /// <returns>A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.</returns>
-    /// <exception cref="FeatureManagementException">Thrown if <see cref="FeatureManager"/> has been registered as singleton.</exception>
+    /// <exception cref="FeatureManagementException">Thrown if <see cref="FeatureManager"/> has been registered as singleton or <see cref="IFeatureStore"/> was not registered.</exception>
     public static IFeatureManagementBuilder AddDatabaseFeatureManagement(this IServiceCollection services)
     {
-        CheckFeatureStoreRegistration(
-            !services.Any(descriptor => descriptor.ServiceType == typeof(IFeatureStore)),
-            errorMessage: "You need to register the IFeatureStore service.");
+        if (!services.Any(descriptor => descriptor.ServiceType == typeof(IFeatureStore)))
+            throw new FeatureManagementException(FeatureManagementError.Conflict, "You need to register the IFeatureStore service.");
 
         services.AddDatabaseFeatureDefinitionProvider();
 
@@ -95,38 +67,66 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Adds scoped <see cref="FeatureManager"/> and other required feature management services.
     /// </summary>
+    /// <typeparam name="TFeatureStore">The service type used to retrieve data from database.</typeparam>
     /// <param name="services">The service collection that feature management services are added to.</param>
-    /// <param name="useCache">Indicates whether register a cache service to manage feature data. Default is <see langword="false"/>.</param>
     /// <returns>A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.</returns>
-    /// <exception cref="FeatureManagementException">Thrown if <see cref="FeatureManager"/> has been registered as singleton.</exception>
-    public static IFeatureManagementBuilder AddDatabaseFeatureManagement<TFeatureStoreImplementation>(this IServiceCollection services, bool useCache = false)
-        where TFeatureStoreImplementation : class, IFeatureStore
+    /// <exception cref="FeatureManagementException">Thrown if <see cref="FeatureManager"/> has been registered as singleton or <see cref="IFeatureStore"/> was already registered.</exception>
+    public static IFeatureManagementBuilder AddDatabaseFeatureManagement<TFeatureStore>(this IServiceCollection services)
+        where TFeatureStore : class, IFeatureStore
     {
-        CheckFeatureStoreRegistration(
-            services.Any(descriptor => descriptor.ServiceType == typeof(IFeatureStore)),
-            errorMessage: "You already registered the IFeatureStore service.");
-
-        services = useCache
-            ? services.AddCachedFeatureStore<TFeatureStoreImplementation>()
-            : services.AddFeatureStore<TFeatureStoreImplementation>();
-
+        services.AddFeatureStore<TFeatureStore>();
         services.AddDatabaseFeatureDefinitionProvider();
 
         return services.AddScopedFeatureManagement();
     }
+
+    #region Internal
+
+    /// <summary>
+    /// Adds a service built on top the <see cref="IFeatureStore"/> to the service collection in order
+    /// to manage database feature management cache.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+    /// <param name="cacheConfiguration">
+    /// The <see cref="IConfiguration"/> for database feature management cache options.
+    /// If <see langword="null"/> (default value), pre-configured option will be used.
+    /// </param>
+    /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
+    internal static IServiceCollection AddCachedFeatureStore(this IServiceCollection services, IConfiguration cacheConfiguration = null)
+    {
+        if (cacheConfiguration is null)
+            return services.AddCachedFeatureStore(_ => new FeatureCacheOptions());
+
+        services.Configure<FeatureCacheOptions>(cacheConfiguration);
+        return services.AddCacheForDatabaseFeatureManagement();
+    }
+
+    /// <summary>
+    /// Adds a service built on top the <see cref="IFeatureStore"/> to the service collection in order
+    /// to manage database feature management cache.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+    /// <param name="configureCacheOptions">An action used to configure database feature management cache options.</param>
+    /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
+    internal static IServiceCollection AddCachedFeatureStore(this IServiceCollection services, Action<FeatureCacheOptions> configureCacheOptions)
+    {
+        services.Configure(configureCacheOptions);
+        return services.AddCacheForDatabaseFeatureManagement();
+    }
+
+    #endregion Internal
 
     #region Private
 
-    private static void CheckFeatureStoreRegistration(bool condition, string errorMessage)
-    {
-        if (condition)
-            throw new FeatureManagementException(FeatureManagementError.Conflict, errorMessage);
-    }
-
     private static void AddDatabaseFeatureDefinitionProvider(this IServiceCollection services)
     {
-        services.AddLogging();
         services.AddScoped<IFeatureDefinitionProvider, DatabaseFeatureDefinitionProvider>();
+    }
+
+    private static IServiceCollection AddCacheForDatabaseFeatureManagement(this IServiceCollection services)
+    {
+        services.AddDistributedMemoryCache();
+        return services.Decorate<IFeatureStore, CachedFeatureStore>();
     }
 
     #endregion Private

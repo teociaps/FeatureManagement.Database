@@ -9,7 +9,7 @@ using Microsoft.FeatureManagement;
 // Setup application services + feature management
 IServiceCollection services = new ServiceCollection();
 
-services.AddDatabaseFeatureManagement<FeatureStore>(useCache: false) //set 'true' to use cache (with default values)
+services.AddDatabaseFeatureManagement<FeatureStore>()
         .AddFeatureFilter<UsernameFilter>();
 
 // Get the feature manager from application services

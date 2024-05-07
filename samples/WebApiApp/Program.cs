@@ -1,8 +1,6 @@
 // Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using FeatureManagement.Database;
-using Microsoft.Extensions.Options;
 using WebApiApp;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,14 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Set up feature management
-builder.Services.AddDatabaseFeatureManagement<FeatureStore>(useCache: false); //set 'true' to use cache (with default values)
-
-//builder.Services.AddOptions<FeatureCacheOptions>()
-//            .Bind(builder.Configuration.GetSection($"FeatureManagement:{FeatureCacheOptions.Name}"));
+builder.Services.AddDatabaseFeatureManagement<FeatureStore>();
 
 var app = builder.Build();
-
-//var options = app.Services.GetRequiredService<IOptions<FeatureCacheOptions>>().Value;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

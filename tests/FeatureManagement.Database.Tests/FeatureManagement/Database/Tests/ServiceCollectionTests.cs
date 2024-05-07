@@ -97,13 +97,14 @@ public class ServiceCollectionTests
     }
 
     [Fact]
-    public void RegisterDatabaseFeatureDefinitionProviderWithCachedService()
+    public void RegisterDatabaseFeatureDefinitionProviderWithCacheService()
     {
         // Arrange
         var serviceCollection = new ServiceCollection();
 
         // Act
-        serviceCollection.AddDatabaseFeatureManagement<FeatureStore>(useCache: true);
+        serviceCollection.AddDatabaseFeatureManagement<FeatureStore>()
+            .WithCacheService();
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         // Assert
@@ -117,7 +118,8 @@ public class ServiceCollectionTests
         var serviceCollection = new ServiceCollection();
 
         // Act
-        serviceCollection.AddCachedFeatureStore<FeatureStore>();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.AddCachedFeatureStore();
         var serviceProvider = serviceCollection.BuildServiceProvider();
         var featureCacheOptions = serviceProvider.GetRequiredService<IOptions<FeatureCacheOptions>>();
 
@@ -144,12 +146,12 @@ public class ServiceCollectionTests
 
         // Act
         serviceCollection.AddSingleton(config);
-        serviceCollection.AddCachedFeatureStore<FeatureStore>();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.AddCachedFeatureStore(config.GetSection(FeatureCacheOptions.Name));
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var featureCacheOptions = serviceProvider.GetRequiredService<IOptions<FeatureCacheOptions>>();
-        config.GetSection(FeatureCacheOptions.Name).Bind(featureCacheOptions.Value);
 
         // Assert
         Assert.True(featureCacheOptions is not null);
