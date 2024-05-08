@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 
 namespace FeatureManagement.Database;
@@ -10,29 +9,22 @@ namespace FeatureManagement.Database;
 /// <summary>
 /// A feature definition provider that pulls feature definitions from database.
 /// </summary>
-public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
+public sealed class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
 {
     private readonly IFeatureStore _featureStore;
-
-    /// <summary>
-    /// The logger for the database feature definition provider.
-    /// </summary>
-    protected ILogger<DatabaseFeatureDefinitionProvider> Logger { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DatabaseFeatureDefinitionProvider"/> class.
     /// </summary>
     /// <param name="featureStore">The service used to get the feature definitions.</param>
-    /// <param name="logger">The logger.</param>
-    /// <exception cref="ArgumentNullException">Thrown when any service is not provided.</exception>
-    public DatabaseFeatureDefinitionProvider(IFeatureStore featureStore, ILogger<DatabaseFeatureDefinitionProvider> logger)
+    /// <exception cref="ArgumentNullException">Thrown if the feature store is not provided.</exception>
+    public DatabaseFeatureDefinitionProvider(IFeatureStore featureStore)
     {
         _featureStore = featureStore ?? throw new ArgumentNullException(nameof(featureStore));
-        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <inheritdoc/>
-    public virtual async Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
+    public async Task<FeatureDefinition> GetFeatureDefinitionAsync(string featureName)
     {
         if (string.IsNullOrWhiteSpace(featureName))
             throw new ArgumentException($"The {nameof(featureName)} cannot be null or empty.", nameof(featureName));
@@ -45,7 +37,7 @@ public class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvider
     }
 
     /// <inheritdoc/>
-    public virtual async IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
+    public async IAsyncEnumerable<FeatureDefinition> GetAllFeatureDefinitionsAsync()
     {
         var features = await _featureStore.GetFeaturesAsync();
         foreach (var feature in features)
