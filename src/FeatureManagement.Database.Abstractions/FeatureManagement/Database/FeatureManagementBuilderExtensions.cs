@@ -16,7 +16,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.</returns>
     public static IFeatureManagementBuilder WithCacheService(this IFeatureManagementBuilder builder)
     {
-        builder.Services.AddCachedFeatureStore();
+        builder.Services.ConfigureCachedFeatureStore();
         return builder;
     }
 
@@ -28,7 +28,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.</returns>
     public static IFeatureManagementBuilder WithCacheService(this IFeatureManagementBuilder builder, Action<FeatureCacheOptions> configureCacheOptions)
     {
-        builder.Services.AddCachedFeatureStore(configureCacheOptions);
+        builder.Services.ConfigureCachedFeatureStore(configureCacheOptions);
         return builder;
     }
 
@@ -40,7 +40,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.</returns>
     public static IFeatureManagementBuilder WithCacheService(this IFeatureManagementBuilder builder, IConfiguration cacheConfiguration)
     {
-        builder.Services.AddCachedFeatureStore(cacheConfiguration);
+        builder.Services.ConfigureCachedFeatureStore(cacheConfiguration);
         return builder;
     }
 }

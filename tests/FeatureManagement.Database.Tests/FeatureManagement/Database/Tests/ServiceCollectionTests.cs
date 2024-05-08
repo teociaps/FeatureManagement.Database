@@ -119,7 +119,7 @@ public class ServiceCollectionTests
 
         // Act
         serviceCollection.AddFeatureStore<FeatureStore>();
-        serviceCollection.AddCachedFeatureStore();
+        serviceCollection.ConfigureCachedFeatureStore();
         var serviceProvider = serviceCollection.BuildServiceProvider();
         var featureCacheOptions = serviceProvider.GetRequiredService<IOptions<FeatureCacheOptions>>();
 
@@ -147,7 +147,7 @@ public class ServiceCollectionTests
         // Act
         serviceCollection.AddSingleton(config);
         serviceCollection.AddFeatureStore<FeatureStore>();
-        serviceCollection.AddCachedFeatureStore(config.GetSection(FeatureCacheOptions.Name));
+        serviceCollection.ConfigureCachedFeatureStore(config.GetSection(FeatureCacheOptions.Name));
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 

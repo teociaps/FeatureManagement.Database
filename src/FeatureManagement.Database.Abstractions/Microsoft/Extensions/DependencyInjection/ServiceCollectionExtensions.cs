@@ -92,13 +92,13 @@ public static class ServiceCollectionExtensions
     /// If <see langword="null"/> (default value), pre-configured option will be used.
     /// </param>
     /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
-    internal static IServiceCollection AddCachedFeatureStore(this IServiceCollection services, IConfiguration cacheConfiguration = null)
+    internal static IServiceCollection ConfigureCachedFeatureStore(this IServiceCollection services, IConfiguration cacheConfiguration = null)
     {
         if (cacheConfiguration is null)
-            return services.AddCachedFeatureStore(_ => new FeatureCacheOptions());
+            return services.ConfigureCachedFeatureStore(_ => new FeatureCacheOptions());
 
         services.Configure<FeatureCacheOptions>(cacheConfiguration);
-        return services.AddCacheForDatabaseFeatureManagement();
+        return services.AddDatabaseFeatureManagementCacheServices();
     }
 
     /// <summary>
@@ -108,10 +108,10 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
     /// <param name="configureCacheOptions">An action used to configure database feature management cache options.</param>
     /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
-    internal static IServiceCollection AddCachedFeatureStore(this IServiceCollection services, Action<FeatureCacheOptions> configureCacheOptions)
+    internal static IServiceCollection ConfigureCachedFeatureStore(this IServiceCollection services, Action<FeatureCacheOptions> configureCacheOptions)
     {
         services.Configure(configureCacheOptions);
-        return services.AddCacheForDatabaseFeatureManagement();
+        return services.AddDatabaseFeatureManagementCacheServices();
     }
 
     #endregion Internal
@@ -123,7 +123,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFeatureDefinitionProvider, DatabaseFeatureDefinitionProvider>();
     }
 
-    private static IServiceCollection AddCacheForDatabaseFeatureManagement(this IServiceCollection services)
+    private static IServiceCollection AddDatabaseFeatureManagementCacheServices(this IServiceCollection services)
     {
         services.AddDistributedMemoryCache();
         return services.Decorate<IFeatureStore, CachedFeatureStore>();
