@@ -1,7 +1,7 @@
 // Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using static FeatureManagement.Database.Features;
 
 namespace FeatureManagement.Database.Tests;
@@ -13,8 +13,7 @@ public class DatabaseFeatureDefinitionProviderTests
     {
         // Arrange
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
-        var logger = NSubstitute.Substitute.For<ILogger<DatabaseFeatureDefinitionProvider>>();
-        var featureProvider = NSubstitute.Substitute.ForPartsOf<DatabaseFeatureDefinitionProvider>(featureStore, logger);
+        var featureProvider = new DatabaseFeatureDefinitionProvider(featureStore);
 
         // Act
         var featureDefinition = await featureProvider.GetFeatureDefinitionAsync(SecondFeature);
@@ -32,8 +31,7 @@ public class DatabaseFeatureDefinitionProviderTests
     {
         // Arrange
         var featureStore = NSubstitute.Substitute.For<FeatureStore>();
-        var logger = NSubstitute.Substitute.For<ILogger<DatabaseFeatureDefinitionProvider>>();
-        var featureProvider = NSubstitute.Substitute.ForPartsOf<DatabaseFeatureDefinitionProvider>(featureStore, logger);
+        var featureProvider = new DatabaseFeatureDefinitionProvider(featureStore);
 
         // Act
         var featureDefinitions = featureProvider.GetAllFeatureDefinitionsAsync();

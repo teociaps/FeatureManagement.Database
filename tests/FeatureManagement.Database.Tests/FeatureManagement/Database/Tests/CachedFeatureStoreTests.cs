@@ -16,7 +16,8 @@ public class CachedFeatureStoreTests
     {
         // Arrange
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddCachedFeatureStore<FeatureStore>();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -46,7 +47,8 @@ public class CachedFeatureStoreTests
     {
         // Arrange
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddCachedFeatureStore<FeatureStore>();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -90,8 +92,8 @@ public class CachedFeatureStoreTests
     {
         // Arrange
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddCachedFeatureStore<FeatureStore>();
-        serviceCollection.Configure<FeatureCacheOptions>(o => o.SlidingExpiration = TimeSpan.FromSeconds(1));
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore(o => o.SlidingExpiration = TimeSpan.FromSeconds(1));
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
