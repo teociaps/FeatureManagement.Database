@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <Import Project="..\..\build\NuGet.props" />
+
+  <PropertyGroup>
+    <PackageId>FeatureManagement.Database.EntityFrameworkCore.SqlServer</PackageId>
+    <Description>
+      An extension library of .NET Feature Management to use feature flags through SQL Server database using Entity Framework Core.
+    </Description>
+    <PackageTags>
+      extension;featuremanagement;feature-flags;database;dotnet;entityframeworkcore;ef;sqlserver
+    </PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="7.0.18" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
