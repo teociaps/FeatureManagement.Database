@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FeatureManagement.Database.EntityFrameworkCore;
@@ -9,8 +12,14 @@ public class FeatureConfiguration : IEntityTypeConfiguration<Feature>
     public void Configure(EntityTypeBuilder<Feature> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.HasMany(x => x.Settings);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.Property(x => x.Name).IsRequired();
         builder.HasIndex(x => x.Name).IsUnique();
-        //TODO: add more config??
+
+        builder.Property(x => x.RequirementType).IsRequired();
+
+        builder.HasMany(x => x.Settings);
+        builder.Navigation(x => x.Settings).AutoInclude();
     }
 }

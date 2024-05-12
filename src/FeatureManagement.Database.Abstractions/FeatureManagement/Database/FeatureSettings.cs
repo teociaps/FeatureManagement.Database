@@ -54,7 +54,6 @@ public class FeatureSettings
 
     private FeatureFilterType _filterType;
 
-
     /// <summary>
     /// The parameters associated with the feature settings.
     /// </summary>
