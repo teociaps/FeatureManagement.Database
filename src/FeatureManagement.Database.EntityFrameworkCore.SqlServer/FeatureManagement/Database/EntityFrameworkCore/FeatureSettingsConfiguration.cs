@@ -14,14 +14,11 @@ public class FeatureSettingsConfiguration : IEntityTypeConfiguration<FeatureSett
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<FeatureSettings> builder)
     {
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.HasKey(fs => fs.Id);
+        builder.Property(fs => fs.Id).ValueGeneratedOnAdd();
 
-        builder.Property(x => x.FilterType).IsRequired();
+        builder.Property(fs => fs.FilterType).IsRequired();
 
-        builder.Property(x => x.Parameters).IsRequired();
-
-        builder.HasOne(x => x.Feature);
-        builder.Navigation(x => x.Feature).AutoInclude();
+        builder.Property(fs => fs.Parameters).IsRequired();
     }
 }

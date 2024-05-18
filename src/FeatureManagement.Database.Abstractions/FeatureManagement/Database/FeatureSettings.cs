@@ -11,7 +11,7 @@ public class FeatureSettings
     /// <summary>
     /// The unique identifier of the feature settings.
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// <para>
@@ -55,14 +55,19 @@ public class FeatureSettings
     private FeatureFilterType _filterType;
 
     /// <summary>
-    /// The parameters associated with the feature settings.
+    /// The parameters for this feature settings.
     /// </summary>
     public string Parameters { get; set; }
 
     /// <summary>
-    /// The feature associated with the settings.
+    /// The Id of the associated feature.
     /// </summary>
-    public virtual Feature Feature { get; set; }
+    public Guid FeatureId { get; set; }
+
+    /// <summary>
+    /// The associated feature.
+    /// </summary>
+    public Feature Feature { get; set; }
 
     /// <summary>
     /// Returns the appropriate filter type name, considering custom filters.
