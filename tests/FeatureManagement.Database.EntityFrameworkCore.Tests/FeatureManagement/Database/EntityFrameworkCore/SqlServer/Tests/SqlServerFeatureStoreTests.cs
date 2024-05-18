@@ -1,42 +1,32 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using static FeatureManagement.Database.Features;
 
 namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
 
-public sealed class SqlServerFeatureStoreTests : IClassFixture<SqlServerFixture>
+public sealed class SqlServerFeatureStoreTests : IClassFixture<IntegrationTestWebAppFactory>, IDisposable
 {
-    private readonly SqlServerFixture _fixture;
+    private readonly IServiceScope _scope;
 
-    public SqlServerFeatureStoreTests(SqlServerFixture fixture)
+    public SqlServerFeatureStoreTests(IntegrationTestWebAppFactory factory)
     {
-        _fixture = fixture;
+        _scope = factory.Services.CreateScope();
+    }
+
+    public void Dispose()
+    {
+        _scope?.Dispose();
     }
 
     [Fact]
-    public async Task TestFeatureWithEfCore()
+    public async Task GetFeatureFromDatabaseUsingEfCore()
     {
-        // Assert/Act
-        IServiceCollection services = new ServiceCollection();
+        // Arrange
+        var featureStore = _scope.ServiceProvider.GetRequiredService<IFeatureStore>();
 
-        services.AddDatabaseFeatureManagement<EFCoreFeatureStore>();
-        services.AddFeatureManagementDbContext<TestDbContext>(o => o.UseSqlServer(_fixture.ConnectionString));
-        var serviceProvider = services.BuildServiceProvider();
-
-        var dbContext = serviceProvider.GetRequiredService<TestDbContext>();
-        await dbContext.Database.MigrateAsync();
-        dbContext.Features.Add(new Feature
-        {
-            Name = FirstFeature,
-            RequirementType = Microsoft.FeatureManagement.RequirementType.All,
-            Settings = [new FeatureSettings { FilterType = FeatureFilterType.TimeWindow, Parameters = """{"Start": "Mon, 01 May 2023 13:59:59 GMT", "End": "Sat, 01 July 2023 00:00:00 GMT"}""" }]
-        });
-
-        var featureStore = serviceProvider.GetRequiredService<IFeatureStore>();
-
+        // Act
         var feature = await featureStore.GetFeatureAsync(FirstFeature);
 
         // Assert

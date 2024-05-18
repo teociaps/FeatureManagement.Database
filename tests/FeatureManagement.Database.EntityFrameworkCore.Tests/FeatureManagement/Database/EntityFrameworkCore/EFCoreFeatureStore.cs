@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using FeatureManagement.Database.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
@@ -8,9 +9,9 @@ namespace FeatureManagement.Database.EntityFrameworkCore;
 
 public class EFCoreFeatureStore : IFeatureStore
 {
-    private readonly FeatureManagementDbContext _dbContext;
+    private readonly TestDbContext _dbContext;
 
-    public EFCoreFeatureStore(FeatureManagementDbContext dbContext)
+    public EFCoreFeatureStore(TestDbContext dbContext)
     {
         _dbContext = dbContext;
     }
