@@ -20,9 +20,9 @@ public class IntegrationTestWebAppFactory
         .WithName("sqlserver-test-container")
         .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
         .WithEnvironment("ACCEPT_EULA", "Y")
-        .WithPortBinding(1433)
+        .WithPortBinding(MsSqlBuilder.MsSqlPort)
         .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MsSqlBuilder.MsSqlPort))
         .Build();
 
     internal string ConnectionString => _sqlServerContainer.GetConnectionString();
@@ -52,8 +52,7 @@ public class IntegrationTestWebAppFactory
             services.RemoveAll(typeof(DbContextOptions<TestDbContext>));
 
             // Add the DbContext with the SQL Server connection string from the container
-            services.AddDbContext<TestDbContext>(options =>
-                options.UseSqlServer(_sqlServerContainer.GetConnectionString()));
+            services.AddFeatureManagementDbContext<TestDbContext>(_sqlServerContainer.GetConnectionString());
         });
     }
 }
