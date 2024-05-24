@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net6.0;net8.0;net9.0</TargetFrameworks>
   </PropertyGroup>
 
   <Import Project="..\..\build\NuGet.props" />
@@ -16,10 +16,16 @@
     </PackageTags>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="9.0.0-preview.4.24266.19" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" VersionOverride="9.0.0-preview.4.24266.19" />
+    <PackageReference Include="System.Text.Json" VersionOverride="9.0.0-preview.4.24266.19" />
+  </ItemGroup>
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.FeatureManagement" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
-    <PackageReference Include="Microsoft.FeatureManagement" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 
