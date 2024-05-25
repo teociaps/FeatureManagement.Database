@@ -62,7 +62,7 @@ public class CachedFeatureStore : IFeatureStore
 
     private async Task<TData> GetCacheAsync<TData>(string key) where TData : class
     {
-        var cachedData = await _cache.GetAsync(key);
+        var cachedData = await _cache.GetAsync(FeatureCacheOptions.CachePrefix + key);
 
         if (cachedData is null)
             return null;
@@ -72,7 +72,7 @@ public class CachedFeatureStore : IFeatureStore
 
     private async Task SetCacheAsync<TData>(string key, TData data) where TData : class
     {
-        await _cache.SetAsync(key, JsonSerializer.SerializeToUtf8Bytes(data), new DistributedCacheEntryOptions
+        await _cache.SetAsync(FeatureCacheOptions.CachePrefix + key, JsonSerializer.SerializeToUtf8Bytes(data), new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = _cacheOptions.AbsoluteExpiration,
             AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow,

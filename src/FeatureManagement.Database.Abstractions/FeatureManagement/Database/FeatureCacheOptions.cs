@@ -14,6 +14,11 @@ public class FeatureCacheOptions
     public const string Name = nameof(FeatureCacheOptions);
 
     /// <summary>
+    /// The prefix for the cache keys.
+    /// </summary>
+    internal const string CachePrefix = "FMDb_";
+
+    /// <summary>
     /// Gets or sets an absolute expiration date for the cache entry.
     /// </summary>
     public DateTimeOffset? AbsoluteExpiration { get; set; }
