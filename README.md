@@ -4,8 +4,9 @@
 [![Build Status](https://github.com/teociaps/FeatureManagement.Database/actions/workflows/build.yml/badge.svg)](https://github.com/teociaps/FeatureManagement.Database/actions/workflows/build.yml)
 [![Test Status](https://github.com/teociaps/FeatureManagement.Database/actions/workflows/test.yml/badge.svg)](https://github.com/teociaps/FeatureManagement.Database/actions/workflows/test.yml)
 
-**.NET Feature Management Database** extends [Microsoft Feature Management](https://github.com/microsoft/FeatureManagement-Dotnet) for retrieving feature definitions from various databases.
+**.NET Feature Management Database** extends [Feature Management] for retrieving feature definitions from various databases.
 It includes abstractions and default implementations to facilitate easy integration with your .NET applications.
+
 
 ## Supported .NET Versions
 
@@ -26,15 +27,14 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Configure Cache](#configure-cache)
 * [Consumption](#consumption)
     * [ASP.NET Core Integration](#asp.net-core-integration)
-* [Contributing](#contributing)
 
 
 ## Features
 
-- **Database Integration**: Store and retrieve feature definitions from various databases.
-- **Caching**: Built-in support for caching feature definitions to enhance performance and reduce database load.
-- **Customizable**: Easily extend and customize to support additional storage solutions and unique requirements.
-- **Seamless Integration**: Integrates smoothly with Microsoft Feature Management, enabling efficient database-backed feature flag management.
+- **Database Integration**: store and retrieve feature definitions from various databases.
+- **Caching**: built-in support for caching feature definitions to enhance performance and reduce database load.
+- **Customizable**: easily extend and customize to support additional storage solutions and unique requirements.
+- **Seamless Integration**: integrates smoothly with Microsoft Feature Management, enabling efficient database-backed feature flag management.
 
 
 ## Packages
@@ -51,17 +51,43 @@ It includes abstractions and default implementations to facilitate easy integrat
 
 ## Getting Started
 
-TODO explain better
-
-
-The built-in `DatabaseFeatureDefinitionProvider` fetches feature definitions from the database. It relies on an implementation of the `IFeatureStore` interface to retrieve feature data and convert it into `FeatureDefinition` objects used by the feature management system.
+.NET Feature Management Database allows you to manage feature definitions stored in a database.
+The built-in `DatabaseFeatureDefinitionProvider` retrieves these definitions and converts them into `FeatureDefinition` objects used by the feature management system.
+This setup relies on an implementation of the `IFeatureStore` interface to access the database.
 
 ### Entities
 
-**Feature**: Represents a feature with its associated settings and parameters. Each feature has a _unique_ name, requirement type, and a collection of settings that define how the feature is enabled or disabled.
+Two primary entities are pre-configured for database feature management:
 
-**FeatureSettings**: Contains the settings for a feature, including parameters that are typically stored in _JSON format_. These settings define the conditions under which a feature is enabled.
-The parameters are based on [Feature Management filter configuration](https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#built-in-feature-filters) + contextual(TODOfor built-in features; for custom feature filter see [how to configure it](https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#implementing-a-feature-filter).
+- **Feature**: represents a feature with its associated settings. Each feature has a unique name, a requirement type, and a collection of settings that define how the feature is enabled or disabled.
+
+- **FeatureSettings**: contains the settings for a feature and these define the conditions under which a feature is enabled.
+The parameters are stored in JSON format and based on Feature Management [built-in feature filter][Feature Management built-in filters] or [contextual feature filter][Feature Management contextual filters] configuration, and can include [custom feature filters][Feature Management custom filters].
+
+#### Example
+
+Suppose you want to define a feature that is enabled for 50% of the users.
+Here is an example of how you can define such a feature and its settings:
+
+``` csharp
+…
+var newFeature = new Feature
+{
+    Id = Guid.NewGuid(),
+    Name = "NewFeature",
+    RequirementType = RequirementType.Any,
+    Settings = new List<FeatureSettings>
+    {
+        new FeatureSettings
+        {
+            Id = Guid.NewGuid(),
+            FilterType = FeatureFilterType.Percentage,
+            Parameters = "{\"Percentage\":50}"
+        }
+    }
+}
+…
+```
 
 ### Feature Store
 
@@ -107,7 +133,6 @@ Registering the feature management services can be done using the following appr
 > [!IMPORTANT]
 > To use database feature management you need to register an **IFeatureStore**.
 
-
 ### Configure Cache
 
 To improve performance and reduce database load, you can configure caching for the feature store.
@@ -149,6 +174,7 @@ The `WithCacheService` method provides several ways to configure caching:
 
 See `FeatureCacheOptions` for more cache-related settings.
 
+
 ## Consumption
 
 The basic form of feature management is checking if a feature flag is enabled and then performing actions based on the result.
@@ -164,15 +190,23 @@ if (await featureManager.IsEnabledAsync("FeatureA"))
 }
 ```
 
-See more [here](https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#consumption).
+See more [here][Feature Management Consumption].
 
 ### ASP.NET Core Integration
 
 The database feature management library provides support in ASP.NET Core and MVC to enable common feature flag scenarios in web applications.
 
-See more [here](https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#aspnet-core-integration).
+See more [here][Feature Management ASP.NET Core].
 
 
 ## Contributing
 
-We welcome contributions! Please see our [Contribution Guidelines](CONTRIBUTING.md) for more information.
+Please see our [Contribution Guidelines](CONTRIBUTING.md) for more information.
+
+
+[Feature Management]: https://github.com/microsoft/FeatureManagement-Dotnet
+[Feature Management built-in filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#built-in-feature-filters
+[Feature Management contextual filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#contextual-feature-filters
+[Feature Management custom filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#implementing-a-feature-filter
+[Feature Management Consumption]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#consumption
+[Feature Management ASP.NET Core]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#aspnet-core-integration
