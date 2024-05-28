@@ -62,7 +62,7 @@ Two primary entities are pre-configured for database feature management:
 - **Feature**: represents a feature with its associated settings. Each feature has a unique name, a requirement type, and a collection of settings that define how the feature is enabled or disabled.
 
 - **FeatureSettings**: contains the settings for a feature and these define the conditions under which a feature is enabled.
-The parameters are stored in JSON format and based on Feature Management [built-in feature filter][Feature Management built-in filters] or [contextual feature filter][Feature Management contextual filters] configuration, and can include [custom feature filters][Feature Management custom filters].
+The parameters are stored in JSON format and based on Feature Management [built-in feature filter][Feature Management built-in filters] or [contextual feature filter][Feature Management contextual filters] configuration, and can include [custom feature filter][Feature Management custom filters] configuration.
 
 #### Example
 
@@ -128,10 +128,10 @@ Registering the feature management services can be done using the following appr
     This method simplifies the configuration by combining both registrations into a single call.
 
 > [!NOTE]
-> In the context of database solution the feature management services will be added as scoped services.
+> In the context of database solutions, the feature management services will be added as scoped services.
 
 > [!IMPORTANT]
-> To use database feature management you need to register an **IFeatureStore**.
+> To use database feature management, you need to register an **IFeatureStore**.
 
 ### Configure Cache
 
@@ -171,8 +171,24 @@ The `WithCacheService` method provides several ways to configure caching:
     services.AddDatabaseFeatureManagement<MyFeatureStore>()
             .WithCacheService(cacheConfiguration);
     ```
+    In your `appsettings.json`:
+    
+    ``` json
+    …
+    {
+      "FeatureCacheOptions": {
+        "AbsoluteExpirationRelativeToNow": "01:00:00",
+        "SlidingExpiration": "00:30:00"
+      }
+    }
+    …
+    ```
 
 See `FeatureCacheOptions` for more cache-related settings.
+
+[!WARNING]
+When a feature value is updated in the database, the cache does not automatically clean up or refresh.
+Ensure to handle cache invalidation appropriately in such scenarios to keep the cache in sync with the database.
 
 
 ## Consumption
@@ -184,7 +200,7 @@ This is done through the `IFeatureManager`'s `IsEnabledAsync` method.
 …
 IFeatureManager featureManager;
 …
-if (await featureManager.IsEnabledAsync("FeatureA"))
+if (await featureManager.IsEnabledAsync("MyFeature"))
 {
     // Do something
 }
