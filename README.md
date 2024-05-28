@@ -174,21 +174,19 @@ The `WithCacheService` method provides several ways to configure caching:
     In your `appsettings.json`:
     
     ``` json
-    …
     {
       "FeatureCacheOptions": {
         "AbsoluteExpirationRelativeToNow": "01:00:00",
         "SlidingExpiration": "00:30:00"
       }
     }
-    …
     ```
 
 See `FeatureCacheOptions` for more cache-related settings.
 
-[!WARNING]
-When a feature value is updated in the database, the cache does not automatically clean up or refresh.
-Ensure to handle cache invalidation appropriately in such scenarios to keep the cache in sync with the database.
+> [!WARNING]
+> When a feature value is updated in the database, the cache does not automatically clean up or refresh.
+> Ensure to handle cache invalidation appropriately in such scenarios to keep the cache in sync with the database.
 
 
 ## Consumption
