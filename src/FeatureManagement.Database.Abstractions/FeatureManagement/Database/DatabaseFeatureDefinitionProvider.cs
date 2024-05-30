@@ -42,7 +42,7 @@ public sealed class DatabaseFeatureDefinitionProvider : IFeatureDefinitionProvid
         var features = await _featureStore.GetFeaturesAsync();
         foreach (var feature in features)
         {
-            if (string.IsNullOrWhiteSpace(feature.Name))
+            if (string.IsNullOrWhiteSpace(feature?.Name))
                 continue;
 
             yield return GetDefinitionFromFeature(feature);

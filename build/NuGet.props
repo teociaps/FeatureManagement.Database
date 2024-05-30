@@ -10,7 +10,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/teociaps/FeatureManagement.Database</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>icon.png</PackageIcon> <!-- TODO: change icon (64x64)-->
+    <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
