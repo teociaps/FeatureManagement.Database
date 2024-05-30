@@ -69,7 +69,7 @@ The parameters are stored in JSON format and based on Feature Management [built-
 Suppose you want to define a feature that is enabled for 50% of the users.
 Here is an example of how you can define such a feature and its settings:
 
-``` csharp
+```csharp
 …
 var newFeature = new Feature
 {
@@ -82,7 +82,7 @@ var newFeature = new Feature
         {
             Id = Guid.NewGuid(),
             FilterType = FeatureFilterType.Percentage,
-            Parameters = "{\"Percentage\":50}"
+            Parameters = "{\"Value\":50}"
         }
     }
 }
@@ -94,7 +94,7 @@ var newFeature = new Feature
 The `IFeatureStore` interface is the core abstraction for retrieving feature data from a database.
 Implement this interface to connect to your specific database (e.g., SQL Server, MongoDB, etc.).
 
-``` csharp
+```csharp
 public class MyFeatureStore : IFeatureStore
 {
     // Implementation to fetch feature definitions from your database
@@ -110,7 +110,7 @@ Registering the feature management services can be done using the following appr
 
     First, register your custom `IFeatureStore` implementation and then add database feature management:
 
-    ``` csharp
+    ```csharp
     services.AddFeatureStore<MyFeatureStore>();
     services.AddDatabaseFeatureManagement();
     ```
@@ -121,7 +121,7 @@ Registering the feature management services can be done using the following appr
 
     For a more streamlined setup, you can register your custom `IFeatureStore` and add database feature management in one step:
 
-    ``` csharp
+    ```csharp
     services.AddDatabaseFeatureManagement<MyFeatureStore>();
     ```
 
@@ -171,9 +171,9 @@ The `WithCacheService` method provides several ways to configure caching:
     services.AddDatabaseFeatureManagement<MyFeatureStore>()
             .WithCacheService(cacheConfiguration);
     ```
-    In your `appsettings.json`:
+    And in your `appsettings.json`:
     
-    ``` json
+    ```json
     {
       "FeatureCacheOptions": {
         "AbsoluteExpirationRelativeToNow": "01:00:00",
@@ -182,7 +182,26 @@ The `WithCacheService` method provides several ways to configure caching:
     }
     ```
 
-See `FeatureCacheOptions` for more cache-related settings.
+#### Advanced Cache Configuration
+
+The cache keys have a prefix defined in the options (`FeatureCacheOptions.CachePrefix`).
+
+- For a single feature, the default cache key will be the name of that feature (prefix included).
+    Example:
+  
+    ```text
+    MyFeature => FMDb_MyFeature
+    ```
+
+- For all features, the default cache key will be "features" combined with the prefix:
+    
+    ```text
+    All features => FMDb_features
+    ```
+    
+    That _"features"_ can be overridden using one of the methods above. So you can have `"FMDb_your-own-cache-key"`.
+
+See the `FeatureCacheOptions` class for more cache-related settings.
 
 > [!WARNING]
 > When a feature value is updated in the database, the cache does not automatically clean up or refresh.
@@ -194,7 +213,7 @@ See `FeatureCacheOptions` for more cache-related settings.
 The basic form of feature management is checking if a feature flag is enabled and then performing actions based on the result.
 This is done through the `IFeatureManager`'s `IsEnabledAsync` method.
 
-``` csharp
+```csharp
 …
 IFeatureManager featureManager;
 …
