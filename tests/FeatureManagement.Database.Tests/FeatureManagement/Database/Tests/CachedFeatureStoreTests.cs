@@ -26,7 +26,7 @@ public class CachedFeatureStoreTests
 
         // Act
         var feature = await cachedFeatureStore.GetFeatureAsync(FirstFeature);
-        var cachedFeature = JsonSerializer.Deserialize<Feature>(await cache.GetAsync(FirstFeature));
+        var cachedFeature = JsonSerializer.Deserialize<Feature>(await cache.GetAsync(FeatureCacheOptions.CachePrefix + FirstFeature));
 
         // Assert
         Assert.True(feature is not null);
@@ -58,7 +58,7 @@ public class CachedFeatureStoreTests
 
         // Act
         var features = await cachedFeatureStore.GetFeaturesAsync();
-        var cachedFeatures = JsonSerializer.Deserialize<IReadOnlyCollection<Feature>>(await cache.GetAsync(cacheOptions.KeyNames.AllFeatures));
+        var cachedFeatures = JsonSerializer.Deserialize<IReadOnlyCollection<Feature>>(await cache.GetAsync(FeatureCacheOptions.CachePrefix + cacheOptions.KeyNames.AllFeatures));
 
         // Assert
         Assert.True(features is not null);

@@ -37,7 +37,7 @@ This project and everyone participating in it are governed by our [Code of Condu
 - Be responsive to comments and feedback on your pull request.
 
 ## Reporting Bugs and Issues
-If you find a bug or have a question, please open an issue on GitHub. When reporting a bug, provide as much detail as possible, including:
+If you find a bug or have a question, please open an [issue](https://github.com/teociaps/FeatureManagement.Database/issues/new/choose) on GitHub. When reporting a bug, provide as much detail as possible, including:
 
 - A clear and concise description of the bug.
 - Steps to reproduce the issue.
@@ -45,7 +45,7 @@ If you find a bug or have a question, please open an issue on GitHub. When repor
 - Screenshots or code snippets, if applicable.
 
 ## Feature Requests
-We welcome suggestions for new features or improvements. Please open an issue to propose your ideas.
+We welcome suggestions for new features or improvements. Please open an [issue](https://github.com/teociaps/FeatureManagement.Database/issues/new?template=feature-request.yml) to propose your ideas.
 
 ## License
 By contributing to this project, you agree that your contributions will be licensed under the [License](LICENSE) file.
