@@ -37,7 +37,7 @@ public class IntegrationTestWebAppFactory
 
     public new async Task DisposeAsync()
     {
-        await _sqlServerContainer.StopAsync();
+        await _sqlServerContainer.DisposeAsync();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
