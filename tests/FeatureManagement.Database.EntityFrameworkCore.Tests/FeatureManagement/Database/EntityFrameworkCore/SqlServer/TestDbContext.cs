@@ -22,6 +22,12 @@ public class TestDbContext : FeatureManagementDbContext
                 Id = Guid.NewGuid(),
                 Name = FirstFeature,
                 RequirementType = Microsoft.FeatureManagement.RequirementType.All,
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = SecondFeature,
+                RequirementType = Microsoft.FeatureManagement.RequirementType.All,
             }
         ];
 

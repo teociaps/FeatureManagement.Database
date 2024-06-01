@@ -46,7 +46,7 @@ public class IntegrationTestWebAppFactory
 
         builder.ConfigureServices(services =>
         {
-            services.AddDatabaseFeatureManagement<EFCoreFeatureStore>();
+            services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>();
 
             // Ensure existing DbContextOptions are removed if necessary
             services.RemoveAll(typeof(DbContextOptions<TestDbContext>));
