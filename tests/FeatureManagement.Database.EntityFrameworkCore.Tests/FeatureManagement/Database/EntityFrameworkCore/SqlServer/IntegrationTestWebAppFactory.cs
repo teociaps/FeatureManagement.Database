@@ -46,13 +46,10 @@ public class IntegrationTestWebAppFactory
 
         builder.ConfigureServices(services =>
         {
-            services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>();
-
-            // Ensure existing DbContextOptions are removed if necessary
             services.RemoveAll(typeof(DbContextOptions<TestDbContext>));
 
-            // Add the DbContext with the SQL Server connection string from the container
-            services.AddFeatureManagementDbContext<TestDbContext>(_sqlServerContainer.GetConnectionString());
+            services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>()
+                .UseSqlServer<TestDbContext>(_sqlServerContainer.GetConnectionString());
         });
     }
 }
