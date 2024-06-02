@@ -13,7 +13,7 @@ public class Feature
     /// <summary>
     /// The unique identifier of the feature.
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The unique name of the feature.
@@ -28,7 +28,7 @@ public class Feature
     /// <summary>
     /// All settings associated with the feature.
     /// </summary>
-    public virtual IEnumerable<FeatureSettings> Settings { get; set; }
+    public ICollection<FeatureSettings> Settings { get; set; }
 }
 
 // TODO: softdelete + auditing?
