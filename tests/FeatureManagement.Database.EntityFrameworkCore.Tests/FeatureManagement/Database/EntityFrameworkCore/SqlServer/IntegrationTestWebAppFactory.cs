@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Testcontainers.MsSql;
 
 namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer;
@@ -42,8 +41,6 @@ public class IntegrationTestWebAppFactory
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment(Environments.Development);
-
         builder.ConfigureServices(services =>
         {
             services.RemoveAll(typeof(DbContextOptions<TestDbContext>));
