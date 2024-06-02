@@ -10,7 +10,7 @@ on:
     types: [opened, reopened, edited]
 
 env:
-    CONFIGURATION: 'Release'
+  CONFIGURATION: 'Release'
 
 jobs:
   build:
@@ -27,8 +27,6 @@ jobs:
           6.0.x
           8.0.x
 
-    - name: Restore
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --no-restore --configuration ${{ env.CONFIGURATION }}
+    - name: Run build
+      shell: pwsh
+      run: ./build.ps1 -Configuration ${{ env.CONFIGURATION }}

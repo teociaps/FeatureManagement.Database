@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9C02
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{AA62B656-2A7B-4133-9280-8DF51CCF4105}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiApp", "samples\WebApiApp\WebApiApp.csproj", "{728B43AD-5292-4BD1-B3CD-4C576E0FD0AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiApp", "samples\WebApiApp\WebApiApp.csproj", "{728B43AD-5292-4BD1-B3CD-4C576E0FD0AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
