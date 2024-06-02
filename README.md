@@ -27,7 +27,8 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Configure Cache](#configure-cache)
 * [Consumption](#consumption)
     * [ASP.NET Core Integration](#asp.net-core-integration)
-
+* [Built-in Database Providers](#built-in-database-providers)
+    * [EF Core SQL Server](#ef-core-sql-server)
 
 ## Features
 
@@ -42,11 +43,14 @@ It includes abstractions and default implementations to facilitate easy integrat
 | Package | NuGet Version |
 | ------- | ------------- |
 | [FeatureManagement.Database.Abstractions](https://www.nuget.org/packages/FeatureManagement.Database.Abstractions/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Abstractions/)
+| [FeatureManagement.Database.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/)
 
 **Package Purposes**
 
 * _FeatureManagement.Database.Abstractions_
 	* Standard functionalities for managing feature flags across various databases
+* _FeatureManagement.Database.EntityFrameworkCore.SqlServer_
+	* Integration with SQL Server database using Entity Framework Core
 
 
 ## Getting Started
@@ -100,6 +104,8 @@ public class MyFeatureStore : IFeatureStore
     // Implementation to fetch feature definitions from your database
 }
 ```
+
+See [built-in database implementations](#built-in-database-providers).
 
 ### Service Registration
 
@@ -230,6 +236,59 @@ See more [here][Feature Management Consumption].
 The database feature management library provides support in ASP.NET Core and MVC to enable common feature flag scenarios in web applications.
 
 See more [here][Feature Management ASP.NET Core].
+
+
+## Built-In Database Providers
+
+### EF Core SQL Server
+
+For easy integration with SQL Server using Entity Framework Core, you can use the `FeatureManagement.Database.EntityFrameworkCore.SqlServer` package.
+This package provides:
+
+- A default, extendable `FeatureManagementDbContext` with pre-configured entities for features and feature settings.
+- A default`FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+
+#### Usage
+
+First, install the package:
+
+```sh
+dotnet add package FeatureManagement.Database.EntityFrameworkCore.SqlServer
+```
+
+Then configure the services:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseSqlServer<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+```
+
+If you have an existing DbContext and want to integrate it, you can inherit from `FeatureManagementDbContext` and update your registration accordingly:
+
+```csharp
+services.AddDbContext<MyDbContext>(builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+services.AddDatabaseFeatureManagement<FeatureStore>();
+```
+
+In this scenario, your DbContext should inherit from FeatureManagementDbContext, and your FeatureStore should be extended to use your custom DbContext.
+
+```csharp
+public class MyDbContext : FeatureManagementDbContext
+{
+    public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
+    // Additional DbSets and configurations
+}
+
+public class MyFeatureStore : FeatureStore
+{
+    public MyFeatureStore(MyDbContext context) : base(context) { }
+    // Custom implementation if needed
+}
+```
+
+> [!NOTE]
+> When using a custom DbContext, ensure that your FeatureStore is also extended to utilize the custom DbContext.
 
 
 ## Contributing
