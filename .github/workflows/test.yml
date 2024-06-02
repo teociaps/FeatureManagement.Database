@@ -10,8 +10,7 @@ on:
     types: [opened, reopened, edited]
 
 env:
-    TEST_PROJECTS_PATH: 'tests/*.Tests'
-    CONFIGURATION: 'Release'
+  CONFIGURATION: 'Release'
 
 jobs:
   test:
@@ -28,5 +27,6 @@ jobs:
           6.0.x
           8.0.x
 
-    - name: Test
-      run: dotnet test ${{ env.TEST_PROJECTS_PATH }} --configuration ${{ env.CONFIGURATION }}
+    - name: Run tests
+      shell: pwsh
+      run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }}
