@@ -1,17 +1,24 @@
 <Solution>
-  <Folder Name="/tests/">
-    <File Path="tests\Directory.Build.props" />
-    <File Path="tests\Directory.Packages.props" />
-    <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
-  </Folder>
-  <Folder Name="/src/">
-    <File Path="src\Directory.Packages.props" />
-    <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
-  </Folder>
   <Folder Name="/build/">
     <File Path="build\Common.props" />
     <File Path="build\icon.png" />
     <File Path="build\NuGet.props" />
     <File Path="build\Versioning.props" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples\ConsoleApp\ConsoleApp.csproj" />
+    <Project Path="samples\WebApiApp\WebApiApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src\Directory.Packages.props" />
+    <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests\Directory.Build.props" />
+    <File Path="tests\Directory.Packages.props" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
   </Folder>
 </Solution>
