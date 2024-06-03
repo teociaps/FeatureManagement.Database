@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+    <ProjectReference Include="..\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>
