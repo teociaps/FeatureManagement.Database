@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
 namespace FeatureManagement.Database.EntityFrameworkCore;
