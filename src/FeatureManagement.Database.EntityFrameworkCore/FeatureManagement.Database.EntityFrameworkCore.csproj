@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="7.0.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="7.0.20" />
   </ItemGroup>
 
   <ItemGroup>

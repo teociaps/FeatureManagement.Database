@@ -81,7 +81,7 @@ public static class FeatureManagementBuilderExtensions
         Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
-        npgsqlDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
+        npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
         builder.ConfigureDbContext<TDbContext>(builder => builder.UseNpgsql(npgsqlDbContextOptionsBuilder));
         return builder;
@@ -107,14 +107,14 @@ public static class FeatureManagementBuilderExtensions
         Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
-        npgsqlDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
+        npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
         builder.ConfigureDbContext<TDbContext>(builder => builder.UseNpgsql(connectionString, npgsqlDbContextOptionsBuilder));
 
         return builder;
     }
 
-    private static Action<NpgsqlDbContextOptionsBuilder> ComposeDefaultSqlServerOptionsBuilder()
+    private static Action<NpgsqlDbContextOptionsBuilder> ComposeDefaultNpgsqlOptionsBuilder()
     {
         return options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
     }

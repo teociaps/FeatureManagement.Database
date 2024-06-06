@@ -4,7 +4,6 @@
 using FeatureManagement.Database.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
 
 namespace FeatureManagement.Database;
