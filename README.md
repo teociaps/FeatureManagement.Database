@@ -31,6 +31,7 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Entity Framework Core](#entity-framework-core)
       * [SQL Server](#sql-server)
       * [PostgreSQL](#postgresql)
+      * [Sqlite](#sqlite)
 
 ## Features
 
@@ -254,7 +255,7 @@ For easy integration with Entity Framework Core, you can use the `FeatureManagem
 This package provides:
 
 - A default, extendable `FeatureManagementDbContext` with pre-configured entities for features and feature settings.
-- A default`FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
 
 #### Usage
 
@@ -289,6 +290,18 @@ Using EF Core, you can work with different database providers:
         .UseNpgsql<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
     ```
 
+* #### Sqlite
+    Install the package `FeatureManagement.Database.EntityFrameworkCore.Sqlite` and configure the services:
+
+    ```csharp
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseSqlite<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    ```
+
+> [!TIP]
+> Tip: If you choose a specific database provider, you only need to download the specific
+package (e.g., FeatureManagement.Database.EntityFrameworkCore.SqlServer) and nothing else.
+
 ### What if I already have a DbContext?
 
 If you have an existing DbContext and want to integrate it with EF Core, download the main package and then
@@ -318,10 +331,6 @@ public class MyFeatureStore : FeatureStore
 
 > [!NOTE]
 > When using a custom DbContext, ensure that your FeatureStore is also extended to utilize the custom DbContext.
-
-> [!TIP]
-> Tip: If you choose a specific database provider, you only need to download the specific
-package (e.g., FeatureManagement.Database.EntityFrameworkCore.SqlServer) and nothing else.
 
 
 ## Contributing
