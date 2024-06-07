@@ -4,7 +4,7 @@
 using Microsoft.EntityFrameworkCore;
 using static FeatureManagement.Database.Features;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer;
+namespace FeatureManagement.Database.EntityFrameworkCore.Tests;
 
 public class TestDbContext : FeatureManagementDbContext
 {

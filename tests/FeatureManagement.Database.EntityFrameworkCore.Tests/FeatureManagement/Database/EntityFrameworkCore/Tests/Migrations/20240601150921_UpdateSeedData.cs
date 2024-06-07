@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Migrations
+namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
 {
     /// <inheritdoc />
     public partial class UpdateSeedData : Migration

@@ -1,23 +1,31 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using static FeatureManagement.Database.Features;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.Tests;
 
-public sealed class SqlServerFeatureStoreTests : IClassFixture<IntegrationTestWebAppFactory>, IDisposable
+public abstract class EFCoreFeatureStoreTests<TWebApplicationFactory> : IClassFixture<TWebApplicationFactory>, IDisposable
+    where TWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly IServiceScope _scope;
     private readonly IFeatureStore _featureStore;
 
-    public SqlServerFeatureStoreTests(IntegrationTestWebAppFactory factory)
+    protected EFCoreFeatureStoreTests(TWebApplicationFactory factory)
     {
         _scope = factory.Services.CreateScope();
         _featureStore = _scope.ServiceProvider.GetRequiredService<IFeatureStore>();
     }
 
     public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
     {
         _scope?.Dispose();
     }

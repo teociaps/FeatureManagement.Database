@@ -1,12 +1,16 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using FeatureManagement.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer;
+namespace FeatureManagement.Database.EntityFrameworkCore.Tests;
 
+/// <summary>
+/// Factory used to build migrations.
+/// </summary>
 public class TestDbContextFactory : IDesignTimeDbContextFactory<TestDbContext>
 {
     public TestDbContext CreateDbContext(string[] args)

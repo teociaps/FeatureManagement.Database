@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Migrations
+namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration

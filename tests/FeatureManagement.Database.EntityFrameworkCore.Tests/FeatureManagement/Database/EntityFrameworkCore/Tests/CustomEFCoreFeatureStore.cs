@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using FeatureManagement.Database.EntityFrameworkCore.SqlServer;
-
-namespace FeatureManagement.Database.EntityFrameworkCore;
+namespace FeatureManagement.Database.EntityFrameworkCore.Tests;
 
 public class CustomEFCoreFeatureStore : FeatureStore
 {
