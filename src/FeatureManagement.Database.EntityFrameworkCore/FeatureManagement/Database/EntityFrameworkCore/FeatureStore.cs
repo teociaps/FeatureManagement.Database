@@ -32,7 +32,7 @@ public class FeatureStore : IFeatureStore
         if (string.IsNullOrEmpty(featureName))
             throw new ArgumentNullException(nameof(featureName));
 
-        var feature = await DbContext.Features.SingleOrDefaultAsync(f => f.Name == featureName)
+        var feature = await DbContext.Features.AsNoTracking().SingleOrDefaultAsync(f => f.Name == featureName)
             ?? throw new KeyNotFoundException($"Feature with name '{featureName}' not found.");
 
         return feature;
@@ -41,6 +41,6 @@ public class FeatureStore : IFeatureStore
     /// <inheritdoc/>
     public virtual async Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
     {
-        return await DbContext.Features.ToListAsync();
+        return await DbContext.Features.AsNoTracking().ToListAsync();
     }
 }
