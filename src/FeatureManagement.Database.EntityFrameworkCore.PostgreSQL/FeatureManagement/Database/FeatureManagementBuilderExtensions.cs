@@ -83,7 +83,7 @@ public static class FeatureManagementBuilderExtensions
     {
         npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(builder => builder.UseNpgsql(npgsqlDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseNpgsql(npgsqlDbContextOptionsBuilder));
         return builder;
     }
 
@@ -109,7 +109,7 @@ public static class FeatureManagementBuilderExtensions
     {
         npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(builder => builder.UseNpgsql(connectionString, npgsqlDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseNpgsql(connectionString, npgsqlDbContextOptionsBuilder));
 
         return builder;
     }

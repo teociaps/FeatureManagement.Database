@@ -81,7 +81,7 @@ public static class FeatureManagementBuilderExtensions
     {
         sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(builder => builder.UseSqlServer(sqlServerDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(sqlServerDbContextOptionsBuilder));
         return builder;
     }
 
@@ -107,7 +107,7 @@ public static class FeatureManagementBuilderExtensions
     {
         sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(builder => builder.UseSqlServer(connectionString, sqlServerDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(connectionString, sqlServerDbContextOptionsBuilder));
 
         return builder;
     }

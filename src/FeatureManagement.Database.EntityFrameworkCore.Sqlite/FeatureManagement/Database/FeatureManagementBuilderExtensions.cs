@@ -81,7 +81,7 @@ public static class FeatureManagementBuilderExtensions
     {
         sqliteDbContextOptionsBuilder += ComposeDefaultSqliteOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(builder => builder.UseSqlite(sqliteDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlite(sqliteDbContextOptionsBuilder));
         return builder;
     }
 
@@ -107,7 +107,7 @@ public static class FeatureManagementBuilderExtensions
     {
         sqliteDbContextOptionsBuilder += ComposeDefaultSqliteOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(builder => builder.UseSqlite(connectionString, sqliteDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlite(connectionString, sqliteDbContextOptionsBuilder));
 
         return builder;
     }
