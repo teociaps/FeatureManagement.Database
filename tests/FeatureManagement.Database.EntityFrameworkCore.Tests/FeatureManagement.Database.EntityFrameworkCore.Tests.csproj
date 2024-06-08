@@ -15,8 +15,6 @@
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="System.Linq.Async" />
     <PackageReference Include="Testcontainers" />
-    <PackageReference Include="Testcontainers.MsSql" />
-    <PackageReference Include="Testcontainers.PostgreSql" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
@@ -25,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
-    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
+    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">

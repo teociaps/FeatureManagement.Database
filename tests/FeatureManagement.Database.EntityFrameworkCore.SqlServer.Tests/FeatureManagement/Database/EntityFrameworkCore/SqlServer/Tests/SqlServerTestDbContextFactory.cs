@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using FeatureManagement.Database;
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
 
 /// <summary>
 /// Factory used to build migrations for SQL Server.

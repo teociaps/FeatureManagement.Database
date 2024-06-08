@@ -3,13 +3,14 @@
 
 // Ignore Spelling: Postgre
 
+using FeatureManagement.Database;
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 /// <summary>
 /// Factory used to build migrations for PostgreSQL.

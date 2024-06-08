@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Testcontainers.PostgreSql" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
     <ProjectReference Include="..\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 

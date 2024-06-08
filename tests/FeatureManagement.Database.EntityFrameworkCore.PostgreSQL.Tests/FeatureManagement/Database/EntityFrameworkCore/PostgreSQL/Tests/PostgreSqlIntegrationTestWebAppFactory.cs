@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Testcontainers.PostgreSql;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<PostgreSqlContainer>
 {

@@ -5,7 +5,7 @@
 
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlFeatureStoreTests(PostgreSqlIntegrationTestWebAppFactory factory)
     : EFCoreFeatureStoreTests<PostgreSqlIntegrationTestWebAppFactory>(factory)

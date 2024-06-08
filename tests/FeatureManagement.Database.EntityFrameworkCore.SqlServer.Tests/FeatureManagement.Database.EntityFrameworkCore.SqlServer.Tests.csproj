@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Testcontainers.MsSql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 
