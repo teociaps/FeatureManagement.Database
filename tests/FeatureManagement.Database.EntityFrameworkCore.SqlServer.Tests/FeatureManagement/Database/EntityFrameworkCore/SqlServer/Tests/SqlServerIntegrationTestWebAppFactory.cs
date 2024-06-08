@@ -2,10 +2,12 @@
 // Licensed under the MIT license.
 
 using DotNet.Testcontainers.Builders;
+using FeatureManagement.Database.EntityFrameworkCore.Tests;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using Testcontainers.MsSql;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
 
 public sealed class SqlServerIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MsSqlContainer>
 {
@@ -27,6 +29,7 @@ public sealed class SqlServerIntegrationTestWebAppFactory : IntegrationTestWebAp
     {
         base.ConfigureServices(services);
         services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>()
-            .UseSqlServer<TestDbContext>(_sqlServerContainer.GetConnectionString());
+            .UseSqlServer<TestDbContext>(_sqlServerContainer.GetConnectionString(),
+                options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
     }
 }

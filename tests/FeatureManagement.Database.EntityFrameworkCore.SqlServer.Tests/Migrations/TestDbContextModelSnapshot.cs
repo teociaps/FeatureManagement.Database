@@ -4,23 +4,20 @@ using FeatureManagement.Database.EntityFrameworkCore.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
+namespace Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    [Migration("20240601150921_UpdateSeedData")]
-    partial class UpdateSeedData
+    partial class TestDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.18")
+                .HasAnnotation("ProductVersion", "7.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -48,13 +45,13 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e02ab394-42c6-412e-9f32-7f5d2ca8e7b6"),
+                            Id = new Guid("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"),
                             Name = "FirstFeature",
                             RequirementType = 1
                         },
                         new
                         {
-                            Id = new Guid("f5665e3e-da77-45f1-806b-6e5e9329a63f"),
+                            Id = new Guid("d3c82992-2f12-4008-9376-da37695a2747"),
                             Name = "SecondFeature",
                             RequirementType = 1
                         });
@@ -88,8 +85,8 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("301f6510-3d8b-446d-8ff6-b68b2ab04ee6"),
-                            FeatureId = new Guid("e02ab394-42c6-412e-9f32-7f5d2ca8e7b6"),
+                            Id = new Guid("672dc1bd-9c5b-44ce-8461-234b262a8395"),
+                            FeatureId = new Guid("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"),
                             FilterType = 2,
                             Parameters = "{\"Start\": \"Mon, 01 May 2023 13:59:59 GMT\", \"End\": \"Sat, 01 July 2023 00:00:00 GMT\"}"
                         });

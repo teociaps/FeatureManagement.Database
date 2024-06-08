@@ -3,37 +3,40 @@ using System;
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
+namespace Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    partial class TestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608121707_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.18")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "7.0.20")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("FeatureManagement.Database.Feature", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("RequirementType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -45,13 +48,13 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e02ab394-42c6-412e-9f32-7f5d2ca8e7b6"),
+                            Id = new Guid("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"),
                             Name = "FirstFeature",
                             RequirementType = 1
                         },
                         new
                         {
-                            Id = new Guid("f5665e3e-da77-45f1-806b-6e5e9329a63f"),
+                            Id = new Guid("d3c82992-2f12-4008-9376-da37695a2747"),
                             Name = "SecondFeature",
                             RequirementType = 1
                         });
@@ -61,20 +64,20 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CustomFilterTypeName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("FeatureId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("FilterType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Parameters")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -85,8 +88,8 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("301f6510-3d8b-446d-8ff6-b68b2ab04ee6"),
-                            FeatureId = new Guid("e02ab394-42c6-412e-9f32-7f5d2ca8e7b6"),
+                            Id = new Guid("672dc1bd-9c5b-44ce-8461-234b262a8395"),
+                            FeatureId = new Guid("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"),
                             FilterType = 2,
                             Parameters = "{\"Start\": \"Mon, 01 May 2023 13:59:59 GMT\", \"End\": \"Sat, 01 July 2023 00:00:00 GMT\"}"
                         });

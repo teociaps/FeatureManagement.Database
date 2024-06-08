@@ -1,14 +1,14 @@
-﻿// Copyright (c) Matteo Ciapparelli.
-// Licensed under the MIT license.
-
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,9 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                 name: "Features",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RequirementType = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    RequirementType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,11 +30,11 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
                 name: "FeatureSettings",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomFilterTypeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FilterType = table.Column<int>(type: "int", nullable: false),
-                    Parameters = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FeatureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomFilterTypeName = table.Column<string>(type: "text", nullable: true),
+                    FilterType = table.Column<int>(type: "integer", nullable: false),
+                    Parameters = table.Column<string>(type: "text", nullable: false),
+                    FeatureId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,12 +50,16 @@ namespace FeatureManagement.Database.EntityFrameworkCore.Tests.Migrations
             migrationBuilder.InsertData(
                 table: "Features",
                 columns: new[] { "Id", "Name", "RequirementType" },
-                values: new object[] { new Guid("cd323051-2bd5-4b66-810d-72a41cdde93e"), "FirstFeature", 1 });
+                values: new object[,]
+                {
+                    { new Guid("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"), "FirstFeature", 1 },
+                    { new Guid("d3c82992-2f12-4008-9376-da37695a2747"), "SecondFeature", 1 }
+                });
 
             migrationBuilder.InsertData(
                 table: "FeatureSettings",
                 columns: new[] { "Id", "CustomFilterTypeName", "FeatureId", "FilterType", "Parameters" },
-                values: new object[] { new Guid("ae963db5-18ff-4a0f-b599-a63d5c551c50"), null, new Guid("cd323051-2bd5-4b66-810d-72a41cdde93e"), 2, "{\"Start\": \"Mon, 01 May 2023 13:59:59 GMT\", \"End\": \"Sat, 01 July 2023 00:00:00 GMT\"}" });
+                values: new object[] { new Guid("672dc1bd-9c5b-44ce-8461-234b262a8395"), null, new Guid("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"), 2, "{\"Start\": \"Mon, 01 May 2023 13:59:59 GMT\", \"End\": \"Sat, 01 July 2023 00:00:00 GMT\"}" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Features_Name",
