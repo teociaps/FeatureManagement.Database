@@ -7,19 +7,8 @@
 **.NET Feature Management Database** extends [Feature Management] for retrieving feature definitions from various databases.
 It includes abstractions and default implementations to facilitate easy integration with your .NET applications.
 
-
-## Supported .NET Versions
-
-| Version | Status |
-| ------- | ------ |
-| .NET 6  | ![Badge](https://img.shields.io/badge/Status-Supported-brightgreen) |
-| .NET 7  | ![Badge](https://img.shields.io/badge/Status-Supported-brightgreen) |
-| .NET 8  | ![Badge](https://img.shields.io/badge/Status-Supported-brightgreen) |
-
-
 ## Index
 
-* [Features](#features)
 * [Packages](#packages)
 * [Getting Started](#getting-started)
     * [Feature Store](#feature-store)
@@ -27,26 +16,34 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Configure Cache](#configure-cache)
 * [Consumption](#consumption)
     * [ASP.NET Core Integration](#asp.net-core-integration)
-
-
-## Features
-
-- **Database Integration**: store and retrieve feature definitions from various databases.
-- **Caching**: built-in support for caching feature definitions to enhance performance and reduce database load.
-- **Customizable**: easily extend and customize to support additional storage solutions and unique requirements.
-- **Seamless Integration**: integrates smoothly with Microsoft Feature Management, enabling efficient database-backed feature flag management.
-
+* [Built-in Database Providers](#built-in-database-providers)
+    * [Entity Framework Core](#entity-framework-core)
 
 ## Packages
 
 | Package | NuGet Version |
 | ------- | ------------- |
 | [FeatureManagement.Database.Abstractions](https://www.nuget.org/packages/FeatureManagement.Database.Abstractions/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Abstractions/)
+| [FeatureManagement.Database.EntityFrameworkCore](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore/)
+| [FeatureManagement.Database.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/)
+| [FeatureManagement.Database.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/)
+| [FeatureManagement.Database.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/)
+| [FeatureManagement.Database.EntityFrameworkCore.MySql](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/)
 
 **Package Purposes**
 
 * _FeatureManagement.Database.Abstractions_
 	* Standard functionalities for managing feature flags across various databases
+* _FeatureManagement.Database.EntityFrameworkCore_
+	* Common package for EF Core with base implementations
+* _FeatureManagement.Database.EntityFrameworkCore.SqlServer_
+	* Integration with SQL Server database using EF Core
+* _FeatureManagement.Database.EntityFrameworkCore.PostgreSQL_
+	* Integration with PostgreSQL database using EF Core
+* _FeatureManagement.Database.EntityFrameworkCore.Sqlite_
+	* Integration with Sqlite database using EF Core
+* _FeatureManagement.Database.EntityFrameworkCore.MySql_
+	* Integration with MySql database using EF Core
 
 
 ## Getting Started
@@ -62,7 +59,7 @@ Two primary entities are pre-configured for database feature management:
 - **Feature**: represents a feature with its associated settings. Each feature has a unique name, a requirement type, and a collection of settings that define how the feature is enabled or disabled.
 
 - **FeatureSettings**: contains the settings for a feature and these define the conditions under which a feature is enabled.
-The parameters are stored in JSON format and based on Feature Management [built-in feature filter][Feature Management built-in filters] or [contextual feature filter][Feature Management contextual filters] configuration, and can include [custom feature filter][Feature Management custom filters] configuration.
+The condition parameters are stored in JSON format and based on Feature Management [built-in feature filter][Feature Management built-in filters] or [contextual feature filter][Feature Management contextual filters] configuration, and can include [custom feature filter][Feature Management custom filters] configuration.
 
 #### Example
 
@@ -101,70 +98,47 @@ public class MyFeatureStore : IFeatureStore
 }
 ```
 
+See [built-in database implementations](#built-in-database-providers).
+
 ### Service Registration
 
 Database feature management relies on .NET Core dependency injection.
-Registering the feature management services can be done using the following approaches:
-
-* #### Register Feature Store and Feature Management Separately
-
-    First, register your custom `IFeatureStore` implementation and then add database feature management:
-
-    ```csharp
-    services.AddFeatureStore<MyFeatureStore>();
-    services.AddDatabaseFeatureManagement();
-    ```
-
-    This approach allows for more modular and explicit registration of services.
-
-* #### Register Feature Store and Feature Management in a Single Call
-
-    For a more streamlined setup, you can register your custom `IFeatureStore` and add database feature management in one step:
-
-    ```csharp
-    services.AddDatabaseFeatureManagement<MyFeatureStore>();
-    ```
-
-    This method simplifies the configuration by combining both registrations into a single call.
+You can register the necessary services with a single line of code:
+```csharp
+services.AddDatabaseFeatureManagement<MyFeatureStore>();
+```
 
 > [!NOTE]
 > In the context of database solutions, the feature management services will be added as scoped services.
 
 > [!IMPORTANT]
-> To use database feature management, you need to register an **IFeatureStore**.
+> To use database feature management, you need to register an implementation of **IFeatureStore**.
 
 ### Configure Cache
 
-To improve performance and reduce database load, you can configure caching for the feature store.
-The `WithCacheService` method provides several ways to configure caching:
+Enhance performance and reduce database load using `WithCacheService`:
 
-* #### Using Default Options
+- **Default Options**
   
-    To register the cache service with default options:
-
     ```csharp
     services.AddDatabaseFeatureManagement<MyFeatureStore>()
-            .WithCacheService();
+        .WithCacheService();
     ```
 
     > By default, the inactive cache will be removed after 30 minutes.
 
-* #### Using Custom Configuration Action
-
-    To register the cache service with custom options:
+- **Custom Configuration Action**
 
     ```csharp
     services.AddDatabaseFeatureManagement<MyFeatureStore>()
-            .WithCacheService(options =>
-            {
-                options.SlidingExpiration = TimeSpan.FromMinutes(10);
-                options.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
-            });
+        .WithCacheService(options =>
+        {
+            options.SlidingExpiration = TimeSpan.FromMinutes(10);
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+        });
     ```
 
-* #### Using Configuration Section
-
-    To register the cache service using settings from a configuration section:
+- **IConfiguration**
 
     ```csharp
     var cacheConfiguration = Configuration.GetSection(FeatureCacheOptions.Name);
@@ -175,37 +149,28 @@ The `WithCacheService` method provides several ways to configure caching:
     
     ```json
     {
-      "FeatureCacheOptions": {
-        "AbsoluteExpirationRelativeToNow": "01:00:00",
-        "SlidingExpiration": "00:30:00"
-      }
+        "FeatureCacheOptions": {
+            "AbsoluteExpirationRelativeToNow": "01:00:00",
+            "SlidingExpiration": "00:30:00"
+        }
     }
     ```
 
 #### Advanced Cache Configuration
 
-The cache keys have a prefix defined in the options (`FeatureCacheOptions.CachePrefix`).
+The cache keys have a prefix (**FMDb_**) defined in the options (`FeatureCacheOptions.CachePrefix`). By default:
 
-- For a single feature, the default cache key will be the name of that feature (prefix included).
-    Example:
+|     | Single feature | All features  |
+| --- | -------------- | ------------- |
+| Key | FMDb_MyFeature | FMDb_features |
+
   
-    ```text
-    MyFeature => FMDb_MyFeature
-    ```
-
-- For all features, the default cache key will be "features" combined with the prefix:
-    
-    ```text
-    All features => FMDb_features
-    ```
-    
-    That _"features"_ can be overridden using one of the methods above. So you can have `"FMDb_your-own-cache-key"`.
+Note that _"features"_ can be overridden when configuring cache. So you can have `"FMDb_your-custom-cache-key"`.
 
 See the `FeatureCacheOptions` class for more cache-related settings.
 
 > [!WARNING]
-> When a feature value is updated in the database, the cache does not automatically clean up or refresh.
-> Ensure to handle cache invalidation appropriately in such scenarios to keep the cache in sync with the database.
+> Cache does not auto-refresh when feature values update directly in the database. Handle cache invalidation appropriately.
 
 
 ## Consumption
@@ -232,9 +197,57 @@ The database feature management library provides support in ASP.NET Core and MVC
 See more [here][Feature Management ASP.NET Core].
 
 
+## Built-In Database Providers
+
+### Entity Framework Core
+
+For easy integration with Entity Framework Core, you can use the `FeatureManagement.Database.EntityFrameworkCore` package.
+This package provides:
+
+- A default, extendable `FeatureManagementDbContext` with pre-configured entities for features and feature settings.
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+
+#### Usage
+
+First, install the package:
+
+```sh
+dotnet add package FeatureManagement.Database.EntityFrameworkCore
+```
+
+Then configure the services with the database provider you want:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .ConfigureDbContext<FeatureManagementDbContext>(builder => ...);
+```
+
+Using EF Core, you can work with different database providers which provide an extension method to the `services.AddDatabaseFeatureManagement<FeatureStore>()`:
+
+| Database Provider | Package | Extension method |
+| ----------------- | ------- | ---------------- |
+| SQL Server | `FeatureManagement.Database.EntityFrameworkCore.SqlServer` | `UseSqlServer<FeatureManagementDbContext>(...);` |
+| PostgreSQL | `FeatureManagement.Database.EntityFrameworkCore.PostgreSQL` | `UseNpgsql<FeatureManagementDbContext>(...);` |
+| Sqlite | `FeatureManagement.Database.EntityFrameworkCore.Sqlite` | `UseSqlite<FeatureManagementDbContext>(...);` |
+| MySql | `FeatureManagement.Database.EntityFrameworkCore.MySql` | `UseMySql<FeatureManagementDbContext>(...);` |
+
+
+If you already have an existing DbContext and want to integrate it with EF Core, download the main package and then
+you can inherit from `FeatureManagementDbContext`, so update your registration accordingly using your database provider (e.g. SQL Server):
+
+```csharp
+services.AddDbContext<MyDbContext>(builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+services.AddDatabaseFeatureManagement<MyFeatureStore>();
+```
+
+> [!NOTE]
+> When using a custom DbContext, ensure that `MyFeatureStore` also extends the default one to utilize the custom DbContext.
+
+
 ## Contributing
 
-Please see our [Contribution Guidelines](CONTRIBUTING.md) for more information.
+Please see [Contribution Guidelines](CONTRIBUTING.md) for more information.
 
 
 [Feature Management]: https://github.com/microsoft/FeatureManagement-Dotnet

@@ -1,17 +1,31 @@
 <Solution>
-  <Folder Name="/tests/">
-    <File Path="tests\Directory.Build.props" />
-    <File Path="tests\Directory.Packages.props" />
-    <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
-  </Folder>
-  <Folder Name="/src/">
-    <File Path="src\Directory.Packages.props" />
-    <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
-  </Folder>
   <Folder Name="/build/">
     <File Path="build\Common.props" />
     <File Path="build\icon.png" />
     <File Path="build\NuGet.props" />
     <File Path="build\Versioning.props" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples\ConsoleApp\ConsoleApp.csproj" />
+    <Project Path="samples\WebApiApp\WebApiApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src\Directory.Packages.props" />
+    <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.MySql\FeatureManagement.Database.EntityFrameworkCore.MySql.csproj" Type="Classic C#" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.Sqlite\FeatureManagement.Database.EntityFrameworkCore.Sqlite.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests\Directory.Build.props" />
+    <File Path="tests\Directory.Packages.props" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" Type="Classic C#" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
   </Folder>
 </Solution>
