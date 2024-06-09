@@ -41,11 +41,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.EntityFrameworkCore.Sqlite", "src\FeatureManagement.Database.EntityFrameworkCore.Sqlite\FeatureManagement.Database.EntityFrameworkCore.Sqlite.csproj", "{DCAEFFDE-B460-4804-820F-65E9C3E18621}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj", "{79F6CB30-8AE5-4E62-AFD9-CC36DCA9D2D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj", "{79F6CB30-8AE5-4E62-AFD9-CC36DCA9D2D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj", "{D28EDA58-BDED-4535-995C-E783C9402E44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj", "{D28EDA58-BDED-4535-995C-E783C9402E44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj", "{23456050-2CC7-49E8-AB84-2F570974F622}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj", "{23456050-2CC7-49E8-AB84-2F570974F622}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.EntityFrameworkCore.MySql", "src\FeatureManagement.Database.EntityFrameworkCore.MySql\FeatureManagement.Database.EntityFrameworkCore.MySql.csproj", "{2E996A73-B9CE-4E06-BF63-3247DF9ED417}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.EntityFrameworkCore.MySql.Tests", "tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj", "{C866A4CB-C992-44BE-8959-13604C20B0B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,10 @@ Global
 		{23456050-2CC7-49E8-AB84-2F570974F622}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23456050-2CC7-49E8-AB84-2F570974F622}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23456050-2CC7-49E8-AB84-2F570974F622}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E996A73-B9CE-4E06-BF63-3247DF9ED417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E996A73-B9CE-4E06-BF63-3247DF9ED417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E996A73-B9CE-4E06-BF63-3247DF9ED417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E996A73-B9CE-4E06-BF63-3247DF9ED417}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4069BAAF-52E9-4A9D-938C-D7F567706E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4069BAAF-52E9-4A9D-938C-D7F567706E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4069BAAF-52E9-4A9D-938C-D7F567706E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -77,6 +85,10 @@ Global
 		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA62B656-2A7B-4133-9280-8DF51CCF4105}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D28EDA58-BDED-4535-995C-E783C9402E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D28EDA58-BDED-4535-995C-E783C9402E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D28EDA58-BDED-4535-995C-E783C9402E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -107,11 +119,13 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{23456050-2CC7-49E8-AB84-2F570974F622} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
+		{2E996A73-B9CE-4E06-BF63-3247DF9ED417} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{4069BAAF-52E9-4A9D-938C-D7F567706E6A} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{6684E6A4-2F8A-45A9-AF5B-F3775B14E4C6} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{728B43AD-5292-4BD1-B3CD-4C576E0FD0AB} = {9C0234A4-16D6-4A68-8F89-9B083FA747C9}
 		{79F6CB30-8AE5-4E62-AFD9-CC36DCA9D2D0} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{AA62B656-2A7B-4133-9280-8DF51CCF4105} = {9C0234A4-16D6-4A68-8F89-9B083FA747C9}
+		{C866A4CB-C992-44BE-8959-13604C20B0B2} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{D28EDA58-BDED-4535-995C-E783C9402E44} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{9AE83D01-5878-4213-AE34-8F5377A2DC88} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}

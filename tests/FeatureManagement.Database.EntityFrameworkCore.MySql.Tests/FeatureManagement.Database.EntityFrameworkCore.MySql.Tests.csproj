@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\build\Common.props" />
 
@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Testcontainers.PostgreSql" />
+    <PackageReference Include="Testcontainers.MySql" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
+    <ProjectReference Include="..\..\src\FeatureManagement.Database.EntityFrameworkCore.MySql\FeatureManagement.Database.EntityFrameworkCore.MySql.csproj" />
     <ProjectReference Include="..\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 
