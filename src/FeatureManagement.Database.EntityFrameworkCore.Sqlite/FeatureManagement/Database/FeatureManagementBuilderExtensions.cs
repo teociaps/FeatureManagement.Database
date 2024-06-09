@@ -14,105 +14,105 @@ namespace FeatureManagement.Database;
 public static class FeatureManagementBuilderExtensions
 {
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.<br/>
+    /// Configures the feature management system to use Sqlite as the data store.<br/>
     /// <see cref="FeatureManagementDbContext"/> will be as default type of context used for feature management.
     /// </summary>
     /// <remarks>
-    /// To configure a custom DbContext see <see cref="UseSqlServer{TDbContext}(IFeatureManagementBuilder, Action{SqlServerDbContextOptionsBuilder})"/>.
+    /// To configure a custom DbContext see <see cref="UseSqlite{TDbContext}(IFeatureManagementBuilder, Action{SqliteDbContextOptionsBuilder})"/>.
     /// </remarks>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="sqliteDbContextOptionsBuilder">
+    /// An optional action used to configure the Sqlite connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer(
+    public static IFeatureManagementBuilder UseSqlite(
         this IFeatureManagementBuilder builder,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<SqliteDbContextOptionsBuilder> sqliteDbContextOptionsBuilder = null)
     {
-        return builder.UseSqlServer<FeatureManagementDbContext>(sqlServerDbContextOptionsBuilder);
+        return builder.UseSqlite<FeatureManagementDbContext>(sqliteDbContextOptionsBuilder);
     }
 
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.<br/>
+    /// Configures the feature management system to use Sqlite as the data store.<br/>
     /// <see cref="FeatureManagementDbContext"/> will be as default type of context used for feature management.
     /// </summary>
     /// <remarks>
-    /// To configure a custom DbContext see <see cref="UseSqlServer{TDbContext}(IFeatureManagementBuilder, string, Action{SqlServerDbContextOptionsBuilder})"/>.
+    /// To configure a custom DbContext see <see cref="UseSqlite{TDbContext}(IFeatureManagementBuilder, string, Action{SqliteDbContextOptionsBuilder})"/>.
     /// </remarks>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="connectionString">The connection string used to configure the connection of context to SQL Server database.</param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="connectionString">The connection string used to configure the connection of context to Sqlite database.</param>
+    /// <param name="sqliteDbContextOptionsBuilder">
+    /// An optional action used to configure the Sqlite connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer(
+    public static IFeatureManagementBuilder UseSqlite(
         this IFeatureManagementBuilder builder,
         string connectionString,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<SqliteDbContextOptionsBuilder> sqliteDbContextOptionsBuilder = null)
     {
-        return builder.UseSqlServer<FeatureManagementDbContext>(connectionString, sqlServerDbContextOptionsBuilder);
+        return builder.UseSqlite<FeatureManagementDbContext>(connectionString, sqliteDbContextOptionsBuilder);
     }
 
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.
+    /// Configures the feature management system to use Sqlite as the data store.
     /// </summary>
     /// <typeparam name="TDbContext">The type of context used for feature management.</typeparam>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="sqliteDbContextOptionsBuilder">
+    /// An optional action used to configure the Sqlite connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer<TDbContext>(
+    public static IFeatureManagementBuilder UseSqlite<TDbContext>(
         this IFeatureManagementBuilder builder,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<SqliteDbContextOptionsBuilder> sqliteDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
-        sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
+        sqliteDbContextOptionsBuilder += ComposeDefaultSqliteOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(sqlServerDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlite(sqliteDbContextOptionsBuilder));
         return builder;
     }
 
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.
+    /// Configures the feature management system to use Sqlite as the data store.
     /// </summary>
     /// <typeparam name="TDbContext">The type of context used for feature management.</typeparam>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="connectionString">The connection string used to configure the connection of context to SQL Server database.</param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="connectionString">The connection string used to configure the connection of context to Sqlite database.</param>
+    /// <param name="sqliteDbContextOptionsBuilder">
+    /// An optional action used to configure the Sqlite connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer<TDbContext>(
+    public static IFeatureManagementBuilder UseSqlite<TDbContext>(
         this IFeatureManagementBuilder builder,
         string connectionString,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<SqliteDbContextOptionsBuilder> sqliteDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
-        sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
+        sqliteDbContextOptionsBuilder += ComposeDefaultSqliteOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(connectionString, sqlServerDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlite(connectionString, sqliteDbContextOptionsBuilder));
 
         return builder;
     }
 
-    private static Action<SqlServerDbContextOptionsBuilder> ComposeDefaultSqlServerOptionsBuilder()
+    private static Action<SqliteDbContextOptionsBuilder> ComposeDefaultSqliteOptionsBuilder()
     {
         return options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
     }

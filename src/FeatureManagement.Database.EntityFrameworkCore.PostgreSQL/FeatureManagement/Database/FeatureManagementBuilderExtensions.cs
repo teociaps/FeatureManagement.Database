@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+// Ignore Spelling: Npgsql
+
 using FeatureManagement.Database.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.FeatureManagement;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 namespace FeatureManagement.Database;
 
@@ -14,105 +16,105 @@ namespace FeatureManagement.Database;
 public static class FeatureManagementBuilderExtensions
 {
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.<br/>
+    /// Configures the feature management system to use PostgreSQL as the data store.<br/>
     /// <see cref="FeatureManagementDbContext"/> will be as default type of context used for feature management.
     /// </summary>
     /// <remarks>
-    /// To configure a custom DbContext see <see cref="UseSqlServer{TDbContext}(IFeatureManagementBuilder, Action{SqlServerDbContextOptionsBuilder})"/>.
+    /// To configure a custom DbContext see <see cref="UseNpgsql{TDbContext}(IFeatureManagementBuilder, Action{NpgsqlDbContextOptionsBuilder})"/>.
     /// </remarks>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="npgsqlDbContextOptionsBuilder">
+    /// An optional action used to configure the PostgreSQL connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer(
+    public static IFeatureManagementBuilder UseNpgsql(
         this IFeatureManagementBuilder builder,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
     {
-        return builder.UseSqlServer<FeatureManagementDbContext>(sqlServerDbContextOptionsBuilder);
+        return builder.UseNpgsql<FeatureManagementDbContext>(npgsqlDbContextOptionsBuilder);
     }
 
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.<br/>
+    /// Configures the feature management system to use PostgreSQL as the data store.<br/>
     /// <see cref="FeatureManagementDbContext"/> will be as default type of context used for feature management.
     /// </summary>
     /// <remarks>
-    /// To configure a custom DbContext see <see cref="UseSqlServer{TDbContext}(IFeatureManagementBuilder, string, Action{SqlServerDbContextOptionsBuilder})"/>.
+    /// To configure a custom DbContext see <see cref="UseNpgsql{TDbContext}(IFeatureManagementBuilder, string, Action{NpgsqlDbContextOptionsBuilder})"/>.
     /// </remarks>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="connectionString">The connection string used to configure the connection of context to SQL Server database.</param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="connectionString">The connection string used to configure the connection of context to PostgreSQL database.</param>
+    /// <param name="npgsqlDbContextOptionsBuilder">
+    /// An optional action used to configure the PostgreSQL connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer(
+    public static IFeatureManagementBuilder UseNpgsql(
         this IFeatureManagementBuilder builder,
         string connectionString,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
     {
-        return builder.UseSqlServer<FeatureManagementDbContext>(connectionString, sqlServerDbContextOptionsBuilder);
+        return builder.UseNpgsql<FeatureManagementDbContext>(connectionString, npgsqlDbContextOptionsBuilder);
     }
 
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.
+    /// Configures the feature management system to use PostgreSQL as the data store.
     /// </summary>
     /// <typeparam name="TDbContext">The type of context used for feature management.</typeparam>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="npgsqlDbContextOptionsBuilder">
+    /// An optional action used to configure the PostgreSQL connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer<TDbContext>(
+    public static IFeatureManagementBuilder UseNpgsql<TDbContext>(
         this IFeatureManagementBuilder builder,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
-        sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
+        npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(sqlServerDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseNpgsql(npgsqlDbContextOptionsBuilder));
         return builder;
     }
 
     /// <summary>
-    /// Configures the feature management system to use SQL Server as the data store.
+    /// Configures the feature management system to use PostgreSQL as the data store.
     /// </summary>
     /// <typeparam name="TDbContext">The type of context used for feature management.</typeparam>
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="connectionString">The connection string used to configure the connection of context to SQL Server database.</param>
-    /// <param name="sqlServerDbContextOptionsBuilder">
-    /// An optional action used to configure the SQL Server connection.
+    /// <param name="connectionString">The connection string used to configure the connection of context to PostgreSQL database.</param>
+    /// <param name="npgsqlDbContextOptionsBuilder">
+    /// An optional action used to configure the PostgreSQL connection.
     /// </param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    public static IFeatureManagementBuilder UseSqlServer<TDbContext>(
+    public static IFeatureManagementBuilder UseNpgsql<TDbContext>(
         this IFeatureManagementBuilder builder,
         string connectionString,
-        Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
+        Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
-        sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
+        npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
-        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(connectionString, sqlServerDbContextOptionsBuilder));
+        builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseNpgsql(connectionString, npgsqlDbContextOptionsBuilder));
 
         return builder;
     }
 
-    private static Action<SqlServerDbContextOptionsBuilder> ComposeDefaultSqlServerOptionsBuilder()
+    private static Action<NpgsqlDbContextOptionsBuilder> ComposeDefaultNpgsqlOptionsBuilder()
     {
         return options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
     }

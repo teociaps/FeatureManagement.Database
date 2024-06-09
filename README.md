@@ -28,7 +28,11 @@ It includes abstractions and default implementations to facilitate easy integrat
 * [Consumption](#consumption)
     * [ASP.NET Core Integration](#asp.net-core-integration)
 * [Built-in Database Providers](#built-in-database-providers)
-    * [EF Core SQL Server](#ef-core-sql-server)
+    * [Entity Framework Core](#entity-framework-core)
+      * [SQL Server](#sql-server)
+      * [PostgreSQL](#postgresql)
+      * [Sqlite](#sqlite)
+      * [MySql](#mysql)
 
 ## Features
 
@@ -43,14 +47,26 @@ It includes abstractions and default implementations to facilitate easy integrat
 | Package | NuGet Version |
 | ------- | ------------- |
 | [FeatureManagement.Database.Abstractions](https://www.nuget.org/packages/FeatureManagement.Database.Abstractions/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Abstractions/)
+| [FeatureManagement.Database.EntityFrameworkCore](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore/)
 | [FeatureManagement.Database.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/)
+| [FeatureManagement.Database.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/)
+| [FeatureManagement.Database.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/)
+| [FeatureManagement.Database.EntityFrameworkCore.MySql](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/)
 
 **Package Purposes**
 
 * _FeatureManagement.Database.Abstractions_
 	* Standard functionalities for managing feature flags across various databases
+* _FeatureManagement.Database.EntityFrameworkCore_
+	* Common package for EF Core with base implementations
 * _FeatureManagement.Database.EntityFrameworkCore.SqlServer_
 	* Integration with SQL Server database using Entity Framework Core
+* _FeatureManagement.Database.EntityFrameworkCore.PostgreSQL_
+	* Integration with PostgreSQL database using Entity Framework Core
+* _FeatureManagement.Database.EntityFrameworkCore.Sqlite_
+	* Integration with Sqlite database using Entity Framework Core
+* _FeatureManagement.Database.EntityFrameworkCore.MySql_
+	* Integration with MySql database using Entity Framework Core
 
 
 ## Getting Started
@@ -240,35 +256,76 @@ See more [here][Feature Management ASP.NET Core].
 
 ## Built-In Database Providers
 
-### EF Core SQL Server
+### Entity Framework Core
 
-For easy integration with SQL Server using Entity Framework Core, you can use the `FeatureManagement.Database.EntityFrameworkCore.SqlServer` package.
+For easy integration with Entity Framework Core, you can use the `FeatureManagement.Database.EntityFrameworkCore` package.
 This package provides:
 
 - A default, extendable `FeatureManagementDbContext` with pre-configured entities for features and feature settings.
-- A default`FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
 
 #### Usage
 
 First, install the package:
 
 ```sh
-dotnet add package FeatureManagement.Database.EntityFrameworkCore.SqlServer
+dotnet add package FeatureManagement.Database.EntityFrameworkCore
 ```
 
-Then configure the services:
+Then configure the services with the database provider you want:
 
 ```csharp
 services.AddDatabaseFeatureManagement<FeatureStore>()
-    .UseSqlServer<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    .ConfigureDbContext<FeatureManagementDbContext>(builder => ...);
 ```
 
-If you have an existing DbContext and want to integrate it, you can inherit from `FeatureManagementDbContext` and update your registration accordingly:
+Using EF Core, you can work with different database providers:
+
+* #### SQL Server
+    Install the package `FeatureManagement.Database.EntityFrameworkCore.SqlServer` and configure the services:
+
+    ```csharp
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseSqlServer<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    ```
+
+* #### PostgreSQL
+    Install the package `FeatureManagement.Database.EntityFrameworkCore.PostgreSQL` and configure the services:
+
+    ```csharp
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseNpgsql<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    ```
+
+* #### Sqlite
+    Install the package `FeatureManagement.Database.EntityFrameworkCore.Sqlite` and configure the services:
+
+    ```csharp
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseSqlite<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    ```
+
+* #### MySql
+    Install the package `FeatureManagement.Database.EntityFrameworkCore.MySql` and configure the services:
+
+    ```csharp
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseMySql<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    ```
+
+> [!TIP]
+> Tip: If you choose a specific database provider, you only need to download the specific
+package (e.g., FeatureManagement.Database.EntityFrameworkCore.SqlServer) and nothing else.
+
+### What if I already have a DbContext?
+
+If you have an existing DbContext and want to integrate it with EF Core, download the main package and then
+you can inherit from `FeatureManagementDbContext`, so update your registration accordingly using your database provider (e.g. SQL Server):
 
 ```csharp
 services.AddDbContext<MyDbContext>(builder => builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-services.AddDatabaseFeatureManagement<FeatureStore>();
+services.AddDatabaseFeatureManagement<MyFeatureStore>();
 ```
 
 In this scenario, your DbContext should inherit from FeatureManagementDbContext, and your FeatureStore should be extended to use your custom DbContext.
