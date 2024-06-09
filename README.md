@@ -32,6 +32,7 @@ It includes abstractions and default implementations to facilitate easy integrat
       * [SQL Server](#sql-server)
       * [PostgreSQL](#postgresql)
       * [Sqlite](#sqlite)
+      * [MySql](#mysql)
 
 ## Features
 
@@ -49,6 +50,8 @@ It includes abstractions and default implementations to facilitate easy integrat
 | [FeatureManagement.Database.EntityFrameworkCore](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore/)
 | [FeatureManagement.Database.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.SqlServer/)
 | [FeatureManagement.Database.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/)
+| [FeatureManagement.Database.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/)
+| [FeatureManagement.Database.EntityFrameworkCore.MySql](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/)
 
 **Package Purposes**
 
@@ -60,6 +63,10 @@ It includes abstractions and default implementations to facilitate easy integrat
 	* Integration with SQL Server database using Entity Framework Core
 * _FeatureManagement.Database.EntityFrameworkCore.PostgreSQL_
 	* Integration with PostgreSQL database using Entity Framework Core
+* _FeatureManagement.Database.EntityFrameworkCore.Sqlite_
+	* Integration with Sqlite database using Entity Framework Core
+* _FeatureManagement.Database.EntityFrameworkCore.MySql_
+	* Integration with MySql database using Entity Framework Core
 
 
 ## Getting Started
@@ -296,6 +303,14 @@ Using EF Core, you can work with different database providers:
     ```csharp
     services.AddDatabaseFeatureManagement<FeatureStore>()
         .UseSqlite<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
+    ```
+
+* #### MySql
+    Install the package `FeatureManagement.Database.EntityFrameworkCore.MySql` and configure the services:
+
+    ```csharp
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseMySql<FeatureManagementDbContext>(Configuration.GetConnectionString("DefaultConnection")));
     ```
 
 > [!TIP]
