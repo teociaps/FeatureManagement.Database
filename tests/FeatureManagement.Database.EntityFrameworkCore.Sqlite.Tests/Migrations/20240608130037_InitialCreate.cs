@@ -20,9 +20,9 @@ namespace Migrations
                 name: "Features",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    RequirementType = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    RequirementType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,11 +33,11 @@ namespace Migrations
                 name: "FeatureSettings",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CustomFilterTypeName = table.Column<string>(type: "text", nullable: true),
-                    FilterType = table.Column<int>(type: "integer", nullable: false),
-                    Parameters = table.Column<string>(type: "text", nullable: false),
-                    FeatureId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CustomFilterTypeName = table.Column<string>(type: "TEXT", nullable: true),
+                    FilterType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Parameters = table.Column<string>(type: "TEXT", nullable: false),
+                    FeatureId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

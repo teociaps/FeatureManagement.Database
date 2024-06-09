@@ -12,12 +12,17 @@
   <Folder Name="/src/">
     <File Path="src\Directory.Packages.props" />
     <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.Sqlite\FeatureManagement.Database.EntityFrameworkCore.Sqlite.csproj" />
     <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
-    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" Type="Classic C#" />
+    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests\Directory.Build.props" />
     <File Path="tests\Directory.Packages.props" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
   </Folder>
