@@ -7,7 +7,7 @@ param(
 Write-Host "Restoring dependencies..."
 dotnet restore
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "dotnet restore failed"
+    Write-Error "dotnet restore failed" -ForegroundColor "Red"
     exit $LASTEXITCODE
 }
 
@@ -15,8 +15,8 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "Building project..."
 dotnet build --no-restore --configuration $Configuration
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "dotnet build failed"
+    Write-Error "dotnet build failed" -ForegroundColor "Red"
     exit $LASTEXITCODE
 }
 
-Write-Host "Build completed successfully."
+Write-Host "Build completed successfully." -ForegroundColor "Green"

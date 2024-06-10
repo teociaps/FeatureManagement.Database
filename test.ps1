@@ -1,4 +1,4 @@
-# run-tests.ps1
+# tests.ps1
 param(
     [string]$Configuration = "Release"
 )
@@ -10,9 +10,9 @@ foreach ($project in $testProjects) {
     Write-Host "Running tests for project: $($project.FullName)"
     dotnet test $project.FullName --configuration $Configuration
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Tests failed for project: $($project.FullName)"
+        Write-Error "Tests failed for project: $($project.FullName)" -ForegroundColor "Red"
         exit $LASTEXITCODE
     }
 }
 
-Write-Host "All tests passed."
+Write-Host "All tests passed." -ForegroundColor "Green"
