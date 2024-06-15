@@ -251,8 +251,8 @@ Please see [Contribution Guidelines](CONTRIBUTING.md) for more information.
 
 
 [Feature Management]: https://github.com/microsoft/FeatureManagement-Dotnet
-[Feature Management built-in filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#built-in-feature-filters
-[Feature Management contextual filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#contextual-feature-filters
-[Feature Management custom filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#implementing-a-feature-filter
-[Feature Management Consumption]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#consumption
-[Feature Management ASP.NET Core]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#aspnet-core-integration
+[Feature Management built-in filters]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#built-in-feature-filters
+[Feature Management contextual filters]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#contextual-feature-filters
+[Feature Management custom filters]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#implementing-a-feature-filter
+[Feature Management Consumption]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#consumption
+[Feature Management ASP.NET Core]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#aspnet-core-integration
