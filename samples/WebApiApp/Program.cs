@@ -13,8 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Set up feature management
-builder.Services.AddDbContext<FeatureManagementDbContext>(options => options.UseInMemoryDatabase("testDb"));
-builder.Services.AddDatabaseFeatureManagement<FeatureStore>();
+builder.Services.AddDatabaseFeatureManagement<FeatureStore>()
+    .ConfigureDbContext<FeatureManagementDbContext>(options => options.UseInMemoryDatabase("testDb"));
 
 var app = builder.Build();
 
