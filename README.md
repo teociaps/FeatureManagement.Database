@@ -18,6 +18,7 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [ASP.NET Core Integration](#asp.net-core-integration)
 * [Built-in Database Providers](#built-in-database-providers)
     * [Entity Framework Core](#entity-framework-core)
+    * [Dapper](#dapper)
 
 ## Packages
 
@@ -29,6 +30,7 @@ It includes abstractions and default implementations to facilitate easy integrat
 | [FeatureManagement.Database.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/)
 | [FeatureManagement.Database.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/)
 | [FeatureManagement.Database.EntityFrameworkCore.MySql](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/)
+| [FeatureManagement.Database.Dapper](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/)
 
 **Package Purposes**
 
@@ -44,6 +46,8 @@ It includes abstractions and default implementations to facilitate easy integrat
 	* Integration with Sqlite database using EF Core
 * _FeatureManagement.Database.EntityFrameworkCore.MySql_
 	* Integration with MySql database using EF Core
+* _FeatureManagement.Database.Dapper_
+	* Integration with Dapper
 
 
 ## Getting Started
@@ -245,14 +249,57 @@ services.AddDatabaseFeatureManagement<MyFeatureStore>();
 > When using a custom DbContext, ensure that `MyFeatureStore` also extends the default one to utilize the custom DbContext.
 
 
+### Dapper
+
+For easy integration with Dapper, you can use the `FeatureManagement.Database.Dapper` package.
+This package provides:
+
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+- A `IDbConnectionFactory` for creating database connections.
+
+#### Usage
+
+First, install the package:
+
+```sh
+dotnet add package FeatureManagement.Database.Dapper
+```
+
+Then implement `IDbConnectionFactory` to create a connection string to connect to your database:
+
+```csharp
+public class SqlServerConnectionFactory : IDbConnectionFactory
+{
+    private readonly string _connectionString;
+
+    public SqlServerConnectionFactory(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
+
+    public IDbConnection CreateConnection()
+    {
+        return new SqlConnection(_connectionString);
+    }
+}
+```
+
+And configure the services:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseDapper(new SqlServerConnectionFactory("Your_SqlServer_ConnString"));
+```
+
+
 ## Contributing
 
 Please see [Contribution Guidelines](CONTRIBUTING.md) for more information.
 
 
 [Feature Management]: https://github.com/microsoft/FeatureManagement-Dotnet
-[Feature Management built-in filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#built-in-feature-filters
-[Feature Management contextual filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#contextual-feature-filters
-[Feature Management custom filters]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#implementing-a-feature-filter
-[Feature Management Consumption]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#consumption
-[Feature Management ASP.NET Core]: https://github.com/microsoft/FeatureManagement-Dotnet?tab=readme-ov-file#aspnet-core-integration
+[Feature Management built-in filters]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#built-in-feature-filters
+[Feature Management contextual filters]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#contextual-feature-filters
+[Feature Management custom filters]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#implementing-a-feature-filter
+[Feature Management Consumption]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#consumption
+[Feature Management ASP.NET Core]: https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference#aspnet-core-integration
