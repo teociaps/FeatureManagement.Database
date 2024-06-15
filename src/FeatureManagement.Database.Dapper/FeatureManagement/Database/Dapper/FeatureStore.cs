@@ -13,18 +13,18 @@ namespace FeatureManagement.Database.Dapper;
 public class FeatureStore : IFeatureStore
 {
     /// <summary>
-    /// The database connection.
+    /// The database connection factory.
     /// </summary>
-    protected readonly IDbConnection DbConnection;
+    protected readonly IDbConnectionFactory DbConnectionFactory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FeatureStore"/> class.
     /// </summary>
-    /// <param name="dbConnection">The database connection.</param>
-    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="dbConnection"/> is null.</exception>
-    public FeatureStore(IDbConnection dbConnection)
+    /// <param name="dbConnectionFactory">The database connection factory.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="dbConnectionFactory"/> is null.</exception>
+    public FeatureStore(IDbConnectionFactory dbConnectionFactory)
     {
-        DbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
+        DbConnectionFactory = dbConnectionFactory ?? throw new ArgumentNullException(nameof(dbConnectionFactory));
     }
 
     /// <inheritdoc/>
@@ -35,12 +35,18 @@ public class FeatureStore : IFeatureStore
             SELECT * FROM FeatureSettings WHERE FeatureId = (SELECT Id FROM Features WHERE Name = @FeatureName);
         ";
 
-        await using var multi = await DbConnection.QueryMultipleAsync(Query, new { FeatureName = featureName });
+        using var connection = DbConnectionFactory.CreateConnection();
 
-        var feature = await multi.ReadSingleOrDefaultAsync<Feature>();
+#if NET6_0_OR_GREATER
+        await using var multiQuery = await connection.QueryMultipleAsync(Query, new { FeatureName = featureName });
+#else
+        using var multiQuery = await connection.QueryMultipleAsync(Query, new { FeatureName = featureName });
+#endif
+
+        var feature = await multiQuery.ReadSingleOrDefaultAsync<Feature>();
         if (feature is not null)
         {
-            feature.Settings = (await multi.ReadAsync<FeatureSettings>()).ToList();
+            feature.Settings = (await multiQuery.ReadAsync<FeatureSettings>()).ToList();
         }
 
         return feature;
@@ -54,10 +60,16 @@ public class FeatureStore : IFeatureStore
             SELECT * FROM FeatureSettings WHERE FeatureId IN (SELECT Id FROM Features);
         ";
 
-        await using var multi = await DbConnection.QueryMultipleAsync(Query);
+        using var connection = DbConnectionFactory.CreateConnection();
 
-        var features = (await multi.ReadAsync<Feature>()).ToList();
-        var settings = (await multi.ReadAsync<FeatureSettings>()).ToList();
+#if NET6_0_OR_GREATER
+        await using var multiQuery = await connection.QueryMultipleAsync(Query);
+#else
+        using var multiQuery = await connection.QueryMultipleAsync(Query);
+#endif
+
+        var features = (await multiQuery.ReadAsync<Feature>()).ToList();
+        var settings = (await multiQuery.ReadAsync<FeatureSettings>()).ToList();
 
         foreach (var feature in features)
         {
