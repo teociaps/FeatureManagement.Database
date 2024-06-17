@@ -10,7 +10,7 @@ namespace FeatureManagement.Database.MongoDB;
 /// <summary>
 /// Represents a factory interface for creating connections to a MongoDB database.
 /// </summary>
-public interface IMongoDbConnectionFactory
+public interface IMongoDBConnectionFactory
 {
     /// <summary>
     /// Gets a MongoDB database instance.

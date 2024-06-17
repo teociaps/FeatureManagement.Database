@@ -30,12 +30,7 @@ public static class FeatureManagementBuilderExtensions
         string connectionString,
         string databaseName)
     {
-        MongoDbConfigurator.RegisterClassMaps();
-
-        var factory = new MongoDBConnectionFactory(connectionString, databaseName);
-        builder.Services.AddTransient<IMongoDbConnectionFactory>(_ => factory);
-
-        return builder;
+        return builder.UseMongoDB(new MongoDBConnectionFactory(connectionString, databaseName));
     }
 
     /// <summary>
@@ -51,12 +46,15 @@ public static class FeatureManagementBuilderExtensions
     /// <exception cref="ArgumentNullException">Thrown if provided factory is null.</exception>
     public static IFeatureManagementBuilder UseMongoDB(
         this IFeatureManagementBuilder builder,
-        IMongoDbConnectionFactory mongoDbConnectionFactory)
+        IMongoDBConnectionFactory mongoDbConnectionFactory)
     {
         if (mongoDbConnectionFactory is null)
             throw new ArgumentNullException(nameof(mongoDbConnectionFactory));
 
-        MongoDbConfigurator.RegisterClassMaps();
+        var initializer = new MongoDBInitializer(mongoDbConnectionFactory.GetDatabase());
+        initializer.Initialize();
+
+        MongoDBConfigurator.RegisterClassMaps();
 
         builder.Services.AddTransient(_ => mongoDbConnectionFactory);
 

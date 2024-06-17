@@ -11,7 +11,7 @@ namespace FeatureManagement.Database.MongoDB;
 /// </summary>
 public class FeatureStore : IFeatureStore
 {
-    private readonly IMongoDbConnectionFactory _connectionFactory;
+    private readonly IMongoDBConnectionFactory _connectionFactory;
 
     /// <summary>
     /// The <see cref="Feature"/> collection.
@@ -27,7 +27,7 @@ public class FeatureStore : IFeatureStore
     /// Initializes a new instance of the <see cref="FeatureStore"/> class.
     /// </summary>
     /// <param name="connectionFactory">The MongoDB connection factory.</param>
-    public FeatureStore(IMongoDbConnectionFactory connectionFactory)
+    public FeatureStore(IMongoDBConnectionFactory connectionFactory)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 

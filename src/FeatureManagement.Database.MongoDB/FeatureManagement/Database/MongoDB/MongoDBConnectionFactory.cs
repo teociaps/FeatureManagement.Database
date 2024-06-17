@@ -8,9 +8,9 @@ using MongoDB.Driver;
 namespace FeatureManagement.Database.MongoDB;
 
 /// <summary>
-/// Default implementation of <see cref="IMongoDbConnectionFactory"/>.
+/// Default implementation of <see cref="IMongoDBConnectionFactory"/>.
 /// </summary>
-public class MongoDBConnectionFactory : IMongoDbConnectionFactory
+public class MongoDBConnectionFactory : IMongoDBConnectionFactory
 {
     private readonly string _connectionString;
     private readonly string _databaseName;
