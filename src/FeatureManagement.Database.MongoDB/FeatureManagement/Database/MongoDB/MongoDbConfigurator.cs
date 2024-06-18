@@ -18,25 +18,31 @@ internal static class MongoDBConfigurator
     /// </summary>
     internal static void RegisterClassMaps()
     {
-        BsonClassMap.RegisterClassMap<Feature>(cm =>
+        if (!BsonClassMap.IsClassMapRegistered(typeof(Feature)))
         {
-            cm.AutoMap();
-            cm.MapIdMember(f => f.Id)
-              .SetSerializer(new GuidSerializer(BsonType.String));
-            cm.MapMember(f => f.Name).SetIsRequired(true);
-            cm.MapMember(f => f.RequirementType).SetIsRequired(true);
-            cm.MapMember(f => f.Settings);
-        });
+            BsonClassMap.RegisterClassMap<Feature>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapIdMember(f => f.Id)
+                  .SetSerializer(new GuidSerializer(BsonType.String));
+                cm.MapMember(f => f.Name).SetIsRequired(true);
+                cm.MapMember(f => f.RequirementType).SetIsRequired(true);
+                cm.MapMember(f => f.Settings);
+            });
+        }
 
-        BsonClassMap.RegisterClassMap<FeatureSettings>(cm =>
+        if (!BsonClassMap.IsClassMapRegistered(typeof(FeatureSettings)))
         {
-            cm.AutoMap();
-            cm.MapIdMember(fs => fs.Id)
-              .SetSerializer(new GuidSerializer(BsonType.String))
-              .SetIdGenerator(CombGuidGenerator.Instance);
-            cm.MapMember(fs => fs.FilterType).SetIsRequired(true);
-            cm.MapMember(fs => fs.Parameters).SetIsRequired(true);
-            cm.MapMember(fs => fs.FeatureId).SetSerializer(new GuidSerializer(BsonType.String));
-        });
+            BsonClassMap.RegisterClassMap<FeatureSettings>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapIdMember(fs => fs.Id)
+                  .SetSerializer(new GuidSerializer(BsonType.String))
+                  .SetIdGenerator(CombGuidGenerator.Instance);
+                cm.MapMember(fs => fs.FilterType).SetIsRequired(true);
+                cm.MapMember(fs => fs.Parameters).SetIsRequired(true);
+                cm.MapMember(fs => fs.FeatureId).SetSerializer(new GuidSerializer(BsonType.String));
+            });
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FeatureManagement.Database.MongoDB;
@@ -29,15 +31,38 @@ internal class MongoDBInitializer
         var featureCollection = _database.GetCollection<Feature>("Features");
         var featureSettingsCollection = _database.GetCollection<FeatureSettings>("FeatureSettings");
 
-        // Create unique index on Feature.Name
+        // Define the index models
         var featureIndexKeysDefinition = Builders<Feature>.IndexKeys.Ascending(f => f.Name);
         var featureIndexOptions = new CreateIndexOptions { Unique = true };
         var featureIndexModel = new CreateIndexModel<Feature>(featureIndexKeysDefinition, featureIndexOptions);
-        featureCollection.Indexes.CreateOne(featureIndexModel);
 
-        // Create index on FeatureSettings.FeatureId
         var featureSettingsIndexKeysDefinition = Builders<FeatureSettings>.IndexKeys.Ascending(fs => fs.FeatureId);
         var featureSettingsIndexModel = new CreateIndexModel<FeatureSettings>(featureSettingsIndexKeysDefinition);
-        featureSettingsCollection.Indexes.CreateOne(featureSettingsIndexModel);
+
+        // Create indexes if they do not exist
+        CreateIndexIfNotExists(featureCollection, featureIndexModel);
+        CreateIndexIfNotExists(featureSettingsCollection, featureSettingsIndexModel);
+    }
+
+    private static void CreateIndexIfNotExists<TDocument>(IMongoCollection<TDocument> collection, CreateIndexModel<TDocument> indexModel)
+    {
+        var indexName = indexModel.Options?.Name ?? GenerateIndexName(indexModel);
+
+        // List existing indexes
+        var existingIndexes = collection.Indexes.List().ToList();
+        var indexExists = existingIndexes.Exists(index => index["name"] == indexName);
+
+        if (!indexExists)
+        {
+            collection.Indexes.CreateOne(indexModel);
+        }
+    }
+
+    private static string GenerateIndexName<TDocument>(CreateIndexModel<TDocument> indexModel)
+    {
+        // Generate a name for the index based on the keys definition
+        var indexKeys = indexModel.Keys.Render(BsonSerializer.SerializerRegistry.GetSerializer<TDocument>(), BsonSerializer.SerializerRegistry);
+        var indexName = string.Join("_", indexKeys.ToBsonDocument().Elements.Select(e => $"{e.Name}_{e.Value.ToString().ToLower()}"));
+        return indexName;
     }
 }
