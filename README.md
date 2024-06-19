@@ -19,6 +19,7 @@ It includes abstractions and default implementations to facilitate easy integrat
 * [Built-in Database Providers](#built-in-database-providers)
     * [Entity Framework Core](#entity-framework-core)
     * [Dapper](#dapper)
+    * [MongoDB](#mongodb)
 
 ## Packages
 
@@ -31,6 +32,7 @@ It includes abstractions and default implementations to facilitate easy integrat
 | [FeatureManagement.Database.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.Sqlite/)
 | [FeatureManagement.Database.EntityFrameworkCore.MySql](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/)
 | [FeatureManagement.Database.Dapper](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/)
+| [FeatureManagement.Database.MongoDB](https://www.nuget.org/packages/FeatureManagement.Database.MongoDB/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.MongoDB/)
 
 **Package Purposes**
 
@@ -48,6 +50,8 @@ It includes abstractions and default implementations to facilitate easy integrat
 	* Integration with MySql database using EF Core
 * _FeatureManagement.Database.Dapper_
 	* Integration with Dapper
+* _FeatureManagement.Database.MongoDB_
+	* Integration with MongoDB
 
 
 ## Getting Started
@@ -289,6 +293,31 @@ And configure the services:
 ```csharp
 services.AddDatabaseFeatureManagement<FeatureStore>()
     .UseDapper(new SqlServerConnectionFactory("Your_SqlServer_ConnString"));
+```
+
+
+### MongoDB
+
+For easy integration with MongoDB, you can use the `FeatureManagement.Database.MongoDB` package.
+This package provides:
+
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+- A `IMongoDBConnectionFactory` for creating database connections with default implementation.
+
+- #### Usage
+
+First, install the package:
+
+```sh
+dotnet add package FeatureManagement.Database.MongoDB
+```
+
+Then use the default `MongoDBConnectionFactory` or implement `IMongoDBConnectionFactory` to create a custom connection string to connect to your database,
+and configure the services:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseMongoDB(...);
 ```
 
 

@@ -53,7 +53,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.Dapper", "src\FeatureManagement.Database.Dapper\FeatureManagement.Database.Dapper.csproj", "{39B7EDB2-6C16-4B74-B0D2-A8EFAF806BB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.Dapper.Tests", "tests\FeatureManagement.Database.Dapper.Tests\FeatureManagement.Database.Dapper.Tests.csproj", "{8CCC154B-D124-4B0E-B62B-41556E1100E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.Dapper.Tests", "tests\FeatureManagement.Database.Dapper.Tests\FeatureManagement.Database.Dapper.Tests.csproj", "{8CCC154B-D124-4B0E-B62B-41556E1100E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.MongoDB", "src\FeatureManagement.Database.MongoDB\FeatureManagement.Database.MongoDB.csproj", "{D0A77D18-0AC7-4B3E-B979-93FF2AEC2639}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.MongoDB.Tests", "tests\FeatureManagement.Database.MongoDB.Tests\FeatureManagement.Database.MongoDB.Tests.csproj", "{0E276EBF-75F5-43E2-8F33-94BB9C49E0BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E276EBF-75F5-43E2-8F33-94BB9C49E0BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E276EBF-75F5-43E2-8F33-94BB9C49E0BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E276EBF-75F5-43E2-8F33-94BB9C49E0BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E276EBF-75F5-43E2-8F33-94BB9C49E0BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23456050-2CC7-49E8-AB84-2F570974F622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23456050-2CC7-49E8-AB84-2F570974F622}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23456050-2CC7-49E8-AB84-2F570974F622}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -101,6 +109,10 @@ Global
 		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C866A4CB-C992-44BE-8959-13604C20B0B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A77D18-0AC7-4B3E-B979-93FF2AEC2639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A77D18-0AC7-4B3E-B979-93FF2AEC2639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A77D18-0AC7-4B3E-B979-93FF2AEC2639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A77D18-0AC7-4B3E-B979-93FF2AEC2639}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D28EDA58-BDED-4535-995C-E783C9402E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D28EDA58-BDED-4535-995C-E783C9402E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D28EDA58-BDED-4535-995C-E783C9402E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -130,6 +142,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{0E276EBF-75F5-43E2-8F33-94BB9C49E0BB} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{23456050-2CC7-49E8-AB84-2F570974F622} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{2E996A73-B9CE-4E06-BF63-3247DF9ED417} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{39B7EDB2-6C16-4B74-B0D2-A8EFAF806BB2} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
@@ -140,6 +153,7 @@ Global
 		{8CCC154B-D124-4B0E-B62B-41556E1100E1} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{AA62B656-2A7B-4133-9280-8DF51CCF4105} = {9C0234A4-16D6-4A68-8F89-9B083FA747C9}
 		{C866A4CB-C992-44BE-8959-13604C20B0B2} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
+		{D0A77D18-0AC7-4B3E-B979-93FF2AEC2639} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{D28EDA58-BDED-4535-995C-E783C9402E44} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{DB4DF079-5C58-4A45-A078-C26EE566DE55} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{9AE83D01-5878-4213-AE34-8F5377A2DC88} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
