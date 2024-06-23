@@ -16,23 +16,23 @@ public class FeatureMap : ClassMap<Feature>
     /// </summary>
     public FeatureMap()
     {
-        Table("Features");
+        Table($"{nameof(Feature)}s");
 
         Id(x => x.Id)
             .GeneratedBy.GuidComb()
-            .Column("Id");
+            .Column(nameof(Feature.Id));
 
         Map(x => x.Name)
-            .Column("Name")
+            .Column(nameof(Feature.Name))
             .Unique()
             .Not.Nullable();
 
         Map(x => x.RequirementType)
-            .Column("RequirementType")
+            .Column(nameof(Feature.RequirementType))
             .Not.Nullable();
 
         HasMany(x => x.Settings)
-            .KeyColumn("FeatureId")
+            .KeyColumn(nameof(FeatureSettings.FeatureId))
             //.Inverse()
             .Cascade.All()
             .LazyLoad();

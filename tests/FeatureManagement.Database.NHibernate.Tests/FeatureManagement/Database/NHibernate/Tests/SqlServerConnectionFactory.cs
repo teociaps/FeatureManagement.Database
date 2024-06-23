@@ -9,9 +9,9 @@ using NHibernate.Tool.hbm2ddl;
 
 namespace FeatureManagement.Database.NHibernate;
 
-public class SqlServerConnectionFactory : INHibernateConnectionFactory
+public class SqlServerConnectionFactory : NHibernateConnectionFactory
 {
-    public ISessionFactory CreateSessionFactory(string connectionString)
+    public override ISessionFactory CreateSessionFactory(string connectionString)
     {
         return Fluently.Configure()
             .Database(MsSqlConfiguration.MsSql2012

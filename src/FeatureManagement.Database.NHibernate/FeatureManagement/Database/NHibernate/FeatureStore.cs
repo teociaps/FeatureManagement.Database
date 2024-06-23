@@ -31,7 +31,7 @@ public class FeatureStore : IFeatureStore
     }
 
     /// <inheritdoc/>
-    public async Task<Feature> GetFeatureAsync([NotNull] string featureName)
+    public virtual async Task<Feature> GetFeatureAsync([NotNull] string featureName)
     {
         using var session = SessionFactory.OpenSession();
         return await session.QueryOver<Feature>()
@@ -41,7 +41,7 @@ public class FeatureStore : IFeatureStore
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
+    public virtual async Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
     {
         using var session = SessionFactory.OpenSession();
         var features = await session.QueryOver<Feature>()

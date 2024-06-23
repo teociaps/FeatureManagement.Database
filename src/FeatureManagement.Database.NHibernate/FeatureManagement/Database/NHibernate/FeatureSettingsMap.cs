@@ -16,25 +16,25 @@ public class FeatureSettingsMap : ClassMap<FeatureSettings>
     /// </summary>
     public FeatureSettingsMap()
     {
-        Table("FeatureSettings");
+        Table(nameof(FeatureSettings));
 
         Id(x => x.Id)
             .GeneratedBy.GuidComb()
-            .Column("Id");
+            .Column(nameof(FeatureSettings.Id));
 
         Map(x => x.CustomFilterTypeName)
-            .Column("CustomFilterTypeName");
+            .Column(nameof(FeatureSettings.CustomFilterTypeName));
 
         Map(x => x.FilterType)
-            .Column("FilterType")
+            .Column(nameof(FeatureSettings.FilterType))
             .Not.Nullable();
 
         Map(x => x.Parameters)
-            .Column("Parameters")
+            .Column(nameof(FeatureSettings.Parameters))
             .Not.Nullable();
 
         References(x => x.Feature)
-            .Column("FeatureId")
+            .Column(nameof(FeatureSettings.FeatureId))
             //.Not.Nullable()
             .LazyLoad();
     }
