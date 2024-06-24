@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <Import Project="..\..\build\NuGet.props" />
+
+  <PropertyGroup>
+    <PackageId>FeatureManagement.Database.NHibernate</PackageId>
+    <Description>
+      An extension library of .NET Feature Management to use feature flags using NHibernate.
+    </Description>
+    <PackageTags>
+      extension;featuremanagement;feature-flags;database;dotnet;nhibernate
+    </PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentNHibernate" />
+    <PackageReference Include="NHibernate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

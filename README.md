@@ -20,6 +20,7 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Entity Framework Core](#entity-framework-core)
     * [Dapper](#dapper)
     * [MongoDB](#mongodb)
+    * [NHibernate](#nhibernate)
 
 ## Packages
 
@@ -33,6 +34,7 @@ It includes abstractions and default implementations to facilitate easy integrat
 | [FeatureManagement.Database.EntityFrameworkCore.MySql](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.EntityFrameworkCore.MySql/)
 | [FeatureManagement.Database.Dapper](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/)
 | [FeatureManagement.Database.MongoDB](https://www.nuget.org/packages/FeatureManagement.Database.MongoDB/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.MongoDB/)
+| [FeatureManagement.Database.NHibernate](https://www.nuget.org/packages/FeatureManagement.Database.NHibernate/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.NHibernate/)
 
 **Package Purposes**
 
@@ -52,6 +54,8 @@ It includes abstractions and default implementations to facilitate easy integrat
 	* Integration with Dapper
 * _FeatureManagement.Database.MongoDB_
 	* Integration with MongoDB
+* _FeatureManagement.Database.NHibernate_
+	* Integration with NHibernate
 
 
 ## Getting Started
@@ -304,7 +308,7 @@ This package provides:
 - A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
 - A `IMongoDBConnectionFactory` for creating database connections with default implementation.
 
-- #### Usage
+#### Usage
 
 First, install the package:
 
@@ -319,6 +323,37 @@ and configure the services:
 services.AddDatabaseFeatureManagement<FeatureStore>()
     .UseMongoDB(...);
 ```
+
+### NHibernate
+
+For easy integration with NHibernate, you can use the `FeatureManagement.Database.NHibernate` package.
+This package provides:
+
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+- An `INHibernateConnectionFactory` for creating session factories with default implementation.
+
+#### Usage
+
+First, install the package:
+
+```sh
+dotnet add package FeatureManagement.Database.NHibernate
+```
+
+Then, use the default `NHibernateConnectionFactory` or implement `INHibernateConnectionFactory` to create a custom session factory, and configure the services:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseNHibernate(options =>
+    {
+        options.DatabaseConfigurer = /* Your database configurer, e.g., MsSqlConfiguration.MsSql2012.ConnectionString("your-connection-string") */;
+        options.ConfigureMapping = m => m.FluentMappings.AddFromAssemblyOf<YourMappingClass>();
+        options.ConfigurationSetup = cfg => { /* Additional NHibernate configurations */ };
+    });
+```
+
+> [!NOTE]
+> You can also use the default implementation and customize it configuring options, like the example above.
 
 
 ## Contributing
