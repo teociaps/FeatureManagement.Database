@@ -18,15 +18,23 @@
     <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.Sqlite\FeatureManagement.Database.EntityFrameworkCore.Sqlite.csproj" />
     <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
     <Project Path="src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" />
+    <Project Path="src\FeatureManagement.Database.MongoDB\FeatureManagement.Database.MongoDB.csproj" />
+    <Project Path="src\FeatureManagement.Database.NHibernate\FeatureManagement.Database.NHibernate.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests\Directory.Build.props" />
     <File Path="tests\Directory.Packages.props" />
+    <Project Path="tests\FeatureManagement.Database.Dapper.Tests\FeatureManagement.Database.Dapper.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.MongoDB.Tests\FeatureManagement.Database.MongoDB.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.NHibernate.Tests\FeatureManagement.Database.NHibernate.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
   </Folder>
+  <Properties Name="Visual Studio">
+    <Property Name="OpenWith" Value="17" />
+  </Properties>
 </Solution>
