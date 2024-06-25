@@ -1,4 +1,7 @@
-﻿using FluentNHibernate.Cfg;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate.Cfg;
 

@@ -1,4 +1,7 @@
-﻿using NHibernate;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using NHibernate;
 using static FeatureManagement.Database.Features;
 
 namespace FeatureManagement.Database.NHibernate.Tests;

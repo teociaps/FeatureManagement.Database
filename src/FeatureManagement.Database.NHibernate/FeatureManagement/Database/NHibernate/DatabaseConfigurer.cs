@@ -1,4 +1,7 @@
-﻿using FluentNHibernate.Cfg.Db;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+using FluentNHibernate.Cfg.Db;
 
 namespace FeatureManagement.Database.NHibernate;
 
