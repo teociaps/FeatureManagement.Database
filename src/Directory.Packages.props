@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="Dapper" Version="2.1.35" />
     <PackageVersion Include="FluentNHibernate" Version="3.3.0" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.41.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
