@@ -61,9 +61,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.NHibernate", "src\FeatureManagement.Database.NHibernate\FeatureManagement.Database.NHibernate.csproj", "{A74702B5-0F9A-40B0-91ED-64E138F0F69E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.NHibernate.Tests", "tests\FeatureManagement.Database.NHibernate.Tests\FeatureManagement.Database.NHibernate.Tests.csproj", "{DBAB888A-FE09-4020-BE88-743958B54F53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.NHibernate.Tests", "tests\FeatureManagement.Database.NHibernate.Tests\FeatureManagement.Database.NHibernate.Tests.csproj", "{DBAB888A-FE09-4020-BE88-743958B54F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.CosmosDB", "src\FeatureManagement.Database.CosmosDB\FeatureManagement.Database.CosmosDB.csproj", "{84718A54-72FF-4AE9-9FFB-558088C344BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.CosmosDB", "src\FeatureManagement.Database.CosmosDB\FeatureManagement.Database.CosmosDB.csproj", "{84718A54-72FF-4AE9-9FFB-558088C344BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.CosmosDB.Tests", "tests\FeatureManagement.Database.CosmosDB.Tests\FeatureManagement.Database.CosmosDB.Tests.csproj", "{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +157,10 @@ Global
 		{84718A54-72FF-4AE9-9FFB-558088C344BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84718A54-72FF-4AE9-9FFB-558088C344BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84718A54-72FF-4AE9-9FFB-558088C344BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +187,7 @@ Global
 		{A74702B5-0F9A-40B0-91ED-64E138F0F69E} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
 		{DBAB888A-FE09-4020-BE88-743958B54F53} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 		{84718A54-72FF-4AE9-9FFB-558088C344BD} = {80D694E3-6FD9-4249-A5E9-B6623BD59E28}
+		{BB720806-46DF-4F8E-BD91-0DEE06BA69F0} = {43BBEC90-C0D3-4FBD-BD47-ACCDE5FA7EA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6910875A-378A-40F4-B89C-68DFDF955953}
