@@ -6,8 +6,6 @@ using Microsoft.Extensions.Options;
 
 namespace FeatureManagement.Database.CosmosDB;
 
-// TODO: improve performances
-
 /// <summary>
 /// Cosmos DB implementation of <see cref="IFeatureStore"/>.
 /// </summary>
@@ -40,13 +38,11 @@ public class FeatureStore : IFeatureStore
             .WithParameter("@FeatureName", featureName);
 
         var feature = await GetFirstOrDefaultAsync<Feature>(featuresContainer, query);
-        if (feature is not null && !_options.UseSeparateContainers)
+        if (feature is not null)
         {
-            feature.Settings = await GetFeatureSettingsAsync(featuresContainer, feature.Id);
-        }
-        else if (feature is not null && _options.UseSeparateContainers)
-        {
-            var featureSettingsContainer = ConnectionFactory.GetFeatureSettingsContainer();
+            var featureSettingsContainer = _options.UseSeparateContainers
+                ? ConnectionFactory.GetFeatureSettingsContainer()
+                : featuresContainer;
             feature.Settings = await GetFeatureSettingsAsync(featureSettingsContainer, feature.Id);
         }
 
@@ -61,17 +57,13 @@ public class FeatureStore : IFeatureStore
         var query = new QueryDefinition("SELECT * FROM c");
 
         var features = await GetListAsync<Feature>(featuresContainer, query);
-        if (!_options.UseSeparateContainers)
+        if (features.Count > 0)
         {
-            foreach (var feature in features)
-            {
-                feature.Settings = await GetFeatureSettingsAsync(featuresContainer, feature.Id);
-            }
-        }
-        else
-        {
-            var featureSettingsContainer = ConnectionFactory.GetFeatureSettingsContainer();
-            var settings = await GetListAsync<FeatureSettings>(featureSettingsContainer, new QueryDefinition("SELECT * FROM c"));
+            var featureSettingsContainer = _options.UseSeparateContainers
+                ? ConnectionFactory.GetFeatureSettingsContainer()
+                : featuresContainer;
+
+            var settings = await GetFeatureSettingsAsync(featureSettingsContainer, features.ConvertAll(f => f.Id));
             foreach (var feature in features)
             {
                 feature.Settings = settings.Where(s => s.FeatureId == feature.Id).ToList();
@@ -81,19 +73,7 @@ public class FeatureStore : IFeatureStore
         return features;
     }
 
-    private static async Task<List<T>> GetListAsync<T>(Container container, QueryDefinition query)
-    {
-        var items = new List<T>();
-        using (var feedIterator = container.GetItemQueryIterator<T>(query))
-        {
-            while (feedIterator.HasMoreResults)
-            {
-                var response = await feedIterator.ReadNextAsync();
-                items.AddRange([..response]);
-            }
-        }
-        return items;
-    }
+    #region Private
 
     private static async Task<T> GetFirstOrDefaultAsync<T>(Container container, QueryDefinition query)
     {
@@ -109,6 +89,32 @@ public class FeatureStore : IFeatureStore
         return default;
     }
 
+    private static async Task<List<T>> GetListAsync<T>(Container container, QueryDefinition query)
+    {
+        var items = new List<T>();
+        using (var feedIterator = container.GetItemQueryIterator<T>(query))
+        {
+            while (feedIterator.HasMoreResults)
+            {
+                var response = await feedIterator.ReadNextAsync();
+                items.AddRange(response);
+            }
+        }
+        return items;
+    }
+
+    private static async Task<List<FeatureSettings>> GetFeatureSettingsAsync(Container container, List<Guid> featureIds)
+    {
+        var items = new List<FeatureSettings>();
+        foreach (var featureId in featureIds)
+        {
+            var query = new QueryDefinition("SELECT * FROM c WHERE c.FeatureId = @FeatureId")
+                .WithParameter("@FeatureId", featureId);
+            items.AddRange(await GetListAsync<FeatureSettings>(container, query));
+        }
+        return items;
+    }
+
     private static async Task<List<FeatureSettings>> GetFeatureSettingsAsync(Container container, Guid featureId)
     {
         var query = new QueryDefinition("SELECT * FROM c WHERE c.FeatureId = @FeatureId")
@@ -116,4 +122,6 @@ public class FeatureStore : IFeatureStore
 
         return await GetListAsync<FeatureSettings>(container, query);
     }
+
+    #endregion Private
 }

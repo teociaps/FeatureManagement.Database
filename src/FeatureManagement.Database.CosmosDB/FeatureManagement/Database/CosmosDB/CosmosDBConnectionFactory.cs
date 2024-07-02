@@ -31,14 +31,10 @@ public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
         _client = new CosmosClient(CosmosDBOptions.EndpointUri, CosmosDBOptions.AccountKey);
         _useSeparateContainers = CosmosDBOptions.UseSeparateContainers;
 
+        _featuresContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeaturesCollectionName);
         if (_useSeparateContainers)
         {
-            _featuresContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeaturesCollectionName);
             _featureSettingsContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeatureSettingsCollectionName);
-        }
-        else
-        {
-            _featuresContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeaturesCollectionName);
         }
     }
 
@@ -57,10 +53,6 @@ public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
     /// <inheritdoc/>
     public virtual Container GetFeatureSettingsContainer()
     {
-        if (_useSeparateContainers)
-        {
-            return _featureSettingsContainer;
-        }
-        return _featuresContainer; // Return the features container if using a single container
+        return _useSeparateContainers ? _featureSettingsContainer : _featuresContainer;
     }
 }
