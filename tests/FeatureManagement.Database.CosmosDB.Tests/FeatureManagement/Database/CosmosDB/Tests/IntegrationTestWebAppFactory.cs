@@ -52,6 +52,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
                 options.EndpointUri = $"https://localhost:{CosmosDbBuilder.CosmosDbPort}";
                 options.AccountKey = CosmosDbBuilder.DefaultAccountKey;
                 options.DatabaseName = "TestDatabase";
+                options.UseSeparateContainers = false;
             });
     }
 }

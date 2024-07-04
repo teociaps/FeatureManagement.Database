@@ -38,11 +38,9 @@ public class FeatureStore : IFeatureStore
             .WithParameter("@FeatureName", featureName);
 
         var feature = await GetFirstOrDefaultAsync<Feature>(featuresContainer, query);
-        if (feature is not null)
+        if (feature is not null && _options.UseSeparateContainers)
         {
-            var featureSettingsContainer = _options.UseSeparateContainers
-                ? ConnectionFactory.GetFeatureSettingsContainer()
-                : featuresContainer;
+            var featureSettingsContainer = ConnectionFactory.GetFeatureSettingsContainer();
             feature.Settings = await GetFeatureSettingsAsync(featureSettingsContainer, feature.Id);
         }
 
@@ -57,11 +55,9 @@ public class FeatureStore : IFeatureStore
         var query = new QueryDefinition("SELECT * FROM c");
 
         var features = await GetListAsync<Feature>(featuresContainer, query);
-        if (features.Count > 0)
+        if (features.Count > 0 && _options.UseSeparateContainers)
         {
-            var featureSettingsContainer = _options.UseSeparateContainers
-                ? ConnectionFactory.GetFeatureSettingsContainer()
-                : featuresContainer;
+            var featureSettingsContainer = ConnectionFactory.GetFeatureSettingsContainer();
 
             var settings = await GetFeatureSettingsAsync(featureSettingsContainer, features.ConvertAll(f => f.Id));
             foreach (var feature in features)

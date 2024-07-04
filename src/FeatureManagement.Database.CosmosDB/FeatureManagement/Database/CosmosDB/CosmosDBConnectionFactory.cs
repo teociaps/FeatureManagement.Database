@@ -33,9 +33,7 @@ public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
 
         _featuresContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeaturesCollectionName);
         if (_useSeparateContainers)
-        {
             _featureSettingsContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeatureSettingsCollectionName);
-        }
     }
 
     /// <inheritdoc/>

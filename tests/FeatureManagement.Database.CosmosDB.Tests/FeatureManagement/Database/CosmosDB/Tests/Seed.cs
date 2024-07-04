@@ -40,7 +40,8 @@ internal static class Seed
             }
         ];
 
-        await featureSettingsContainer.DeleteItemAsync<FeatureSettings>("672dc1bd-9c5b-44ce-8461-234b262a8395", new PartitionKey("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"));
+        if (cosmosDBOptions.UseSeparateContainers)
+            await featureSettingsContainer.DeleteItemAsync<FeatureSettings>("672dc1bd-9c5b-44ce-8461-234b262a8395", new PartitionKey("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"));
 
         List<FeatureSettings> settings =
         [
