@@ -25,6 +25,7 @@
   <Folder Name="/tests/">
     <File Path="tests\Directory.Build.props" />
     <File Path="tests\Directory.Packages.props" />
+    <Project Path="tests\FeatureManagement.Database.CosmosDB.Tests\FeatureManagement.Database.CosmosDB.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.Dapper.Tests\FeatureManagement.Database.Dapper.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
