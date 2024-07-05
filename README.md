@@ -21,6 +21,7 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Dapper](#dapper)
     * [MongoDB](#mongodb)
     * [NHibernate](#nhibernate)
+    * [Cosmos DB](#cosmos-db)
 
 ## Packages
 
@@ -35,6 +36,7 @@ It includes abstractions and default implementations to facilitate easy integrat
 | [FeatureManagement.Database.Dapper](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.Dapper/)
 | [FeatureManagement.Database.MongoDB](https://www.nuget.org/packages/FeatureManagement.Database.MongoDB/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.MongoDB/)
 | [FeatureManagement.Database.NHibernate](https://www.nuget.org/packages/FeatureManagement.Database.NHibernate/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.NHibernate/)
+| [FeatureManagement.Database.CosmosDB](https://www.nuget.org/packages/FeatureManagement.Database.CosmosDB/) | [![NuGet Version](https://img.shields.io/nuget/v/FeatureManagement.Database.svg?style=flat)](https://www.nuget.org/packages/FeatureManagement.Database.CosmosDB/)
 
 **Package Purposes**
 
@@ -56,6 +58,8 @@ It includes abstractions and default implementations to facilitate easy integrat
 	* Integration with MongoDB
 * _FeatureManagement.Database.NHibernate_
 	* Integration with NHibernate
+* _FeatureManagement.Database.CosmosDB_
+	* Integration with Azure Cosmos DB
 
 
 ## Getting Started
@@ -324,6 +328,7 @@ services.AddDatabaseFeatureManagement<FeatureStore>()
     .UseMongoDB(...);
 ```
 
+
 ### NHibernate
 
 For easy integration with NHibernate, you can use the `FeatureManagement.Database.NHibernate` package.
@@ -354,6 +359,92 @@ services.AddDatabaseFeatureManagement<FeatureStore>()
 
 > [!NOTE]
 > You can also use the default implementation and customize it configuring options, like the example above.
+
+
+### Cosmos DB
+
+For easy integration with Cosmos DB, you can use the `FeatureManagement.Database.CosmosDB` package.
+This package provides:
+
+- A default `FeatureStore` implementation of the `IFeatureStore` interface, which can be extended as needed.
+- An `ICosmosDBConnectionFactory` for creating Cosmos DB clients with a default implementation.
+
+#### Usage
+
+First, install the package:
+
+```sh
+dotnet add package FeatureManagement.Database.CosmosDB
+```
+
+Then, use the default `CosmosDBConnectionFactory` or implement `ICosmosDBConnectionFactory` to create a custom Cosmos DB client, and configure the services:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseCosmosDB(options =>
+    {
+        options.EndpointUri = "https://your-cosmos-db-endpoint";
+        options.AccountKey = "your-cosmos-db-account-key";
+        options.DatabaseName = "your-database-name";
+        options.FeaturesCollectionName = "Features";
+        options.FeatureSettingsCollectionName = "FeatureSettings";
+        options.UseSeparateContainers = true; // or false if using a single container
+    });
+```
+
+Alternatively, you can configure the services using `IConfiguration`:
+
+```csharp
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseCosmosDB(Configuration.GetSection("CosmosDBOptions"));
+```
+
+You can also provide a custom `ICosmosDBConnectionFactory`:
+
+```csharp
+public class MyCustomCosmosDBConnectionFactory : ICosmosDBConnectionFactory
+{
+    // Implement your own factory
+}
+
+...
+
+services.AddDatabaseFeatureManagement<FeatureStore>()
+    .UseCosmosDB<MyCustomCosmosDBConnectionFactory>(options =>
+    {
+        ...
+    });
+```
+
+> [!NOTE]
+> You can use the default implementation customizing it by configuring the options; otherwise override it or implement your own factory.
+
+#### Example Configuration Section
+
+If you are using `IConfiguration`, your appsettings.json might look like this:
+
+```json
+{
+  "CosmosDBOptions": {
+    "EndpointUri": "https://your-cosmos-db-endpoint",
+    "AccountKey": "your-cosmos-db-account-key",
+    "DatabaseName": "your-database-name",
+    "FeaturesCollectionName": "Features",
+    "FeatureSettingsCollectionName": "FeatureSettings",
+    "UseSeparateContainers": true
+  }
+}
+```
+
+Make sure to bind this section in your `Startup.cs` or `Program.cs`:
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDatabaseFeatureManagement<FeatureStore>()
+        .UseCosmosDB(Configuration.GetSection("CosmosDBOptions"));
+}
+```
 
 
 ## Contributing
