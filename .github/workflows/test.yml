@@ -11,22 +11,52 @@ on:
 
 env:
   CONFIGURATION: 'Release'
+  COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
+  AZURE_COSMOS_ENDPOINT: https://localhost:8081
+  COSMOS_DB_PATHS: |
+    FeatureManagement.Database.Abstractions/
+    FeatureManagement.Database.CosmosDB/
+    FeatureManagement.Database.CosmosDB.Tests/
 
 jobs:
-  test:
+  setup_cosmosdb:
+    if: ${{ github.event_name == 'pull_request' && contains(env.COSMOS_DB_PATHS.split('\n'), github.event.pull_request.changed_files) }}
     runs-on: ubuntu-latest
+    steps:
+      - name: Cosmos DB setup
+        uses: ./.github/workflows/cosmosdb-setup.yml
+
+  test_with_cosmosdb:
+    needs: setup_cosmosdb
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet_version: ['6.0.x', '8.0.x']
+        test_type: ['OnlyCosmosDB']
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: .NET setup
+        uses: ./.github/workflows/dotnet-setup.yml
+        with:
+          dotnet_version: ${{ matrix.dotnet_version }}
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          6.0.x
-          8.0.x
+      - name: Run tests
+        shell: pwsh
+        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type }}
 
-    - name: Run tests
-      shell: pwsh
-      run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }}
+  test_without_cosmosdb:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet_version: ['6.0.x', '8.0.x']
+        test_type: ['NoCosmosDB']
+
+    steps:
+      - name: .NET setup
+        uses: ./.github/workflows/dotnet-setup.yml
+        with:
+          dotnet_version: ${{ matrix.dotnet_version }}
+
+      - name: Run tests
+        shell: pwsh
+        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type }}
