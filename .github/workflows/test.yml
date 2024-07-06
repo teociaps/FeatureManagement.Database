@@ -13,14 +13,14 @@ env:
   CONFIGURATION: 'Release'
   COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
   AZURE_COSMOS_ENDPOINT: https://localhost:8081
-  COSMOS_DB_PATHS: |
-    FeatureManagement.Database.Abstractions/
-    FeatureManagement.Database.CosmosDB/
-    FeatureManagement.Database.CosmosDB.Tests/
 
 jobs:
   setup_cosmosdb:
-    if: ${{ github.event_name == 'pull_request' && contains(${{ env.COSMOS_DB_PATHS }}.split('\n'), github.event.pull_request.changed_files) }}
+    if: ${{ github.event_name == 'pull_request' && (
+         contains(github.event.pull_request.changed_files, 'FeatureManagement.Database.Abstractions/') ||
+         contains(github.event.pull_request.changed_files, 'FeatureManagement.Database.CosmosDB/') ||
+         contains(github.event.pull_request.changed_files, 'FeatureManagement.Database.CosmosDB.Tests/')
+       ) }}
     runs-on: ubuntu-latest
     steps:
       - name: Cosmos DB setup
