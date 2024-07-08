@@ -21,9 +21,8 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
 
     steps:
-      - uses: actions/setup-dotnet@v4
       - name: .NET setup
-        uses: ./.github/workflows/dotnet-setup.yml
+        uses: teociaps/FeatureManagement.Database./.github/workflows/dotnet-setup.yml@main
         with:
           dotnet_version: ${{ matrix.dotnet_version }}
 
