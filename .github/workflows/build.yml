@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: .NET setup
-        uses: teociaps/FeatureManagement.Database./.github/workflows/dotnet-setup.yml@main
+        uses: ./.github/actions/dotnet-setup
         with:
           dotnet_version: ${{ matrix.dotnet_version }}
 
