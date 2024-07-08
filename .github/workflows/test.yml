@@ -39,6 +39,7 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['OnlyCosmosDB']
     steps:
+      - uses: actions/setup-dotnet@v4
       - name: .NET setup
         uses: ./.github/workflows/dotnet-setup.yml
         with:
@@ -58,6 +59,7 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['NoCosmosDB']
     steps:
+      - uses: actions/setup-dotnet@v4
       - name: .NET setup
         uses: ./.github/workflows/dotnet-setup.yml
         with:
