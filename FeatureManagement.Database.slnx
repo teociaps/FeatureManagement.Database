@@ -12,6 +12,7 @@
   <Folder Name="/src/">
     <File Path="src\Directory.Packages.props" />
     <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
+    <Project Path="src\FeatureManagement.Database.CosmosDB\FeatureManagement.Database.CosmosDB.csproj" />
     <Project Path="src\FeatureManagement.Database.Dapper\FeatureManagement.Database.Dapper.csproj" />
     <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.MySql\FeatureManagement.Database.EntityFrameworkCore.MySql.csproj" />
     <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
@@ -24,6 +25,7 @@
   <Folder Name="/tests/">
     <File Path="tests\Directory.Build.props" />
     <File Path="tests\Directory.Packages.props" />
+    <Project Path="tests\FeatureManagement.Database.CosmosDB.Tests\FeatureManagement.Database.CosmosDB.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.Dapper.Tests\FeatureManagement.Database.Dapper.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
