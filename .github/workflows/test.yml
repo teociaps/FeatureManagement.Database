@@ -7,26 +7,65 @@ on:
       - completed
   pull_request:
     branches: [dev, main]
-    types: [opened, reopened, edited]
+    types: [opened, reopened, synchronize, edited, ready_for_review]
 
 env:
   CONFIGURATION: 'Release'
+  COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
+  AZURE_COSMOS_ENDPOINT: https://localhost:8081
 
 jobs:
-  test:
+  check_cosmosdb_paths:
     runs-on: ubuntu-latest
-
+    outputs:
+      cosmosdb_changed: ${{ steps.filter.outputs.cosmosdb }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          6.0.x
-          8.0.x
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            cosmosdb:
+              - 'FeatureManagement.Database.Abstractions/**'
+              - 'FeatureManagement.Database.CosmosDB/**'
+              - 'FeatureManagement.Database.CosmosDB.Tests/**'
 
-    - name: Run tests
-      shell: pwsh
-      run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }}
+  cosmosdb_tests:
+    needs: check_cosmosdb_paths
+    if: needs.check_cosmosdb_paths.outputs.cosmosdb_changed == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet_version: ['6.0.x', '8.0.x']
+        test_type: ['OnlyCosmosDB']
+    steps:
+      - name: .NET setup
+        uses: ./.github/workflows/dotnet-setup.yml
+        with:
+          dotnet_version: ${{ matrix.dotnet_version }}
+
+      - name: Cosmos DB setup
+        uses: ./.github/workflows/cosmosdb-setup.yml
+
+      - name: Run CosmosDB tests
+        shell: pwsh
+        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type }}
+
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet_version: ['6.0.x', '8.0.x']
+        test_type: ['NoCosmosDB']
+    steps:
+      - name: .NET setup
+        uses: ./.github/workflows/dotnet-setup.yml
+        with:
+          dotnet_version: ${{ matrix.dotnet_version }}
+
+      - name: Run tests
+        shell: pwsh
+        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type }}

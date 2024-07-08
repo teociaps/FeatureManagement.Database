@@ -1,4 +1,7 @@
-﻿namespace FeatureManagement.Database.NHibernate;
+﻿// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
+namespace FeatureManagement.Database.NHibernate;
 
 /// <summary>
 /// Specifies the pre-configured types of databases supported.
