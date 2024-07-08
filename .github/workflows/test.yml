@@ -39,6 +39,7 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['OnlyCosmosDB']
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
       - name: .NET setup
         uses: ./.github/actions/dotnet-setup
@@ -59,6 +60,7 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['NoCosmosDB']
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
       - name: .NET setup
         uses: ./.github/actions/dotnet-setup
