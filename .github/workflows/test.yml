@@ -15,12 +15,29 @@ env:
   AZURE_COSMOS_ENDPOINT: https://localhost:8081
 
 jobs:
+  check_cosmosdb_paths:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      cosmosdb_changed: ${{ steps.filter.outputs.cosmosdb }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            cosmosdb:
+              - 'FeatureManagement.Database.Abstractions/**'
+              - 'FeatureManagement.Database.CosmosDB/**'
+              - 'FeatureManagement.Database.CosmosDB.Tests/**'
+
   setup_cosmosdb:
-    if: ${{ github.event_name == 'pull_request' && (
-         contains(github.event.pull_request.changed_files, 'FeatureManagement.Database.Abstractions/') ||
-         contains(github.event.pull_request.changed_files, 'FeatureManagement.Database.CosmosDB/') ||
-         contains(github.event.pull_request.changed_files, 'FeatureManagement.Database.CosmosDB.Tests/')
-       ) }}
+    needs: check_cosmosdb_paths
+    if: needs.check_cosmosdb_paths.outputs.cosmosdb_changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Cosmos DB setup
