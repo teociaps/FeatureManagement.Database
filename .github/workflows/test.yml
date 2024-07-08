@@ -17,23 +17,48 @@ env:
 jobs:
   check_cosmosdb_paths:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
     outputs:
-      cosmosdb_changed: ${{ steps.filter.outputs.cosmosdb }}
+      cosmosdb_changed: ${{ steps.check_paths.outputs.cosmosdb_changed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Filter paths
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            cosmosdb:
-              - 'FeatureManagement.Database.Abstractions/**'
-              - 'FeatureManagement.Database.CosmosDB/**'
-              - 'FeatureManagement.Database.CosmosDB.Tests/**'
+      - name: Get list of changed files
+        id: changes
+        run: |
+          echo "changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_ENV
+
+      - name: Determine if CosmosDB files changed
+        id: check_paths
+        run: |
+          cosmosdb_changed=false
+          for file in ${{ env.changed_files }}; do
+            if [[ "$file" == "FeatureManagement.Database.Abstractions/"* || "$file" == "FeatureManagement.Database.CosmosDB/"* || "$file" == "FeatureManagement.Database.CosmosDB.Tests/"* ]]; then
+              cosmosdb_changed=true
+              break
+            fi
+          done
+          echo "::set-output name=cosmosdb_changed::$cosmosdb_changed"
+
+  # check_cosmosdb_paths:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pull-requests: read
+  #   outputs:
+  #     cosmosdb_changed: ${{ steps.filter.outputs.cosmosdb }}
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Filter paths
+  #       id: filter
+  #       uses: dorny/paths-filter@v3
+  #       with:
+  #         filters: |
+  #           cosmosdb:
+  #             - 'FeatureManagement.Database.Abstractions/**'
+  #             - 'FeatureManagement.Database.CosmosDB/**'
+  #             - 'FeatureManagement.Database.CosmosDB.Tests/**'
 
   setup_cosmosdb:
     needs: check_cosmosdb_paths
