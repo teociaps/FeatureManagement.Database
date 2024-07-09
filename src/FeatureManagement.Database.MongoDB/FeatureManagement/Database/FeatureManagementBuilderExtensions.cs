@@ -25,6 +25,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if provided name or connection string is null.</exception>
     public static IFeatureManagementBuilder UseMongoDB(
         this IFeatureManagementBuilder builder,
         string connectionString,

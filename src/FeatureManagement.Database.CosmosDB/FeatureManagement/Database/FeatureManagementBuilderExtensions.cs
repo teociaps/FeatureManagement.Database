@@ -59,6 +59,7 @@ public static class FeatureManagementBuilderExtensions
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
     /// <exception cref="ArgumentException">Thrown if the provided factory type is not <see cref="ICosmosDBConnectionFactory"/>.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if provided configuration is null.</exception>
     public static IFeatureManagementBuilder UseCosmosDB(
         this IFeatureManagementBuilder builder,
         Type cosmosDBConnectionFactoryType,
@@ -70,6 +71,9 @@ public static class FeatureManagementBuilderExtensions
                 "The provided factory type must inherit from ICosmosDBConnectionFactory.",
                 nameof(cosmosDBConnectionFactoryType));
         }
+
+        if (configuration is null)
+            throw new ArgumentNullException(nameof(configuration));
 
         builder.Services.AddOptions();
         builder.Services.Configure<CosmosDBOptions>(configuration);
@@ -90,6 +94,7 @@ public static class FeatureManagementBuilderExtensions
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
     /// <exception cref="ArgumentException">Thrown if the provided factory type is not <see cref="ICosmosDBConnectionFactory"/>.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if provided options configuration is null.</exception>
     public static IFeatureManagementBuilder UseCosmosDB(
         this IFeatureManagementBuilder builder,
         Type cosmosDBConnectionFactoryType,
@@ -101,6 +106,9 @@ public static class FeatureManagementBuilderExtensions
                 "The provided factory type must inherit from ICosmosDBConnectionFactory.",
                 nameof(cosmosDBConnectionFactoryType));
         }
+
+        if (configureOptions is null)
+            throw new ArgumentNullException(nameof(configureOptions));
 
         builder.Services.AddOptions();
         builder.Services.Configure(configureOptions);
@@ -120,6 +128,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if provided factory or configuration is null.</exception>
     public static IFeatureManagementBuilder UseCosmosDB<TConnectionFactory>(
         this IFeatureManagementBuilder builder,
         IConfiguration configuration)
@@ -158,11 +167,18 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if provided factory or options configuration is null.</exception>
     public static IFeatureManagementBuilder UseCosmosDB(
         this IFeatureManagementBuilder builder,
         ICosmosDBConnectionFactory cosmosDBConnectionFactory,
         Action<CosmosDBOptions> configureOptions)
     {
+        if (cosmosDBConnectionFactory is null)
+            throw new ArgumentNullException(nameof(cosmosDBConnectionFactory));
+
+        if (configureOptions is null)
+            throw new ArgumentNullException(nameof(configureOptions));
+
         builder.Services.AddOptions();
         builder.Services.Configure(configureOptions);
         builder.Services.AddSingleton(cosmosDBConnectionFactory);
@@ -181,11 +197,18 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if provided factory or configuration is null.</exception>
     public static IFeatureManagementBuilder UseCosmosDB(
         this IFeatureManagementBuilder builder,
         ICosmosDBConnectionFactory cosmosDBConnectionFactory,
         IConfiguration configuration)
     {
+        if (cosmosDBConnectionFactory is null)
+            throw new ArgumentNullException(nameof(cosmosDBConnectionFactory));
+
+        if (configuration is null)
+            throw new ArgumentNullException(nameof(configuration));
+
         builder.Services.AddOptions();
         builder.Services.Configure<CosmosDBOptions>(configuration);
         builder.Services.AddSingleton(cosmosDBConnectionFactory);
