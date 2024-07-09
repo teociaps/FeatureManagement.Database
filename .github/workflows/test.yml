@@ -11,6 +11,9 @@ env:
   COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
   AZURE_COSMOS_ENDPOINT: https://localhost:8081
 
+permissions:
+  pull-requests: read
+
 jobs:
   check_cosmosdb_paths:
     runs-on: ubuntu-latest
