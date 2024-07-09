@@ -8,6 +8,7 @@ on:
   pull_request:
     branches: [dev, main]
     types: [opened, reopened, synchronize, edited, ready_for_review]
+    paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
 
 env:
   CONFIGURATION: 'Release'
@@ -15,18 +16,17 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet_version: ['6.0.x', '8.0.x']
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: .NET setup
+        uses: ./.github/actions/dotnet-setup
+        with:
+          dotnet_version: ${{ matrix.dotnet_version }}
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          6.0.x
-          8.0.x
-
-    - name: Run build
-      shell: pwsh
-      run: ./build.ps1 -Configuration ${{ env.CONFIGURATION }}
+      - name: Run build
+        shell: pwsh
+        run: ./build.ps1 -Configuration ${{ env.CONFIGURATION }}

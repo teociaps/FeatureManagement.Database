@@ -1,0 +1,36 @@
+# .github/actions/cosmos-setup/action.yml
+name: "Cosmos DB Setup"
+description: "Setup Cosmos DB Emulator environment"
+runs:
+  using: "composite"
+  steps:
+    - name: Pull and Run Cosmos DB Emulator
+      shell: bash
+      run: |
+        docker pull mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+        docker run \
+          --publish 8081:8081 \
+          --name cosmosdb-linux-emulator \
+          --detach \
+          mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+
+    - name: Wait for Cosmos DB Emulator to start
+      shell: bash
+      run: |
+        echo "Waiting for Cosmos DB Emulator to start... (it may require a few minutes)"
+        while ! curl --insecure https://localhost:8081/_explorer/emulator.pem >/dev/null 2>&1; do
+          sleep 5
+        done
+
+    - name: Download Cosmos DB Emulator Certificate
+      shell: bash
+      run: |
+        curl --insecure https://localhost:8081/_explorer/emulator.pem > ~/emulatorcert.crt
+        echo "Certificate downloaded"
+
+    - name: Import Emulator Certificate
+      shell: bash
+      run: |
+        sudo cp ~/emulatorcert.crt /usr/local/share/ca-certificates/
+        sudo update-ca-certificates
+        echo "Certificate updated. Cosmos DB Emulator configured successfully!"

@@ -17,18 +17,28 @@ Get-ChildItem -Path src -Filter FeatureManagement.* -Directory | ForEach-Object 
     $projectName = $_.Name
     $csprojPath = Join-Path -Path $projectPath -ChildPath "$projectName.csproj"
 
-    $version = dotnet msbuild $csprojPath -nologo -t:GetVersion -v:q -p:OutputProperty=Version
-    $packageName = "$projectName.$version.nupkg"
+    try {
+        $version = dotnet msbuild $csprojPath -nologo -t:GetVersion -v:q -p:OutputProperty=Version
 
-    dotnet pack $projectPath --configuration $Configuration --output $PackageOutput
+        if (-not $version) {
+            throw "Failed to retrieve version for project $projectName"
+        }
 
-    $packageExists = dotnet nuget search $projectName --version $version --source $NuGetSourceUrl | Select-String -Pattern $version
+        $packageName = "$projectName.$version.nupkg"
 
-    if (-not $packageExists) {
-        dotnet nuget push "$PackageOutput/$packageName" -k $NuGetApiKey -s $NuGetSourceUrl
-        Write-Host "Package $packageName version $version pushed." -ForegroundColor "Green"
-    } else {
-        Write-Host "Package $packageName version $version already exists on NuGet. Skipping push." -ForegroundColor "Yellow"
+        dotnet pack $projectPath --configuration $Configuration --output $PackageOutput
+
+        $packageExists = dotnet nuget search $projectName --version $version --source $NuGetSourceUrl | Select-String -Pattern $version
+
+        if (-not $packageExists) {
+            dotnet nuget push "$PackageOutput/$packageName" -k $NuGetApiKey -s $NuGetSourceUrl
+            Write-Host "Package $packageName version $version pushed." -ForegroundColor "Green"
+        } else {
+            Write-Host "Package $packageName version $version already exists on NuGet. Skipping push." -ForegroundColor "Yellow"
+        }
+    } catch {
+        Write-Host "Error processing project $projectName: $_" -ForegroundColor "Red"
     }
 }
+
 Write-Host "Deploy finished."

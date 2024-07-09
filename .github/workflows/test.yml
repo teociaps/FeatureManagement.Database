@@ -1,18 +1,19 @@
 name: Test
 
 on:
-  workflow_run:
-    workflows: ["Build"]
-    types:
-      - completed
   pull_request:
     branches: [dev, main]
     types: [opened, reopened, synchronize, edited, ready_for_review]
+    paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
 
 env:
   CONFIGURATION: 'Release'
   COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
   AZURE_COSMOS_ENDPOINT: https://localhost:8081
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   check_cosmosdb_paths:
@@ -42,13 +43,14 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['OnlyCosmosDB']
     steps:
+      - uses: actions/checkout@v4
       - name: .NET setup
-        uses: ./.github/workflows/dotnet-setup.yml
+        uses: ./.github/actions/dotnet-setup
         with:
           dotnet_version: ${{ matrix.dotnet_version }}
 
       - name: Cosmos DB setup
-        uses: ./.github/workflows/cosmosdb-setup.yml
+        uses: ./.github/actions/cosmosdb-setup
 
       - name: Run CosmosDB tests
         shell: pwsh
@@ -61,8 +63,9 @@ jobs:
         dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['NoCosmosDB']
     steps:
+      - uses: actions/checkout@v4
       - name: .NET setup
-        uses: ./.github/workflows/dotnet-setup.yml
+        uses: ./.github/actions/dotnet-setup
         with:
           dotnet_version: ${{ matrix.dotnet_version }}
 

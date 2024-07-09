@@ -1,0 +1,15 @@
+# .github/actions/dotnet-setup/action.yml
+name: ".NET Setup"
+description: "Setup .NET environment for the project"
+inputs:
+  dotnet_version:
+    description: "The .NET version to use"
+    required: true
+    default: "6.0.x"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet_version }}
