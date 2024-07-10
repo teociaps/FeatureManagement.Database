@@ -25,7 +25,7 @@
     <MinorVersion>0</MinorVersion>
     <PatchVersion>0</PatchVersion>
 
-    <IsPreview>true</IsPreview>
+    <IsPreview>false</IsPreview>
     <VersionSuffix Condition="'$(IsPreview)' == 'true'">-preview</VersionSuffix>
     <VersionSuffix Condition="'$(IsPreview)' == 'false'"></VersionSuffix>
 
