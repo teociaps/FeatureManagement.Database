@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-// Ignore Spelling: Postgre
-
 using DotNet.Testcontainers.Builders;
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 using Microsoft.Extensions.DependencyInjection;

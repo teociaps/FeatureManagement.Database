@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-// Ignore Spelling: Mongo
-
 using FeatureManagement.Database.MongoDB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;

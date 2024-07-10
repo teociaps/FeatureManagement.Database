@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-// Ignore Spelling: Npgsql
-
 using FeatureManagement.Database.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
