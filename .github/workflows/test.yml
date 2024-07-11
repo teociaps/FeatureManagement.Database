@@ -30,9 +30,9 @@ jobs:
         with:
           filters: |
             cosmosdb:
-              - 'FeatureManagement.Database.Abstractions/**'
-              - 'FeatureManagement.Database.CosmosDB/**'
-              - 'FeatureManagement.Database.CosmosDB.Tests/**'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.CosmosDB/**'
+              - '**/FeatureManagement.Database.CosmosDB.Tests/**'
 
   cosmosdb_tests:
     needs: check_cosmosdb_paths
