@@ -37,7 +37,7 @@ Get-ChildItem -Path src -Filter FeatureManagement.* -Directory | ForEach-Object 
             Write-Host "Package $packageName version $version already exists on NuGet. Skipping push." -ForegroundColor "Yellow"
         }
     } catch {
-        Write-Host "Error processing project $projectName: $_" -ForegroundColor "Red"
+        Write-Error "Error processing project $projectName: $_"
     }
 }
 

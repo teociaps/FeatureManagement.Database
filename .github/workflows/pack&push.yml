@@ -12,9 +12,6 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet_version: ['6.0.x', '8.0.x']
 
     steps:
       - uses: actions/checkout@v4
@@ -23,10 +20,12 @@ jobs:
             .github
             src
             build
-      - name: .NET setup
-        uses: ./.github/actions/dotnet-setup
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet_version: ${{ matrix.dotnet_version }}
+          dotnet-version: |
+            6.0.x
+            8.0.x
 
       - name: Pack & Push to NuGet
         shell: pwsh

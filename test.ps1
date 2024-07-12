@@ -20,7 +20,7 @@ foreach ($project in $testProjects) {
     Write-Host "Running tests for project: $($project.FullName)"
     dotnet test $project.FullName --configuration $Configuration
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Tests failed for project: $($project.FullName)" -ForegroundColor "Red"
+        Write-Error "Tests failed for project: $($project.FullName)"
         exit $LASTEXITCODE
     }
 }
