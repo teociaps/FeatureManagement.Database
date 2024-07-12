@@ -53,6 +53,16 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
                 options.AccountKey = CosmosDbBuilder.DefaultAccountKey;
                 options.DatabaseName = "TestDatabase";
                 options.UseSeparateContainers = false;
+            }, clientOptions =>
+            {
+                clientOptions.HttpClientFactory = () =>
+                {
+                    var handler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+                    return new HttpClient(handler);
+                };
             });
     }
 }
