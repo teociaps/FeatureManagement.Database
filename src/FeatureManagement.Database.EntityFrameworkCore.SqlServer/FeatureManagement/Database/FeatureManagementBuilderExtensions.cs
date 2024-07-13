@@ -99,12 +99,16 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentException">Thrown if provided connection string is null or empty.</exception>
     public static IFeatureManagementBuilder UseSqlServer<TDbContext>(
         this IFeatureManagementBuilder builder,
         string connectionString,
         Action<SqlServerDbContextOptionsBuilder> sqlServerDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ArgumentException("Use a valid value for connection string.", nameof(connectionString));
+
         sqlServerDbContextOptionsBuilder += ComposeDefaultSqlServerOptionsBuilder();
 
         builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseSqlServer(connectionString, sqlServerDbContextOptionsBuilder));

@@ -4,6 +4,7 @@
 using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Testcontainers.CosmosDb;
@@ -53,6 +54,19 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
                 options.AccountKey = CosmosDbBuilder.DefaultAccountKey;
                 options.DatabaseName = "TestDatabase";
                 options.UseSeparateContainers = false;
+            }, clientOptions =>
+            {
+                clientOptions.ConnectionMode = ConnectionMode.Gateway;
+                clientOptions.MaxRetryAttemptsOnRateLimitedRequests = 10;
+                clientOptions.MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(30);
+                clientOptions.HttpClientFactory = () =>
+                {
+                    var handler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+                    return new HttpClient(handler);
+                };
             });
     }
 }

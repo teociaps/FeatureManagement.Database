@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-// Ignore Spelling: Mongo
-
 using FeatureManagement.Database.MongoDB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
@@ -25,6 +23,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if provided name or connection string is null.</exception>
     public static IFeatureManagementBuilder UseMongoDB(
         this IFeatureManagementBuilder builder,
         string connectionString,

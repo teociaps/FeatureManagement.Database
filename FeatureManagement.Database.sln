@@ -65,7 +65,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.CosmosDB", "src\FeatureManagement.Database.CosmosDB\FeatureManagement.Database.CosmosDB.csproj", "{84718A54-72FF-4AE9-9FFB-558088C344BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureManagement.Database.CosmosDB.Tests", "tests\FeatureManagement.Database.CosmosDB.Tests\FeatureManagement.Database.CosmosDB.Tests.csproj", "{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.CosmosDB.Tests", "tests\FeatureManagement.Database.CosmosDB.Tests\FeatureManagement.Database.CosmosDB.Tests.csproj", "{BB720806-46DF-4F8E-BD91-0DEE06BA69F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{72D5C448-265C-440D-9A9F-D38DDC39260D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

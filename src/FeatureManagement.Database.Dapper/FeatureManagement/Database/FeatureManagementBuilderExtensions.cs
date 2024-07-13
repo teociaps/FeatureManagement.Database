@@ -22,6 +22,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown if provided factory is null.</exception>
     public static IFeatureManagementBuilder UseDapper(
         this IFeatureManagementBuilder builder,
         IDbConnectionFactory dbConnectionFactory)

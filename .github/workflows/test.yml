@@ -1,18 +1,19 @@
 name: Test
 
 on:
-  workflow_run:
-    workflows: ["Build"]
-    types:
-      - completed
   pull_request:
     branches: [dev, main]
     types: [opened, reopened, synchronize, edited, ready_for_review]
+    paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
 
 env:
   CONFIGURATION: 'Release'
   COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
   AZURE_COSMOS_ENDPOINT: https://localhost:8081
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   check_cosmosdb_paths:
@@ -29,9 +30,9 @@ jobs:
         with:
           filters: |
             cosmosdb:
-              - 'FeatureManagement.Database.Abstractions/**'
-              - 'FeatureManagement.Database.CosmosDB/**'
-              - 'FeatureManagement.Database.CosmosDB.Tests/**'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.CosmosDB/**'
+              - '**/FeatureManagement.Database.CosmosDB.Tests/**'
 
   cosmosdb_tests:
     needs: check_cosmosdb_paths
@@ -39,16 +40,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['OnlyCosmosDB']
     steps:
-      - name: .NET setup
-        uses: ./.github/workflows/dotnet-setup.yml
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet_version: ${{ matrix.dotnet_version }}
+          dotnet-version: |
+            6.0.x
+            8.0.x
 
       - name: Cosmos DB setup
-        uses: ./.github/workflows/cosmosdb-setup.yml
+        uses: ./.github/actions/cosmosdb-setup
 
       - name: Run CosmosDB tests
         shell: pwsh
@@ -58,13 +61,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet_version: ['6.0.x', '8.0.x']
         test_type: ['NoCosmosDB']
     steps:
-      - name: .NET setup
-        uses: ./.github/workflows/dotnet-setup.yml
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet_version: ${{ matrix.dotnet_version }}
+          dotnet-version: |
+            6.0.x
+            8.0.x
 
       - name: Run tests
         shell: pwsh

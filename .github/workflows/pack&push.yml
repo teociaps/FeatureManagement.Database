@@ -2,8 +2,7 @@ name: Pack & Push
 
 on:
   release:
-    types:
-      - published
+    types: [published]
 
 env:
   CONFIGURATION: 'Release'
@@ -15,21 +14,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        sparse-checkout: |
-          .github
-          src
-          build
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+            src
+            build
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            8.0.x
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          6.0.x
-          8.0.x
-
-    - name: Pack & Push to NuGet
-      shell: pwsh
-      run: ./pack&push.ps1 -Configuration ${{ env.CONFIGURATION }} -PackageOutput ${{ env.PACKAGE_OUTPUT }} -NuGetSourceUrl ${{ env.NUGET_SOURCE_URL }} -NuGetApiKey ${{ secrets.NUGET_API_KEY }}
+      - name: Pack & Push to NuGet
+        shell: pwsh
+        run: ./pack&push.ps1 -Configuration ${{ env.CONFIGURATION }} -PackageOutput ${{ env.PACKAGE_OUTPUT }} -NuGetSourceUrl ${{ env.NUGET_SOURCE_URL }} -NuGetApiKey ${{ secrets.NUGET_API_KEY }}
