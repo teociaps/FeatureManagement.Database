@@ -12,6 +12,7 @@ namespace FeatureManagement.Database.CosmosDB;
 public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
 {
     private readonly CosmosClient _client;
+
     private readonly Container _featuresContainer;
     private readonly Container _featureSettingsContainer;
     private readonly bool _useSeparateContainers;
@@ -25,10 +26,15 @@ public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
     /// Initializes a new instance of the <see cref="CosmosDBConnectionFactory"/> class.
     /// </summary>
     /// <param name="options">The Cosmos DB options.</param>
-    public CosmosDBConnectionFactory(IOptions<CosmosDBOptions> options)
+    /// <param name="configureCosmosClientOptions">An action used to configure custom client options.</param>
+    public CosmosDBConnectionFactory(IOptions<CosmosDBOptions> options, Action<CosmosClientOptions> configureCosmosClientOptions = null)
     {
         CosmosDBOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
-        _client = new CosmosClient(CosmosDBOptions.EndpointUri, CosmosDBOptions.AccountKey);
+
+        var cosmosClientOptions = new CosmosClientOptions();
+        configureCosmosClientOptions?.Invoke(cosmosClientOptions);
+
+        _client = new CosmosClient(CosmosDBOptions.EndpointUri, CosmosDBOptions.AccountKey, cosmosClientOptions);
         _useSeparateContainers = CosmosDBOptions.UseSeparateContainers;
 
         _featuresContainer = _client.GetContainer(CosmosDBOptions.DatabaseName, CosmosDBOptions.FeaturesCollectionName);

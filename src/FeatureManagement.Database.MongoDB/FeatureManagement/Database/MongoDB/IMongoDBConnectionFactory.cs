@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-// Ignore Spelling: Mongo
-
 using MongoDB.Driver;
 
 namespace FeatureManagement.Database.MongoDB;

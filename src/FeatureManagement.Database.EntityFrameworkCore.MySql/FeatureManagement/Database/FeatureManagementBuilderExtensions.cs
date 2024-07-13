@@ -112,6 +112,7 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentException">Thrown if provided connection string is null or empty.</exception>
     public static IFeatureManagementBuilder UseMySql<TDbContext>(
         this IFeatureManagementBuilder builder,
         string connectionString,
@@ -119,6 +120,9 @@ public static class FeatureManagementBuilderExtensions
         ServerVersion serverVersion = null)
             where TDbContext : FeatureManagementDbContext
     {
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ArgumentException("Use a valid value for connection string.", nameof(connectionString));
+
         mySqlDbContextOptionsBuilder += ComposeDefaultMySqlOptionsBuilder();
 
         builder.ConfigureDbContext<TDbContext>(dbContextBuilder =>

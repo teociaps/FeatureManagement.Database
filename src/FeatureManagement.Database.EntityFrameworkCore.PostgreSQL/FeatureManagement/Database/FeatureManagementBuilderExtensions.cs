@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-// Ignore Spelling: Npgsql
-
 using FeatureManagement.Database.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
@@ -101,12 +99,16 @@ public static class FeatureManagementBuilderExtensions
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
+    /// <exception cref="ArgumentException">Thrown if provided connection string is null or empty.</exception>
     public static IFeatureManagementBuilder UseNpgsql<TDbContext>(
         this IFeatureManagementBuilder builder,
         string connectionString,
         Action<NpgsqlDbContextOptionsBuilder> npgsqlDbContextOptionsBuilder = null)
             where TDbContext : FeatureManagementDbContext
     {
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ArgumentException("Use a valid value for connection string.", nameof(connectionString));
+
         npgsqlDbContextOptionsBuilder += ComposeDefaultNpgsqlOptionsBuilder();
 
         builder.ConfigureDbContext<TDbContext>(dbContextBuilder => dbContextBuilder.UseNpgsql(connectionString, npgsqlDbContextOptionsBuilder));

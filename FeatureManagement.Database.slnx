@@ -5,6 +5,9 @@
     <File Path="build\NuGet.props" />
     <File Path="build\Versioning.props" />
   </Folder>
+  <Folder Name="/config/">
+    <File Path=".editorconfig" />
+  </Folder>
   <Folder Name="/samples/">
     <Project Path="samples\ConsoleApp\ConsoleApp.csproj" />
     <Project Path="samples\WebApiApp\WebApiApp.csproj" />

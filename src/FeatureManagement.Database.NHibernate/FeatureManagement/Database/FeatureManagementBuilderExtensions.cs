@@ -72,11 +72,11 @@ public static class FeatureManagementBuilderExtensions
     /// <param name="builder">
     /// The <see cref="IFeatureManagementBuilder"/> used to customize feature management functionality.
     /// </param>
-    /// <param name="configureOptions">The NHibernate options configurator.</param>
+    /// <param name="configureOptions">The NHibernate options configuration.</param>
     /// <returns>
     /// A <see cref="IFeatureManagementBuilder"/> that can be used to customize feature management functionality.
     /// </returns>
-    /// <exception cref="ArgumentNullException">Thrown if provided option configurator is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if provided option configuration is null.</exception>
     public static IFeatureManagementBuilder UseNHibernate(
         this IFeatureManagementBuilder builder,
         Action<NHibernateConfigurationOptions> configureOptions)
