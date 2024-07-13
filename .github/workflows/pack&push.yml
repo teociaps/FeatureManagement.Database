@@ -29,4 +29,4 @@ jobs:
 
       - name: Pack & Push to NuGet
         shell: pwsh
-        run: ./pack&push.ps1 -Configuration ${{ env.CONFIGURATION }} -PackageOutput ${{ env.PACKAGE_OUTPUT }} -NuGetSourceUrl ${{ env.NUGET_SOURCE_URL }} -NuGetApiKey ${{ secrets.NUGET_API_KEY }}
+        run: ./deploy.ps1 -Configuration ${{ env.CONFIGURATION }} -PackageOutput ${{ env.PACKAGE_OUTPUT }} -NuGetSourceUrl ${{ env.NUGET_SOURCE_URL }} -NuGetApiKey ${{ secrets.NUGET_API_KEY }}
