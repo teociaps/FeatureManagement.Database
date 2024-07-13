@@ -56,8 +56,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
                 options.UseSeparateContainers = false;
             }, clientOptions =>
             {
-                clientOptions.ConnectionMode = ConnectionMode.Direct;
-                clientOptions.ConsistencyLevel = ConsistencyLevel.Session;
+                clientOptions.ConnectionMode = ConnectionMode.Gateway;
                 clientOptions.MaxRetryAttemptsOnRateLimitedRequests = 10;
                 clientOptions.MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(30);
                 clientOptions.HttpClientFactory = () =>
