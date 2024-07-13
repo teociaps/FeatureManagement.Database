@@ -21,8 +21,18 @@ internal static class Seed
         var featuresContainer = cosmosDBConnectionFactory.GetFeaturesContainer();
         var featureSettingsContainer = cosmosDBConnectionFactory.GetFeatureSettingsContainer();
 
-        await featuresContainer.DeleteItemAsync<Feature>("7c81e846-dc77-4aff-bf03-8dd8bb2d3194", new PartitionKey(FirstFeature));
-        await featuresContainer.DeleteItemAsync<Feature>("d3c82992-2f12-4008-9376-da37695a2747", new PartitionKey(SecondFeature));
+        try
+        {
+            await featuresContainer.DeleteItemAsync<Feature>("7c81e846-dc77-4aff-bf03-8dd8bb2d3194", new PartitionKey(FirstFeature));
+            await featuresContainer.DeleteItemAsync<Feature>("d3c82992-2f12-4008-9376-da37695a2747", new PartitionKey(SecondFeature));
+
+            if (cosmosDBOptions.UseSeparateContainers)
+                await featureSettingsContainer.DeleteItemAsync<FeatureSettings>("672dc1bd-9c5b-44ce-8461-234b262a8395", new PartitionKey("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"));
+        }
+        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            // Nothing: I can't delete something that doesn't exist
+        }
 
         List<Feature> features =
         [
@@ -39,9 +49,6 @@ internal static class Seed
                 RequirementType = Microsoft.FeatureManagement.RequirementType.All,
             }
         ];
-
-        if (cosmosDBOptions.UseSeparateContainers)
-            await featureSettingsContainer.DeleteItemAsync<FeatureSettings>("672dc1bd-9c5b-44ce-8461-234b262a8395", new PartitionKey("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"));
 
         List<FeatureSettings> settings =
         [
