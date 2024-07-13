@@ -3,7 +3,6 @@ name: Build
 on:
   push:
     branches: [main]
-    tags: ['v*.*.*']
     paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
   pull_request:
     branches: [dev, main]
