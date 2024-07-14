@@ -15,7 +15,7 @@ It includes abstractions and default implementations to facilitate easy integrat
     * [Service Registration](#service-registration)
     * [Configure Cache](#configure-cache)
 * [Consumption](#consumption)
-    * [ASP.NET Core Integration](#asp.net-core-integration)
+    * [ASP.NET Core Integration](#aspnet-core-integration)
 * [Built-in Database Providers](#built-in-database-providers)
     * [Entity Framework Core](#entity-framework-core)
     * [Dapper](#dapper)
