@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-namespace FeatureManagement.Database;
+namespace FeatureManagement.Database.Abstractions;
 
 internal static class Features
 {

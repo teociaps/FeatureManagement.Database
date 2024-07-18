@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 
-namespace FeatureManagement.Database.Tests;
+namespace FeatureManagement.Database.Abstractions.Tests;
 
 public class ServiceCollectionTests
 {
@@ -49,6 +49,7 @@ public class ServiceCollectionTests
         // Act/Assert
         Assert.Throws<ArgumentException>("implementationType", () => serviceCollection.AddFeatureStore(typeof(FeatureNonStore)));
     }
+
     [Fact]
     public void RegisterDatabaseFeatureDefinitionProviderShouldThrowExceptionIfStoreIsNotRegistered()
     {

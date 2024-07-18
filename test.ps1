@@ -1,20 +1,20 @@
-# tests.ps1
+# test.ps1
 param(
     [string]$Configuration = "Release",
-    [string]$TestType = "All" # Possible values: All, NoCosmosDB, OnlyCosmosDB
+    [string]$TestType = "All" # Possible values: All, Abstractions, CosmosDB, Dapper, EntityFrameworkCore, MongoDB, NHibernate
 )
 
 # Get all test project files
 $testProjects = Get-ChildItem -Path "tests" -Recurse -Filter "*.csproj"
 
-# Filter test projects based on the $TestType parameter
-if ($TestType -eq "NoCosmosDB") {
-    $testProjects = $testProjects | Where-Object { $_.FullName -notmatch "CosmosDB" }
-    Write-Host "TestType: $($TestType) => Skipping CosmosDB tests..." -ForegroundColor "Cyan"
-} elseif ($TestType -eq "OnlyCosmosDB") {
-    $testProjects = $testProjects | Where-Object { $_.FullName -match "CosmosDB" }
-    Write-Host "TestType: $($TestType) => Testing only CosmosDB..." -ForegroundColor "Cyan"
+# Filter test projects based on the $TestType parameter, except for "All"
+if ($TestType -ne "All") {
+    $testProjects = $testProjects | Where-Object { $_.FullName -match $TestType }
+    Write-Host "TestType: $($TestType) => Testing only projects matching '$TestType'..." -ForegroundColor "Cyan"
 }
+
+Write-Host "Projects to be tested:" -ForegroundColor "Cyan"
+$testProjects | ForEach-Object { Write-Host $_.FullName -ForegroundColor "Cyan" }
 
 foreach ($project in $testProjects) {
     Write-Host "Running tests for project: $($project.FullName)"

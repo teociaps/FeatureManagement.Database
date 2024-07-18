@@ -3,4 +3,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("FeatureManagement.Database.Tests")]
+[assembly: InternalsVisibleTo("FeatureManagement.Database.Abstractions.Tests")]

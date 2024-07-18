@@ -5,9 +5,9 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using static FeatureManagement.Database.Features;
+using static FeatureManagement.Database.Abstractions.Features;
 
-namespace FeatureManagement.Database.Tests;
+namespace FeatureManagement.Database.Abstractions.Tests;
 
 public class CachedFeatureStoreTests
 {

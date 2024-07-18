@@ -2,9 +2,9 @@
 // Licensed under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
-using static FeatureManagement.Database.Features;
+using static FeatureManagement.Database.Abstractions.Features;
 
-namespace FeatureManagement.Database;
+namespace FeatureManagement.Database.Abstractions;
 
 public class FeatureStore : IFeatureStore
 {

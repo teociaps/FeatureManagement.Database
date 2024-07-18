@@ -1,10 +1,9 @@
 // Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using Microsoft.FeatureManagement;
-using static FeatureManagement.Database.Features;
+using static FeatureManagement.Database.Abstractions.Features;
 
-namespace FeatureManagement.Database.Tests;
+namespace FeatureManagement.Database.Abstractions.Tests;
 
 public class DatabaseFeatureDefinitionProviderTests
 {
