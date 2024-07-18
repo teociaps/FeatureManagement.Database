@@ -1,0 +1,37 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directories:
+      - "/src"
+      - "/tests"
+      - "/samples"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "NuGet updates"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "nuget"
+    assignees:
+      - "teociaps"
+    reviewers:
+      - "teociaps"
+
+  - package-ecosystem: "github-actions"
+    directory: /
+    schedule:
+      interval: weekly
+      day: friday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "GitHub Actions updates"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    assignees:
+      - "teociaps"
+    reviewers:
+      - "teociaps"
