@@ -71,12 +71,12 @@ jobs:
     strategy:
       matrix:
         test_type: [
-          { name: "Abstractions", condition: "needs.checks_tests_need.outputs.abstractions_changed == 'true'" },
-          { name: "CosmosDB", condition: "needs.checks_tests_need.outputs.cosmosdb_changed == 'true'" },
-          { name: "Dapper", condition: "needs.checks_tests_need.outputs.dapper_changed == 'true'" },
-          { name: "EntityFrameworkCore", condition: "needs.checks_tests_need.outputs.efcore_changed == 'true'" },
-          { name: "MongoDB", condition: "needs.checks_tests_need.outputs.mongodb_changed == 'true'" },
-          { name: "NHibernate", condition: "needs.checks_tests_need.outputs.nhibernate_changed == 'true'" },
+          { name: "Abstractions", env_condition: "abstractions_changed" },
+          { name: "CosmosDB", env_condition: "cosmosdb_changed" },
+          { name: "Dapper", env_condition: "dapper_changed" },
+          { name: "EntityFrameworkCore", env_condition: "efcore_changed" },
+          { name: "MongoDB", env_condition: "mongodb_changed" },
+          { name: "NHibernate", env_condition: "nhibernate_changed" },
         ]
       fail-fast: false
     steps:
@@ -88,7 +88,10 @@ jobs:
             6.0.x
             8.0.x
 
+      - name: Set condition environment variable
+        run: echo "CONDITION=${{ needs.checks_tests_need.outputs[matrix.test_type.env_condition] }}" >> $GITHUB_ENV
+
       - name: Run ${{ matrix.test_type.name }} tests
-        if: ${{ matrix.test_type.condition }}
+        if: ${{ env.CONDITION }} == 'true'
         shell: pwsh
         run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type.name }}
