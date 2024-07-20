@@ -96,6 +96,6 @@ jobs:
         uses: ./.github/actions/cosmosdb-setup
 
       - name: Run ${{ matrix.test_type.name }} tests
-        if: ${{ env.CONDITION }} == 'true'
+        if: ${{ env.CONDITION }} == true
         shell: pwsh
         run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type.name }}
