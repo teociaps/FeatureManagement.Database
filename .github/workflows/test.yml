@@ -91,6 +91,10 @@ jobs:
       - name: Set condition environment variable
         run: echo "CONDITION=${{ needs.checks_tests_need.outputs[matrix.test_type.env_condition] }}" >> $GITHUB_ENV
 
+      - name: Start CosmosDB Emulator
+        if: matrix.test_type.name == 'CosmosDB'
+        uses: ./.github/actions/cosmosdb-setup
+
       - name: Run ${{ matrix.test_type.name }} tests
         if: ${{ env.CONDITION }} == 'true'
         shell: pwsh
