@@ -1,22 +1,22 @@
 version: 2
 updates:
-  - package-ecosystem: "nuget"
-    directories:
-      - "*/*"
-    schedule:
-      interval: weekly
-      day: friday
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "NuGet updates"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "nuget"
-    assignees:
-      - "teociaps"
-    reviewers:
-      - "teociaps"
+  #- package-ecosystem: "nuget"
+  #  directories:
+  #    - "*/*"
+  #  schedule:
+  #    interval: weekly
+  #    day: friday
+  #  open-pull-requests-limit: 10
+  #  commit-message:
+  #    prefix: "NuGet updates"
+  #    include: "scope"
+  #  labels:
+  #    - "dependencies"
+  #    - "nuget"
+  #  assignees:
+  #    - "teociaps"
+  #  reviewers:
+  #    - "teociaps"
 
   - package-ecosystem: "github-actions"
     directory: /
