@@ -5,8 +5,8 @@ on:
     branches: [main]
     paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
   pull_request:
-    branches: [dev, main]
-    types: [opened, reopened, synchronize, edited, ready_for_review]
+    branches: [main, preview]
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
 
 env:

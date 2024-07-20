@@ -5,45 +5,80 @@ on:
     branches: [main]
     paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
   pull_request:
-    branches: [dev, main]
-    types: [opened, reopened, synchronize, edited, ready_for_review]
+    branches: [main, preview]
+    types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore: ['**/*.md', '**/*.png', '**/*.txt']
 
 env:
   CONFIGURATION: 'Release'
-  COSMOSDB_EMULATOR_CERT_PATH: ~/emulatorcert.crt
-  AZURE_COSMOS_ENDPOINT: https://localhost:8081
 
 permissions:
   contents: read
   pull-requests: read
 
 jobs:
-  check_cosmosdb_paths:
+  checks_tests_need:
     runs-on: ubuntu-latest
     outputs:
+      abstractions_changed: ${{ steps.filter.outputs.abstractions }}
       cosmosdb_changed: ${{ steps.filter.outputs.cosmosdb }}
+      dapper_changed: ${{ steps.filter.outputs.dapper }}
+      efcore_changed: ${{ steps.filter.outputs.efcore }}
+      mongodb_changed: ${{ steps.filter.outputs.mongodb }}
+      nhibernate_changed: ${{ steps.filter.outputs.nhibernate }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Filter paths
+      - name: Filter paths to trigger tests
         id: filter
         uses: dorny/paths-filter@v3
         with:
           filters: |
+            abstractions:
+              - '**/.github/workflows/test.yml'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.Tests/**'
             cosmosdb:
+              - '**/.github/workflows/test.yml'
               - '**/FeatureManagement.Database.Abstractions/**'
               - '**/FeatureManagement.Database.CosmosDB/**'
               - '**/FeatureManagement.Database.CosmosDB.Tests/**'
+            dapper:
+              - '**/.github/workflows/test.yml'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.Dapper/**'
+              - '**/FeatureManagement.Database.Dapper.Tests/**'
+            efcore:
+              - '**/.github/workflows/test.yml'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.EntityFrameworkCore*/**'
+              - '**/FeatureManagement.Database.EntityFrameworkCore*.Tests/**'
+            mongodb:
+              - '**/.github/workflows/test.yml'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.MongoDB/**'
+              - '**/FeatureManagement.Database.MongoDB.Tests/**'
+            nhibernate:
+              - '**/.github/workflows/test.yml'
+              - '**/FeatureManagement.Database.Abstractions/**'
+              - '**/FeatureManagement.Database.NHibernate/**'
+              - '**/FeatureManagement.Database.NHibernate.Tests/**'
 
-  cosmosdb_tests:
-    needs: check_cosmosdb_paths
-    if: needs.check_cosmosdb_paths.outputs.cosmosdb_changed == 'true'
+  run_tests:
+    needs: checks_tests_need
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test_type: ['OnlyCosmosDB']
+        test_type: [
+          { name: "Abstractions", env_condition: "abstractions_changed" },
+          { name: "CosmosDB", env_condition: "cosmosdb_changed" },
+          { name: "Dapper", env_condition: "dapper_changed" },
+          { name: "EntityFrameworkCore", env_condition: "efcore_changed" },
+          { name: "MongoDB", env_condition: "mongodb_changed" },
+          { name: "NHibernate", env_condition: "nhibernate_changed" },
+        ]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
@@ -53,27 +88,14 @@ jobs:
             6.0.x
             8.0.x
 
-      - name: Cosmos DB setup
+      - name: Set condition environment variable
+        run: echo "CONDITION=${{ needs.checks_tests_need.outputs[matrix.test_type.env_condition] }}" >> $GITHUB_ENV
+
+      - name: Start CosmosDB Emulator
+        if: matrix.test_type.name == 'CosmosDB'
         uses: ./.github/actions/cosmosdb-setup
 
-      - name: Run CosmosDB tests
+      - name: Run ${{ matrix.test_type.name }} tests
+        if: ${{ env.CONDITION }} == 'true'
         shell: pwsh
-        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type }}
-
-  tests:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test_type: ['NoCosmosDB']
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: |
-            6.0.x
-            8.0.x
-
-      - name: Run tests
-        shell: pwsh
-        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type }}
+        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type.name }}

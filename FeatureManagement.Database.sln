@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{CF0EB3BF
 		build\Versioning.props = build\Versioning.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.Tests", "tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj", "{9AE83D01-5878-4213-AE34-8F5377A2DC88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeatureManagement.Database.Abstractions.Tests", "tests\FeatureManagement.Database.Abstractions.Tests\FeatureManagement.Database.Abstractions.Tests.csproj", "{9AE83D01-5878-4213-AE34-8F5377A2DC88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9C0234A4-16D6-4A68-8F89-9B083FA747C9}"
 EndProject

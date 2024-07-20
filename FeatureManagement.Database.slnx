@@ -37,7 +37,7 @@
     <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.MongoDB.Tests\FeatureManagement.Database.MongoDB.Tests.csproj" />
     <Project Path="tests\FeatureManagement.Database.NHibernate.Tests\FeatureManagement.Database.NHibernate.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.Tests\FeatureManagement.Database.Tests.csproj" />
+    <Project Path="tests\FeatureManagement.Database.Abstractions.Tests\FeatureManagement.Database.Abstractions.Tests.csproj" />
   </Folder>
   <Properties Name="Visual Studio">
     <Property Name="OpenWith" Value="17" />
