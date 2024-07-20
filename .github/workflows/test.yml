@@ -71,12 +71,12 @@ jobs:
     strategy:
       matrix:
         test_type: [
-          { name: "Abstractions", env_condition: "abstractions_changed" },
-          { name: "CosmosDB", env_condition: "cosmosdb_changed" },
-          { name: "Dapper", env_condition: "dapper_changed" },
-          { name: "EntityFrameworkCore", env_condition: "efcore_changed" },
-          { name: "MongoDB", env_condition: "mongodb_changed" },
-          { name: "NHibernate", env_condition: "nhibernate_changed" },
+          { name: "Abstractions", condition: "abstractions_changed" },
+          { name: "CosmosDB", condition: "cosmosdb_changed" },
+          { name: "Dapper", condition: "dapper_changed" },
+          { name: "EntityFrameworkCore", condition: "efcore_changed" },
+          { name: "MongoDB", condition: "mongodb_changed" },
+          { name: "NHibernate", condition: "nhibernate_changed" },
         ]
       fail-fast: false
     steps:
@@ -88,14 +88,11 @@ jobs:
             6.0.x
             8.0.x
 
-      - name: Set condition environment variable
-        run: echo "CONDITION=${{ needs.checks_tests_need.outputs[matrix.test_type.env_condition] }}" >> $GITHUB_ENV
-
       - name: Start CosmosDB Emulator
-        if: matrix.test_type.name == 'CosmosDB'
+        if: matrix.test_type.name == 'CosmosDB' && needs.checks_tests_need.outputs.cosmosdb_changed == 'true'
         uses: ./.github/actions/cosmosdb-setup
 
       - name: Run ${{ matrix.test_type.name }} tests
-        if: ${{ env.CONDITION }} == true
+        if: needs.checks_tests_need.outputs[matrix.test_type.condition] == 'true'
         shell: pwsh
         run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type.name }}
