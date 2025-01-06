@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FeatureManagement.Database;
 
@@ -17,13 +18,19 @@ public class CachedFeatureStore : IFeatureStore
     private readonly IDistributedCache _cache;
     private readonly FeatureCacheOptions _cacheOptions;
 
+    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions(JsonSerializerOptions.Default)
+    {
+        ReferenceHandler = ReferenceHandler.IgnoreCycles
+    };
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CachedFeatureStore"/> class.
     /// </summary>
     /// <param name="featureStore">The concrete feature store.</param>
     /// <param name="cache">The cache service.</param>
     /// <param name="options">The cache options.</param>
-    public CachedFeatureStore(IFeatureStore featureStore, IDistributedCache cache, IOptions<FeatureCacheOptions> options)
+    public CachedFeatureStore(IFeatureStore featureStore, IDistributedCache cache,
+        IOptions<FeatureCacheOptions> options)
     {
         _featureStore = featureStore ?? throw new ArgumentNullException(nameof(featureStore));
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
@@ -67,17 +74,18 @@ public class CachedFeatureStore : IFeatureStore
         if (cachedData is null)
             return null;
 
-        return await JsonSerializer.DeserializeAsync<TData>(new MemoryStream(cachedData));
+        return await JsonSerializer.DeserializeAsync<TData>(new MemoryStream(cachedData), _jsonOptions);
     }
 
     private async Task SetCacheAsync<TData>(string key, TData data) where TData : class
     {
-        await _cache.SetAsync(FeatureCacheOptions.CachePrefix + key, JsonSerializer.SerializeToUtf8Bytes(data), new DistributedCacheEntryOptions
-        {
-            AbsoluteExpiration = _cacheOptions.AbsoluteExpiration,
-            AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow,
-            SlidingExpiration = _cacheOptions.SlidingExpiration
-        });
+        await _cache.SetAsync(FeatureCacheOptions.CachePrefix + key,
+            JsonSerializer.SerializeToUtf8Bytes(data, _jsonOptions), new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = _cacheOptions.AbsoluteExpiration,
+                AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow,
+                SlidingExpiration = _cacheOptions.SlidingExpiration
+            });
     }
 
     #endregion Private

@@ -93,7 +93,7 @@ public class CachedFeatureStoreTests
         // Arrange
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddFeatureStore<FeatureStore>();
-        serviceCollection.ConfigureCachedFeatureStore(o => o.SlidingExpiration = TimeSpan.FromSeconds(1));
+        serviceCollection.ConfigureCachedFeatureStore();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -108,5 +108,33 @@ public class CachedFeatureStoreTests
         // Assert
         Assert.True(feature is not null);
         Assert.True(featureCache is null);
+    }
+    
+    
+    [Fact]
+    public async Task GetAllFeaturesFromCachedStoreWhenFeaturesHaveCircularReference()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddFeatureStore<FeatureStoreWithCircularReference>();
+        serviceCollection.ConfigureCachedFeatureStore();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
+        var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+
+        // Act
+        var feature = await cachedFeatureStore.GetFeatureAsync(FirstFeature);
+        var cachedFeature = JsonSerializer.Deserialize<Feature>(await cache.GetAsync(FeatureCacheOptions.CachePrefix + FirstFeature));
+
+        // Assert
+        Assert.True(feature is not null);
+        Assert.True(cachedFeature is not null);
+
+        Assert.Equal(FirstFeature, feature.Name);
+        Assert.Equal(feature.Name, cachedFeature.Name);
+
+        Assert.True(feature.Settings.Any());
     }
 }
