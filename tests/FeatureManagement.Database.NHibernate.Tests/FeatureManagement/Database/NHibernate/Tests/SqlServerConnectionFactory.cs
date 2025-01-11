@@ -7,7 +7,7 @@ using NHibernate;
 using NHibernate.Bytecode;
 using NHibernate.Tool.hbm2ddl;
 
-namespace FeatureManagement.Database.NHibernate;
+namespace FeatureManagement.Database.NHibernate.Tests;
 
 public class SqlServerConnectionFactory : NHibernateConnectionFactory
 {
