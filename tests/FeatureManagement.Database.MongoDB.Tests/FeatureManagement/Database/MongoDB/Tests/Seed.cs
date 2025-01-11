@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using static FeatureManagement.Database.Features;
 
@@ -10,6 +13,9 @@ internal static class Seed
 {
     internal static async Task SeedDataAsync(IMongoDatabase database)
     {
+        // Ensure the GuidSerializer is registered
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+
         var featureCollection = database.GetCollection<Feature>("Features");
         var featureSettingsCollection = database.GetCollection<FeatureSettings>("FeatureSettings");
 

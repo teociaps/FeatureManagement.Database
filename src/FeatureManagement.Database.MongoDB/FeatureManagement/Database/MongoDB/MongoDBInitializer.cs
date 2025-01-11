@@ -61,8 +61,8 @@ internal class MongoDBInitializer
     private static string GenerateIndexName<TDocument>(CreateIndexModel<TDocument> indexModel)
     {
         // Generate a name for the index based on the keys definition
-        var indexKeys = indexModel.Keys.Render(BsonSerializer.SerializerRegistry.GetSerializer<TDocument>(), BsonSerializer.SerializerRegistry);
-        var indexName = string.Join("_", indexKeys.ToBsonDocument().Elements.Select(e => $"{e.Name}_{e.Value.ToString().ToLower()}"));
-        return indexName;
+        var renderArgs = new RenderArgs<TDocument>(BsonSerializer.SerializerRegistry.GetSerializer<TDocument>(), BsonSerializer.SerializerRegistry);
+        var indexKeys = indexModel.Keys.Render(renderArgs);
+        return string.Join("_", indexKeys.ToBsonDocument().Elements.Select(e => $"{e.Name}_{e.Value.ToString().ToLower()}"));
     }
 }
