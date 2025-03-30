@@ -181,12 +181,15 @@ The cache keys have a prefix (**FMDb_**) defined in the options (`FeatureCacheOp
 | Key | FMDb_MyFeature | FMDb_features |
 
   
-Note that _"features"_ can be overridden when configuring cache. So you can have `"FMDb_your-custom-cache-key"`.
+Note that _"features"_ can be overridden when configuring cache. So you can have `"FMDb_<your-custom-cache-key>"`.
 
 See the `FeatureCacheOptions` class for more cache-related settings.
 
 > [!WARNING]
 > Cache does not auto-refresh when feature values update directly in the database. Handle cache invalidation appropriately.
+
+> [!IMPORTANT]
+> When using .NET 9, cache entries will automatically leverage the unified caching approach of `HybridCache`. This provides multi-level caching with in-memory and distributed cache support out of the box. The expiration settings from `FeatureCacheOptions` (like `SlidingExpiration` and `AbsoluteExpirationRelativeToNow`) are automatically applied to the cache entries. This optimization happens transparently in the `CachedFeatureStore` implementation, requiring no additional configuration from you.
 
 
 ## Consumption
