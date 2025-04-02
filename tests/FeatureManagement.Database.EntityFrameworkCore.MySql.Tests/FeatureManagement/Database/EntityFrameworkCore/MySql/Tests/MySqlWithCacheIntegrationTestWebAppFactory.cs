@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Testcontainers.MySql;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.MySql.Tests;
 
 public sealed class MySqlWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MySqlContainer>
 {

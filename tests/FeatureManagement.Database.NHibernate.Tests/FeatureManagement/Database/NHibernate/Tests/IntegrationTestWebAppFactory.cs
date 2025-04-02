@@ -13,9 +13,11 @@ namespace FeatureManagement.Database.NHibernate.Tests;
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MsSqlContainer _sqlServerContainer = new MsSqlBuilder()
-        .WithName("sqlserver-test-container")
+        .WithName("nhibernate-sqlserver-test-container")
         .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
         .WithEnvironment("ACCEPT_EULA", "Y")
+        .WithEnvironment("SA_USERNAME", MsSqlBuilder.DefaultUsername)
+        .WithEnvironment("SA_PASSWORD", MsSqlBuilder.DefaultPassword)
         .WithPortBinding(MsSqlBuilder.MsSqlPort)
         .WithCleanUp(true)
         .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MsSqlBuilder.MsSqlPort))
