@@ -15,11 +15,11 @@ The Wiki contains comprehensive information on the following topics:
 * **[Getting Started](https://github.com/teociaps/FeatureManagement.Database/wiki/Getting-Started)**: Instructions on how to begin using the library.
 * **[Consumption](https://github.com/teociaps/FeatureManagement.Database/wiki/Consumption)**: Details on how to use feature flags in your application.
 * **Database Providers**:
-    * **[Entity Framework Core](https://github.com/teociaps/FeatureManagement.Database/wiki/Database-Providers-Entity-Framework-Core)**
-    * **[Dapper](https://github.com/teociaps/FeatureManagement.Database/wiki/Database-Providers-Dapper)**
-    * **[MongoDB](https://github.com/teociaps/FeatureManagement.Database/wiki/Database-Providers-MongoDB)**
-    * **[NHibernate](https://github.com/teociaps/FeatureManagement.Database/wiki/Database-Providers-NHibernate)**
-    * **[Cosmos DB](https://github.com/teociaps/FeatureManagement.Database/wiki/Database-Providers-CosmosDB)**
+    * **[Entity Framework Core](https://github.com/teociaps/FeatureManagement.Database/wiki/Entity-Framework-Core-Database-Provider)**
+    * **[Dapper](https://github.com/teociaps/FeatureManagement.Database/wiki/Dapper-Database-Provider)**
+    * **[MongoDB](https://github.com/teociaps/FeatureManagement.Database/wiki/MongoDB-Database-Provider)**
+    * **[NHibernate](https://github.com/teociaps/FeatureManagement.Database/wiki/NHibernate-Database-Provider)**
+    * **[Cosmos DB](https://github.com/teociaps/FeatureManagement.Database/wiki/CosmosDB-Database-Provider)**
 * **[Releases](https://github.com/teociaps/FeatureManagement.Database/wiki/Release-History)**: List of releases.
 
 
