@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net6.0;net8.0;net9.0</TargetFrameworks>
   </PropertyGroup>
 
   <Import Project="..\..\build\NuGet.props" />
@@ -16,10 +16,13 @@
     </PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0' Or '$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="Dapper" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Dapper" VersionOverride="2.1.35" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />

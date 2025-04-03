@@ -21,7 +21,7 @@ internal static class DecoratorServiceCollectionExtensions
         where TDecorator : class, TService
     {
         if (services.TryGetDescriptors(typeof(TService), out var descriptors))
-            return services.DecorateDescriptors(descriptors.ToArray(), x => x.Decorate(typeof(TDecorator)));
+            return services.DecorateDescriptors([.. descriptors], x => x.Decorate(typeof(TDecorator)));
 
         return services;
     }

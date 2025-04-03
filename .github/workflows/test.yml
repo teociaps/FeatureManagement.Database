@@ -87,6 +87,7 @@ jobs:
           dotnet-version: |
             6.0.x
             8.0.x
+            9.0.x
 
       - name: Start CosmosDB Emulator
         if: matrix.test_type.name == 'CosmosDB' && needs.checks_tests_need.outputs.cosmosdb_changed == 'true'

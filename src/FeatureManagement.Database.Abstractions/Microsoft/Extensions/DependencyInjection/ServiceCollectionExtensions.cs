@@ -125,7 +125,11 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddDatabaseFeatureManagementCacheServices(this IServiceCollection services)
     {
+#if NET9_0_OR_GREATER
+        services.AddHybridCache().AddSerializer<Feature, FeatureHybridCacheSerializer>();
+#else
         services.AddDistributedMemoryCache();
+#endif
         return services.Decorate<IFeatureStore, CachedFeatureStore>();
     }
 

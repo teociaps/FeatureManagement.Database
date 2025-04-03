@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Testcontainers.PostgreSql;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<PostgreSqlContainer>
 {
