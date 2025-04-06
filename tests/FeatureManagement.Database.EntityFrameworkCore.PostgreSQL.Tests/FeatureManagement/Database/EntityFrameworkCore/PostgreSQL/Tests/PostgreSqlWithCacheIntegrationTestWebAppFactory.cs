@@ -11,12 +11,12 @@ namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<PostgreSqlContainer>
 {
-    private const string _ContainerName = "postgresql-test-container-cache";
-
     public PostgreSqlWithCacheIntegrationTestWebAppFactory()
     {
+        var containerName = GetUniqueContainerName("postgresql-test-container-cache");
+
         _container = new PostgreSqlBuilder()
-            .WithName(_ContainerName)
+            .WithName(containerName)
             .WithImage("postgres:latest")
             .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort, assignRandomHostPort: true)
             .WithCleanUp(true)

@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using DotNet.Testcontainers.Builders;
-using FeatureManagement.Database.Common.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,8 +12,17 @@ namespace FeatureManagement.Database.MongoDB.Tests;
 
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MongoDbContainer _mongoDBContainer = new MongoDbBuilder()
-            .WithName(_ContainerName)
+    private readonly MongoDbContainer _mongoDBContainer;
+    private const string _Database = "TestDb";
+
+    internal string ConnectionString => _mongoDBContainer.GetConnectionString();
+
+    public IntegrationTestWebAppFactory()
+    {
+        var containerName = GetUniqueContainerName("mongodb-test-container");
+
+        _mongoDBContainer = new MongoDbBuilder()
+            .WithName(containerName)
             .WithImage("mongo:latest")
             .WithUsername(null)
             .WithPassword(null)
@@ -22,11 +30,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
             .WithCleanUp(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
             .Build();
-
-    private const string _Database = "TestDb";
-    private const string _ContainerName = "mongodb-test-container";
-
-    internal string ConnectionString => _mongoDBContainer.GetConnectionString();
+    }
 
     public async Task InitializeAsync()
     {
@@ -40,7 +44,6 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
     public new async Task DisposeAsync()
     {
         await _mongoDBContainer.DisposeAsync();
-        await DockerContainerHelper.RemoveExistingContainerAsync(_ContainerName);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -52,5 +55,11 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
     {
         services.AddDatabaseFeatureManagement<FeatureStore>()
             .UseMongoDB(ConnectionString, _Database);
+    }
+
+    private static string GetUniqueContainerName(string baseName)
+    {
+        var framework = Environment.GetEnvironmentVariable("DOTNET_TARGET_FRAMEWORK") ?? "default";
+        return $"{baseName}-{framework}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

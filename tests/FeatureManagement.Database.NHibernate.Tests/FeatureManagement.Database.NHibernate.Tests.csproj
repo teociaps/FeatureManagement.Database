@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FeatureManagement.Database.NHibernate\FeatureManagement.Database.NHibernate.csproj" />
-    <ProjectReference Include="..\FeatureManagement.Database.Common.Utilities\FeatureManagement.Database.Common.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">

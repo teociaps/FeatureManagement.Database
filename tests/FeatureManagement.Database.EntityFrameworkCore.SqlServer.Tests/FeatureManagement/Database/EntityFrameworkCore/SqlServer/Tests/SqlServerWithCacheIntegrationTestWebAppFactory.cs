@@ -11,12 +11,12 @@ namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
 
 public sealed class SqlServerWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MsSqlContainer>
 {
-    private const string _ContainerName = "sqlserver-test-container-with-cache";
-
     public SqlServerWithCacheIntegrationTestWebAppFactory()
     {
+        var containerName = GetUniqueContainerName("sqlserver-test-container-with-cache");
+
         _container = new MsSqlBuilder()
-            .WithName(_ContainerName)
+            .WithName(containerName)
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
             .WithEnvironment("ACCEPT_EULA", "Y")
             .WithPortBinding(MsSqlBuilder.MsSqlPort, assignRandomHostPort: true)

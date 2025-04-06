@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using DotNet.Testcontainers.Containers;
-using FeatureManagement.Database.Common.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +28,6 @@ public abstract class IntegrationTestWebAppFactory<TContainer>
     public new async Task DisposeAsync()
     {
         await _container.DisposeAsync();
-        await DockerContainerHelper.RemoveExistingContainerAsync(_container.Name);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -40,5 +38,11 @@ public abstract class IntegrationTestWebAppFactory<TContainer>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
         services.RemoveAll<DbContextOptions<TestDbContext>>();
+    }
+
+    protected static string GetUniqueContainerName(string baseName)
+    {
+        var framework = Environment.GetEnvironmentVariable("DOTNET_TARGET_FRAMEWORK") ?? "default";
+        return $"{baseName}-{framework}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

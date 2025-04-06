@@ -11,12 +11,12 @@ namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
 
 public sealed class SqlServerIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MsSqlContainer>
 {
-    private const string _ContainerName = "sqlserver-test-container";
-
     public SqlServerIntegrationTestWebAppFactory()
     {
+        var containerName = GetUniqueContainerName("sqlserver-test-container");
+
         _container = new MsSqlBuilder()
-            .WithName(_ContainerName)
+            .WithName(containerName)
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
             .WithEnvironment("ACCEPT_EULA", "Y")
             .WithPortBinding(MsSqlBuilder.MsSqlPort)

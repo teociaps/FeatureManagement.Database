@@ -11,12 +11,12 @@ namespace FeatureManagement.Database.EntityFrameworkCore.MySql.Tests;
 
 public sealed class MySqlWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MySqlContainer>
 {
-    private const string _ContainerName = "mysql-test-container-cache";
-
     public MySqlWithCacheIntegrationTestWebAppFactory()
     {
+        var containerName = GetUniqueContainerName("mysql-test-container-cache");
+
         _container = new MySqlBuilder()
-            .WithName(_ContainerName)
+            .WithName(containerName)
             .WithImage("mysql:latest")
             .WithDatabase("TestDb")
             .WithUsername("root")

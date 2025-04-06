@@ -29,7 +29,6 @@
     <File Path="tests/Directory.Build.props" />
     <File Path="tests/Directory.Packages.props" />
     <Project Path="tests/FeatureManagement.Database.Abstractions.Tests/FeatureManagement.Database.Abstractions.Tests.csproj" />
-    <Project Path="tests/FeatureManagement.Database.Common.Utilities/FeatureManagement.Database.Common.Utilities.csproj" />
     <Project Path="tests/FeatureManagement.Database.CosmosDB.Tests/FeatureManagement.Database.CosmosDB.Tests.csproj" />
     <Project Path="tests/FeatureManagement.Database.Dapper.Tests/FeatureManagement.Database.Dapper.Tests.csproj" />
     <Project Path="tests/FeatureManagement.Database.EntityFrameworkCore.MySql.Tests/FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" />
