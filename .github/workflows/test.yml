@@ -70,8 +70,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        targetFramework: [net6, net8, net9]
-        dotnetVersion: [6.0.x, 8.0.x, 9.0.x]
+        framework:
+          - target: net6
+            sdk: 6.0.x
+          - target: net8
+            sdk: 8.0.x
+          - target: net9
+            sdk: 9.0.x
         testType: [
           { name: "Abstractions", condition: "abstractions_changed" },
           { name: "CosmosDB", condition: "cosmosdb_changed" },
@@ -86,7 +91,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnetVersion }}
+          dotnet-version: ${{ matrix.framework.sdk }}
 
       - name: Start CosmosDB Emulator
         if: matrix.testType.name == 'CosmosDB' && needs.checks_tests_need.outputs.cosmosdb_changed == 'true'
@@ -96,5 +101,5 @@ jobs:
         if: needs.checks_tests_need.outputs[matrix.testType.condition] == 'true'
         shell: pwsh
         env:
-          DOTNET_TARGET_FRAMEWORK: ${{ matrix.framework }}
+          DOTNET_TARGET_FRAMEWORK: ${{ matrix.framework.target }}
         run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.testType.name }}
