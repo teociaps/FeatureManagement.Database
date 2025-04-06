@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using DotNet.Testcontainers.Builders;
+using FeatureManagement.Database.Common.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,16 +14,17 @@ namespace FeatureManagement.Database.MongoDB.Tests;
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MongoDbContainer _mongoDBContainer = new MongoDbBuilder()
-        .WithName("mongodb-test-container")
-        .WithImage("mongo:latest")
-        .WithUsername(null)
-        .WithPassword(null)
-        .WithPortBinding(MongoDbBuilder.MongoDbPort)
-        .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
-        .Build();
+            .WithName(_ContainerName)
+            .WithImage("mongo:latest")
+            .WithUsername(null)
+            .WithPassword(null)
+            .WithPortBinding(MongoDbBuilder.MongoDbPort)
+            .WithCleanUp(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
+            .Build();
 
     private const string _Database = "TestDb";
+    private const string _ContainerName = "mongodb-test-container";
 
     internal string ConnectionString => _mongoDBContainer.GetConnectionString();
 
@@ -38,6 +40,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
     public new async Task DisposeAsync()
     {
         await _mongoDBContainer.DisposeAsync();
+        await DockerContainerHelper.RemoveExistingContainerAsync(_ContainerName);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

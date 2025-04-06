@@ -11,24 +11,24 @@ namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<PostgreSqlContainer>
 {
-    private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
-        .WithName("postgresql-test-container-cache")
-        .WithImage("postgres:latest")
-        .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort, assignRandomHostPort: true)
-        .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(PostgreSqlBuilder.PostgreSqlPort))
-        .Build();
+    private const string _ContainerName = "postgresql-test-container-cache";
 
     public PostgreSqlWithCacheIntegrationTestWebAppFactory()
     {
-        _container = _postgreSqlContainer;
+        _container = new PostgreSqlBuilder()
+            .WithName(_ContainerName)
+            .WithImage("postgres:latest")
+            .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort, assignRandomHostPort: true)
+            .WithCleanUp(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(PostgreSqlBuilder.PostgreSqlPort))
+            .Build();
     }
 
     protected override void ConfigureServices(IServiceCollection services)
     {
         base.ConfigureServices(services);
         services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>()
-            .UseNpgsql<TestDbContext>(_postgreSqlContainer.GetConnectionString(),
+            .UseNpgsql<TestDbContext>(_container.GetConnectionString(),
                 options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName))
             .WithCacheService();
     }

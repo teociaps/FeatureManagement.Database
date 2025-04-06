@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FeatureManagement.Database.CosmosDB\FeatureManagement.Database.CosmosDB.csproj" />
+    <ProjectReference Include="..\FeatureManagement.Database.Common.Utilities\FeatureManagement.Database.Common.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

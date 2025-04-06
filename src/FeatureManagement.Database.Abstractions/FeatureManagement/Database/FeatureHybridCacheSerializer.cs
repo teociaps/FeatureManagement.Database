@@ -1,3 +1,6 @@
+// Copyright (c) Matteo Ciapparelli.
+// Licensed under the MIT license.
+
 #if NET9_0_OR_GREATER
 using Microsoft.Extensions.Caching.Hybrid;
 using System.Buffers;

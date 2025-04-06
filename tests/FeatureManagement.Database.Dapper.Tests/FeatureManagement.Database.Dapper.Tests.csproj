@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FeatureManagement.Database.Dapper\FeatureManagement.Database.Dapper.csproj" />
+    <ProjectReference Include="..\FeatureManagement.Database.Common.Utilities\FeatureManagement.Database.Common.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

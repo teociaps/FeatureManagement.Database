@@ -1,6 +1,6 @@
 ﻿<Project>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(MSBuildProjectName.EndsWith(`Tests`))'">
     <PackageReference Include="coverlet.collector">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using DotNet.Testcontainers.Builders;
+using FeatureManagement.Database.Common.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Azure.Cosmos;
@@ -14,6 +15,7 @@ namespace FeatureManagement.Database.CosmosDB.Tests;
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly CosmosDbContainer _cosmosDbContainer = new CosmosDbBuilder()
+            .WithName(_ContainerName)
             .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
             .WithExposedPort(8081)
             .WithPortBinding(8081, true)
@@ -21,6 +23,8 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
             .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "false")
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8081))
             .Build();
+
+    private const string _ContainerName = "cosmosdb-test-container";
 
     internal string ConnectionString => _cosmosDbContainer.GetConnectionString();
 
@@ -38,6 +42,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
     public new async Task DisposeAsync()
     {
         await _cosmosDbContainer.DisposeAsync();
+        await DockerContainerHelper.RemoveExistingContainerAsync(_ContainerName);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
