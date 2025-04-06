@@ -19,7 +19,7 @@ public sealed class SqlServerIntegrationTestWebAppFactory : IntegrationTestWebAp
             .WithName(containerName)
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
             .WithEnvironment("ACCEPT_EULA", "Y")
-            .WithPortBinding(MsSqlBuilder.MsSqlPort)
+            .WithPortBinding(MsSqlBuilder.MsSqlPort, assignRandomHostPort: true)
             .WithCleanUp(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MsSqlBuilder.MsSqlPort))
             .Build();

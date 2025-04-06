@@ -70,7 +70,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        targetFramework: [net6, net8, net9]
         testType: [
           { name: "Abstractions", condition: "abstractions_changed" },
           { name: "CosmosDB", condition: "cosmosdb_changed" },
@@ -97,6 +96,4 @@ jobs:
       - name: Run ${{ matrix.testType.name }} tests
         if: needs.checks_tests_need.outputs[matrix.testType.condition] == 'true'
         shell: pwsh
-        env:
-          DOTNET_TARGET_FRAMEWORK: ${{ matrix.framework }}
         run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.testType.name }}

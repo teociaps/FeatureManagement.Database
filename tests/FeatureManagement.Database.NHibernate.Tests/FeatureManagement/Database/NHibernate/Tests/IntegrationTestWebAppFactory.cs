@@ -24,7 +24,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             .WithEnvironment("ACCEPT_EULA", "Y")
             .WithEnvironment("SA_USERNAME", MsSqlBuilder.DefaultUsername)
             .WithEnvironment("SA_PASSWORD", MsSqlBuilder.DefaultPassword)
-            .WithPortBinding(MsSqlBuilder.MsSqlPort)
+            .WithPortBinding(MsSqlBuilder.MsSqlPort, assignRandomHostPort: true)
             .WithCleanUp(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MsSqlBuilder.MsSqlPort))
             .Build();
@@ -58,7 +58,6 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     private static string GetUniqueContainerName(string baseName)
     {
-        var framework = Environment.GetEnvironmentVariable("DOTNET_TARGET_FRAMEWORK") ?? "default";
-        return $"{baseName}-{framework}-{Guid.NewGuid().ToString("N")[..8]}";
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

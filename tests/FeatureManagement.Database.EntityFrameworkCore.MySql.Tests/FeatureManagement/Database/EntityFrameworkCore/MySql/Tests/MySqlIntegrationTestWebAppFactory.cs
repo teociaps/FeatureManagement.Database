@@ -22,7 +22,7 @@ public sealed class MySqlIntegrationTestWebAppFactory : IntegrationTestWebAppFac
             .WithUsername("root")
             .WithPassword("mysqlpassword")
             .WithPrivileged(true)
-            .WithPortBinding(MySqlBuilder.MySqlPort)
+            .WithPortBinding(MySqlBuilder.MySqlPort, assignRandomHostPort: true)
             .WithCleanUp(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MySqlBuilder.MySqlPort))
             .Build();

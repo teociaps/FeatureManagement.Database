@@ -24,11 +24,11 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
         _cosmosDbContainer = new CosmosDbBuilder()
             .WithName(containerName)
             .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
-            .WithExposedPort(8081)
-            .WithPortBinding(8081, true)
+            .WithExposedPort(CosmosDbBuilder.CosmosDbPort)
+            .WithPortBinding(CosmosDbBuilder.CosmosDbPort, assignRandomHostPort: true)
             .WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "2")
             .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "false")
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8081))
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(CosmosDbBuilder.CosmosDbPort))
             .Build();
     }
 
@@ -80,7 +80,6 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
 
     private static string GetUniqueContainerName(string baseName)
     {
-        var framework = Environment.GetEnvironmentVariable("DOTNET_TARGET_FRAMEWORK") ?? "default";
-        return $"{baseName}-{framework}-{Guid.NewGuid().ToString("N")[..8]}";
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

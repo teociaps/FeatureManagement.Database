@@ -18,7 +18,7 @@ public sealed class PostgreSqlIntegrationTestWebAppFactory : IntegrationTestWebA
         _container = new PostgreSqlBuilder()
             .WithName(containerName)
             .WithImage("postgres:latest")
-            .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort)
+            .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort, assignRandomHostPort: true)
             .WithCleanUp(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(PostgreSqlBuilder.PostgreSqlPort))
             .Build();

@@ -42,7 +42,6 @@ public abstract class IntegrationTestWebAppFactory<TContainer>
 
     protected static string GetUniqueContainerName(string baseName)
     {
-        var framework = Environment.GetEnvironmentVariable("DOTNET_TARGET_FRAMEWORK") ?? "default";
-        return $"{baseName}-{framework}-{Guid.NewGuid().ToString("N")[..8]}";
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

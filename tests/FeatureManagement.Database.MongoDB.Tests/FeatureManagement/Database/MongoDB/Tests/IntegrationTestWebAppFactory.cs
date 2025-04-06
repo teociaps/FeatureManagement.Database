@@ -26,7 +26,7 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
             .WithImage("mongo:latest")
             .WithUsername(null)
             .WithPassword(null)
-            .WithPortBinding(MongoDbBuilder.MongoDbPort)
+            .WithPortBinding(MongoDbBuilder.MongoDbPort, assignRandomHostPort: true)
             .WithCleanUp(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
             .Build();
@@ -59,7 +59,6 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
 
     private static string GetUniqueContainerName(string baseName)
     {
-        var framework = Environment.GetEnvironmentVariable("DOTNET_TARGET_FRAMEWORK") ?? "default";
-        return $"{baseName}-{framework}-{Guid.NewGuid().ToString("N")[..8]}";
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }
