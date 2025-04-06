@@ -9,9 +9,10 @@ namespace FeatureManagement.Database.CosmosDB;
 /// <summary>
 /// Default implementation of <see cref="ICosmosDBConnectionFactory"/>.
 /// </summary>
-public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
+public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory, IDisposable
 {
     private readonly CosmosClient _client;
+    private bool _disposedValue;
 
     private readonly Container _featuresContainer;
     private readonly Container _featureSettingsContainer;
@@ -58,5 +59,29 @@ public class CosmosDBConnectionFactory : ICosmosDBConnectionFactory
     public virtual Container GetFeatureSettingsContainer()
     {
         return _useSeparateContainers ? _featureSettingsContainer : _featuresContainer;
+    }
+
+    /// <summary>
+    /// Releases the unmanaged resources used by the CosmosDBConnectionFactory and optionally releases the managed resources.
+    /// </summary>
+    /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _client?.Dispose();
+            }
+
+            _disposedValue = true;
+        }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        Dispose(disposing: true);
     }
 }
