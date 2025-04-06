@@ -4,11 +4,21 @@ description: "Setup Cosmos DB Emulator environment"
 runs:
   using: "composite"
   steps:
+    - name: Check for Docker Installation
+      shell: bash
+      run: |
+        if ! command -v docker &> /dev/null; then
+          echo "Docker could not be found. Install Docker before running this action."
+          exit 1
+        fi
+
     - name: Pull and Run Cosmos DB Emulator
       shell: bash
       run: |
+        set -e
         docker pull mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
         docker run \
+          --rm \
           --publish 8081:8081 \
           --name cosmosdb-linux-emulator \
           --detach \
@@ -18,7 +28,7 @@ runs:
       shell: bash
       run: |
         echo "Waiting for Cosmos DB Emulator to start... (it may require a few minutes)"
-        while ! curl --insecure https://localhost:8081/_explorer/emulator.pem >/dev/null 2>&1; do
+        until curl --insecure https://localhost:8081/_explorer/emulator.pem >/dev/null 2>&1; do
           sleep 5
         done
 
