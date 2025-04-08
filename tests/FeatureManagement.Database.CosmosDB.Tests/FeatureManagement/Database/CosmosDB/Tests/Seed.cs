@@ -71,11 +71,18 @@ internal static class Seed
         if (!cosmosDBOptions.UseSeparateContainers)
             features[0].Settings = settings;
 
-        // Insert new items
-        await featuresContainer.CreateItemAsync(new { id = features[0].Id.ToString(), features[0].Name, features[0].RequirementType, features[0].Settings }, partitionKey1);
-        await featuresContainer.CreateItemAsync(new { id = features[1].Id.ToString(), features[1].Name, features[1].RequirementType }, partitionKey2);
+        try
+        {
+            // Insert new items
+            await featuresContainer.CreateItemAsync(new { id = features[0].Id.ToString(), features[0].Name, features[0].RequirementType, features[0].Settings }, partitionKey1);
+            await featuresContainer.CreateItemAsync(new { id = features[1].Id.ToString(), features[1].Name, features[1].RequirementType }, partitionKey2);
 
-        if (cosmosDBOptions.UseSeparateContainers)
-            await featureSettingsContainer.CreateItemAsync(new { id = settings[0].Id.ToString(), settings[0].FeatureId, settings[0].FilterType, settings[0].Parameters }, featureSettingsPartitionKey);
+            if (cosmosDBOptions.UseSeparateContainers)
+                await featureSettingsContainer.CreateItemAsync(new { id = settings[0].Id.ToString(), settings[0].FeatureId, settings[0].FilterType, settings[0].Parameters }, featureSettingsPartitionKey);
+        }
+        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            // Do nothing when the item already exists
+        }
     }
 }
