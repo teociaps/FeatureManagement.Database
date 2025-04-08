@@ -7,32 +7,32 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Testcontainers.MySql;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.MySql.Tests;
 
 public sealed class MySqlWithCacheIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MySqlContainer>
 {
-    private readonly MySqlContainer _mySqlContainer = new MySqlBuilder()
-        .WithName("mysql-test-container-cache")
-        .WithImage("mysql:latest")
-        .WithDatabase("TestDb")
-        .WithUsername("root")
-        .WithPassword("mysqlpassword")
-        .WithPrivileged(true)
-        .WithPortBinding(MySqlBuilder.MySqlPort, assignRandomHostPort: true)
-        .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MySqlBuilder.MySqlPort))
-        .Build();
-
     public MySqlWithCacheIntegrationTestWebAppFactory()
     {
-        _container = _mySqlContainer;
+        var containerName = GetUniqueContainerName("mysql-test-container-cache");
+
+        _container = new MySqlBuilder()
+            .WithName(containerName)
+            .WithImage("mysql:latest")
+            .WithDatabase("TestDb")
+            .WithUsername("root")
+            .WithPassword("mysqlpassword")
+            .WithPrivileged(true)
+            .WithPortBinding(MySqlBuilder.MySqlPort, assignRandomHostPort: true)
+            .WithCleanUp(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MySqlBuilder.MySqlPort))
+            .Build();
     }
 
     protected override void ConfigureServices(IServiceCollection services)
     {
         base.ConfigureServices(services);
         services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>()
-            .UseMySql<TestDbContext>(_mySqlContainer.GetConnectionString(),
+            .UseMySql<TestDbContext>(_container.GetConnectionString(),
                 options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName))
             .WithCacheService();
     }

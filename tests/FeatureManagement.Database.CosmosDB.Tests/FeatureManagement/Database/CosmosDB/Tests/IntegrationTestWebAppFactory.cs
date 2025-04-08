@@ -13,16 +13,24 @@ namespace FeatureManagement.Database.CosmosDB.Tests;
 
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly CosmosDbContainer _cosmosDbContainer = new CosmosDbBuilder()
-            .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
-            .WithExposedPort(8081)
-            .WithPortBinding(8081, true)
-            .WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "2")
-            .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "false")
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8081))
-            .Build();
+    private readonly CosmosDbContainer _cosmosDbContainer;
 
     internal string ConnectionString => _cosmosDbContainer.GetConnectionString();
+
+    public IntegrationTestWebAppFactory()
+    {
+        var containerName = GetUniqueContainerName("cosmosdb-test-container");
+
+        _cosmosDbContainer = new CosmosDbBuilder()
+            .WithName(containerName)
+            .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
+            .WithExposedPort(CosmosDbBuilder.CosmosDbPort)
+            .WithPortBinding(CosmosDbBuilder.CosmosDbPort, assignRandomHostPort: true)
+            .WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "2")
+            .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "false")
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(CosmosDbBuilder.CosmosDbPort))
+            .Build();
+    }
 
     public async Task InitializeAsync()
     {
@@ -68,5 +76,10 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
                     return new HttpClient(handler);
                 };
             });
+    }
+
+    private static string GetUniqueContainerName(string baseName)
+    {
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

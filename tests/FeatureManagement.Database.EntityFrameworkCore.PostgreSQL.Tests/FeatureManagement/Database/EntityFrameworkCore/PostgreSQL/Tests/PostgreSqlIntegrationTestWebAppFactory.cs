@@ -11,24 +11,24 @@ namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<PostgreSqlContainer>
 {
-    private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
-        .WithName("postgresql-test-container")
-        .WithImage("postgres:latest")
-        .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort)
-        .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(PostgreSqlBuilder.PostgreSqlPort))
-        .Build();
-
     public PostgreSqlIntegrationTestWebAppFactory()
     {
-        _container = _postgreSqlContainer;
+        var containerName = GetUniqueContainerName("postgresql-test-container");
+
+        _container = new PostgreSqlBuilder()
+            .WithName(containerName)
+            .WithImage("postgres:latest")
+            .WithPortBinding(PostgreSqlBuilder.PostgreSqlPort, assignRandomHostPort: true)
+            .WithCleanUp(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(PostgreSqlBuilder.PostgreSqlPort))
+            .Build();
     }
 
     protected override void ConfigureServices(IServiceCollection services)
     {
         base.ConfigureServices(services);
         services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>()
-            .UseNpgsql<TestDbContext>(_postgreSqlContainer.GetConnectionString(),
+            .UseNpgsql<TestDbContext>(_container.GetConnectionString(),
                 options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
     }
 }

@@ -37,6 +37,11 @@ public abstract class IntegrationTestWebAppFactory<TContainer>
 
     protected virtual void ConfigureServices(IServiceCollection services)
     {
-        services.RemoveAll(typeof(DbContextOptions<TestDbContext>));
+        services.RemoveAll<DbContextOptions<TestDbContext>>();
+    }
+
+    protected static string GetUniqueContainerName(string baseName)
+    {
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

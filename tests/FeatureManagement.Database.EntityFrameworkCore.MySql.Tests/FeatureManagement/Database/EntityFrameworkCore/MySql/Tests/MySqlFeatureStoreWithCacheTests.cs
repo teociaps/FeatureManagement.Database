@@ -3,7 +3,7 @@
 
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.MySql.Tests;
 
 public sealed class MySqlFeatureStoreWithCacheTests(MySqlWithCacheIntegrationTestWebAppFactory factory)
     : EFCoreFeatureStoreTests<MySqlWithCacheIntegrationTestWebAppFactory>(factory)

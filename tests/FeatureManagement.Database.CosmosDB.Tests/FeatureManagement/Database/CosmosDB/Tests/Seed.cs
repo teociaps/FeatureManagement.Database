@@ -21,53 +21,68 @@ internal static class Seed
         var featuresContainer = cosmosDBConnectionFactory.GetFeaturesContainer();
         var featureSettingsContainer = cosmosDBConnectionFactory.GetFeatureSettingsContainer();
 
+        // IDs and Partition Keys
+        const string Feature1Id = "7c81e846-dc77-4aff-bf03-8dd8bb2d3194";
+        const string Feature2Id = "d3c82992-2f12-4008-9376-da37695a2747";
+        const string FeatureSettingsId = "672dc1bd-9c5b-44ce-8461-234b262a8395";
+        var partitionKey1 = new PartitionKey(FirstFeature);
+        var partitionKey2 = new PartitionKey(SecondFeature);
+        var featureSettingsPartitionKey = new PartitionKey(Feature1Id);
+
         try
         {
-            await featuresContainer.DeleteItemAsync<Feature>("7c81e846-dc77-4aff-bf03-8dd8bb2d3194", new PartitionKey(FirstFeature));
-            await featuresContainer.DeleteItemAsync<Feature>("d3c82992-2f12-4008-9376-da37695a2747", new PartitionKey(SecondFeature));
+            // Delete existing items if they exist
+            await featuresContainer.DeleteItemAsync<Feature>(Feature1Id, partitionKey1);
+            await featuresContainer.DeleteItemAsync<Feature>(Feature2Id, partitionKey2);
 
             if (cosmosDBOptions.UseSeparateContainers)
-                await featureSettingsContainer.DeleteItemAsync<FeatureSettings>("672dc1bd-9c5b-44ce-8461-234b262a8395", new PartitionKey("7c81e846-dc77-4aff-bf03-8dd8bb2d3194"));
+                await featureSettingsContainer.DeleteItemAsync<FeatureSettings>(FeatureSettingsId, featureSettingsPartitionKey);
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
-            // Nothing: I can't delete something that doesn't exist
+            // Item not found, nothing to delete
         }
 
-        List<Feature> features =
-        [
-            new()
-            {
-                Id = Guid.Parse("7C81E846-DC77-4AFF-BF03-8DD8BB2D3194"),
+        // Define new features and settings
+        var features = new List<Feature>
+        {
+            new() {
+                Id = Guid.Parse(Feature1Id),
                 Name = FirstFeature,
                 RequirementType = Microsoft.FeatureManagement.RequirementType.All,
             },
-            new()
-            {
-                Id = Guid.Parse("D3C82992-2F12-4008-9376-DA37695A2747"),
+            new() {
+                Id = Guid.Parse(Feature2Id),
                 Name = SecondFeature,
                 RequirementType = Microsoft.FeatureManagement.RequirementType.All,
             }
-        ];
+        };
 
-        List<FeatureSettings> settings =
-        [
-            new()
-            {
-                Id = Guid.Parse("672DC1BD-9C5B-44CE-8461-234B262A8395"),
+        var settings = new List<FeatureSettings>
+        {
+            new() {
+                Id = Guid.Parse(FeatureSettingsId),
                 FeatureId = features[0].Id,
                 FilterType = FeatureFilterType.TimeWindow,
                 Parameters = """{"Start": "Mon, 01 May 2023 13:59:59 GMT", "End": "Sat, 01 July 2023 00:00:00 GMT"}"""
             }
-        ];
+        };
 
         if (!cosmosDBOptions.UseSeparateContainers)
             features[0].Settings = settings;
 
-        await featuresContainer.CreateItemAsync(new { id = features[0].Id.ToString(), features[0].Name, features[0].RequirementType, features[0].Settings }, new PartitionKey(features[0].Name));
-        await featuresContainer.CreateItemAsync(new { id = features[1].Id.ToString(), features[1].Name, features[1].RequirementType }, new PartitionKey(features[1].Name));
+        try
+        {
+            // Insert new items
+            await featuresContainer.CreateItemAsync(new { id = features[0].Id.ToString(), features[0].Name, features[0].RequirementType, features[0].Settings }, partitionKey1);
+            await featuresContainer.CreateItemAsync(new { id = features[1].Id.ToString(), features[1].Name, features[1].RequirementType }, partitionKey2);
 
-        if (cosmosDBOptions.UseSeparateContainers)
-            await featureSettingsContainer.CreateItemAsync(new { id = settings[0].Id.ToString(), settings[0].FeatureId, settings[0].FilterType, settings[0].CustomFilterTypeName, settings[0].Parameters }, new PartitionKey(settings[0].FeatureId.ToString()));
+            if (cosmosDBOptions.UseSeparateContainers)
+                await featureSettingsContainer.CreateItemAsync(new { id = settings[0].Id.ToString(), settings[0].FeatureId, settings[0].FilterType, settings[0].Parameters }, featureSettingsPartitionKey);
+        }
+        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            // Do nothing when the item already exists
+        }
     }
 }

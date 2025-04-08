@@ -21,22 +21,18 @@ var app = builder.Build();
 // Seed with feature
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<FeatureManagementDbContext>();
-if (!dbContext.Features.Any())
+if (!await dbContext.Features.AnyAsync())
 {
     dbContext.Features.Add(new Feature
     {
         Name = WebApiApp.Features.Weather,
         Settings = [new FeatureSettings { FilterType = FeatureFilterType.Percentage, Parameters = """{ "Value": 50 }""" }]
     });
-    dbContext.SaveChanges();
+    await dbContext.SaveChangesAsync();
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -44,4 +40,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

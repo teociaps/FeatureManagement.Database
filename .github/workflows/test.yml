@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test_type: [
+        testType: [
           { name: "Abstractions", condition: "abstractions_changed" },
           { name: "CosmosDB", condition: "cosmosdb_changed" },
           { name: "Dapper", condition: "dapper_changed" },
@@ -87,12 +87,13 @@ jobs:
           dotnet-version: |
             6.0.x
             8.0.x
+            9.0.x
 
       - name: Start CosmosDB Emulator
-        if: matrix.test_type.name == 'CosmosDB' && needs.checks_tests_need.outputs.cosmosdb_changed == 'true'
+        if: matrix.testType.name == 'CosmosDB' && needs.checks_tests_need.outputs.cosmosdb_changed == 'true'
         uses: ./.github/actions/cosmosdb-setup
 
-      - name: Run ${{ matrix.test_type.name }} tests
-        if: needs.checks_tests_need.outputs[matrix.test_type.condition] == 'true'
+      - name: Run ${{ matrix.testType.name }} tests
+        if: needs.checks_tests_need.outputs[matrix.testType.condition] == 'true'
         shell: pwsh
-        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.test_type.name }}
+        run: ./test.ps1 -Configuration ${{ env.CONFIGURATION }} -TestType ${{ matrix.testType.name }}

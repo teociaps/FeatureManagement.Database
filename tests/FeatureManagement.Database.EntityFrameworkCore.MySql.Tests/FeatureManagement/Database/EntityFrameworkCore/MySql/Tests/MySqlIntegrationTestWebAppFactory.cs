@@ -11,28 +11,28 @@ namespace FeatureManagement.Database.EntityFrameworkCore.MySql.Tests;
 
 public sealed class MySqlIntegrationTestWebAppFactory : IntegrationTestWebAppFactory<MySqlContainer>
 {
-    private readonly MySqlContainer _mySqlContainer = new MySqlBuilder()
-        .WithName("mysql-test-container")
-        .WithImage("mysql:latest")
-        .WithDatabase("TestDb")
-        .WithUsername("root")
-        .WithPassword("mysqlpassword")
-        .WithPrivileged(true)
-        .WithPortBinding(MySqlBuilder.MySqlPort)
-        .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MySqlBuilder.MySqlPort))
-        .Build();
-
     public MySqlIntegrationTestWebAppFactory()
     {
-        _container = _mySqlContainer;
+        var containerName = GetUniqueContainerName("mysql-test-container");
+
+        _container = new MySqlBuilder()
+            .WithName(containerName)
+            .WithImage("mysql:latest")
+            .WithDatabase("TestDb")
+            .WithUsername("root")
+            .WithPassword("mysqlpassword")
+            .WithPrivileged(true)
+            .WithPortBinding(MySqlBuilder.MySqlPort, assignRandomHostPort: true)
+            .WithCleanUp(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MySqlBuilder.MySqlPort))
+            .Build();
     }
 
     protected override void ConfigureServices(IServiceCollection services)
     {
         base.ConfigureServices(services);
         services.AddDatabaseFeatureManagement<CustomEFCoreFeatureStore>()
-            .UseMySql<TestDbContext>(_mySqlContainer.GetConnectionString(),
+            .UseMySql<TestDbContext>(_container.GetConnectionString(),
                 options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName));
     }
 }

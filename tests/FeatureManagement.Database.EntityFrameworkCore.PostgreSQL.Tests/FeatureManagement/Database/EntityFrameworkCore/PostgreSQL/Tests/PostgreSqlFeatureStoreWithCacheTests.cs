@@ -3,7 +3,7 @@
 
 using FeatureManagement.Database.EntityFrameworkCore.Tests;
 
-namespace FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests;
+namespace FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests;
 
 public sealed class PostgreSqlFeatureStoreWithCacheTests(PostgreSqlWithCacheIntegrationTestWebAppFactory factory)
     : EFCoreFeatureStoreTests<PostgreSqlWithCacheIntegrationTestWebAppFactory>(factory)

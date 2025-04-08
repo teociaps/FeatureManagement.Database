@@ -1,45 +1,42 @@
 <Solution>
   <Folder Name="/build/">
-    <File Path="build\Common.props" />
-    <File Path="build\icon.png" />
-    <File Path="build\NuGet.props" />
-    <File Path="build\Versioning.props" />
+    <File Path="build/Common.props" />
+    <File Path="build/icon.png" />
+    <File Path="build/NuGet.props" />
+    <File Path="build/Versioning.props" />
   </Folder>
   <Folder Name="/config/">
     <File Path=".editorconfig" />
   </Folder>
   <Folder Name="/samples/">
-    <Project Path="samples\ConsoleApp\ConsoleApp.csproj" />
-    <Project Path="samples\WebApiApp\WebApiApp.csproj" />
+    <Project Path="samples/ConsoleApp/ConsoleApp.csproj" />
+    <Project Path="samples/WebApiApp/WebApiApp.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <File Path="src\Directory.Packages.props" />
-    <Project Path="src\FeatureManagement.Database.Abstractions\FeatureManagement.Database.Abstractions.csproj" />
-    <Project Path="src\FeatureManagement.Database.CosmosDB\FeatureManagement.Database.CosmosDB.csproj" />
-    <Project Path="src\FeatureManagement.Database.Dapper\FeatureManagement.Database.Dapper.csproj" />
-    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.MySql\FeatureManagement.Database.EntityFrameworkCore.MySql.csproj" />
-    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
-    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.Sqlite\FeatureManagement.Database.EntityFrameworkCore.Sqlite.csproj" />
-    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore.SqlServer\FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
-    <Project Path="src\FeatureManagement.Database.EntityFrameworkCore\FeatureManagement.Database.EntityFrameworkCore.csproj" />
-    <Project Path="src\FeatureManagement.Database.MongoDB\FeatureManagement.Database.MongoDB.csproj" />
-    <Project Path="src\FeatureManagement.Database.NHibernate\FeatureManagement.Database.NHibernate.csproj" />
+    <File Path="src/Directory.Packages.props" />
+    <Project Path="src/FeatureManagement.Database.Abstractions/FeatureManagement.Database.Abstractions.csproj" />
+    <Project Path="src/FeatureManagement.Database.CosmosDB/FeatureManagement.Database.CosmosDB.csproj" />
+    <Project Path="src/FeatureManagement.Database.Dapper/FeatureManagement.Database.Dapper.csproj" />
+    <Project Path="src/FeatureManagement.Database.EntityFrameworkCore.MySql/FeatureManagement.Database.EntityFrameworkCore.MySql.csproj" />
+    <Project Path="src/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.csproj" />
+    <Project Path="src/FeatureManagement.Database.EntityFrameworkCore.Sqlite/FeatureManagement.Database.EntityFrameworkCore.Sqlite.csproj" />
+    <Project Path="src/FeatureManagement.Database.EntityFrameworkCore.SqlServer/FeatureManagement.Database.EntityFrameworkCore.SqlServer.csproj" />
+    <Project Path="src/FeatureManagement.Database.EntityFrameworkCore/FeatureManagement.Database.EntityFrameworkCore.csproj" />
+    <Project Path="src/FeatureManagement.Database.MongoDB/FeatureManagement.Database.MongoDB.csproj" />
+    <Project Path="src/FeatureManagement.Database.NHibernate/FeatureManagement.Database.NHibernate.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <File Path="tests\Directory.Build.props" />
-    <File Path="tests\Directory.Packages.props" />
-    <Project Path="tests\FeatureManagement.Database.CosmosDB.Tests\FeatureManagement.Database.CosmosDB.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.Dapper.Tests\FeatureManagement.Database.Dapper.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests\FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests\FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests\FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests\FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.EntityFrameworkCore.Tests\FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.MongoDB.Tests\FeatureManagement.Database.MongoDB.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.NHibernate.Tests\FeatureManagement.Database.NHibernate.Tests.csproj" />
-    <Project Path="tests\FeatureManagement.Database.Abstractions.Tests\FeatureManagement.Database.Abstractions.Tests.csproj" />
+    <File Path="tests/Directory.Build.props" />
+    <File Path="tests/Directory.Packages.props" />
+    <Project Path="tests/FeatureManagement.Database.Abstractions.Tests/FeatureManagement.Database.Abstractions.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.CosmosDB.Tests/FeatureManagement.Database.CosmosDB.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.Dapper.Tests/FeatureManagement.Database.Dapper.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.EntityFrameworkCore.MySql.Tests/FeatureManagement.Database.EntityFrameworkCore.MySql.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests/FeatureManagement.Database.EntityFrameworkCore.PostgreSQL.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests/FeatureManagement.Database.EntityFrameworkCore.Sqlite.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests/FeatureManagement.Database.EntityFrameworkCore.SqlServer.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.EntityFrameworkCore.Tests/FeatureManagement.Database.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.MongoDB.Tests/FeatureManagement.Database.MongoDB.Tests.csproj" />
+    <Project Path="tests/FeatureManagement.Database.NHibernate.Tests/FeatureManagement.Database.NHibernate.Tests.csproj" />
   </Folder>
-  <Properties Name="Visual Studio">
-    <Property Name="OpenWith" Value="17" />
-  </Properties>
 </Solution>

@@ -12,19 +12,25 @@ namespace FeatureManagement.Database.MongoDB.Tests;
 
 public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MongoDbContainer _mongoDBContainer = new MongoDbBuilder()
-        .WithName("mongodb-test-container")
-        .WithImage("mongo:latest")
-        .WithUsername(null)
-        .WithPassword(null)
-        .WithPortBinding(MongoDbBuilder.MongoDbPort)
-        .WithCleanUp(true)
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
-        .Build();
-
+    private readonly MongoDbContainer _mongoDBContainer;
     private const string _Database = "TestDb";
 
     internal string ConnectionString => _mongoDBContainer.GetConnectionString();
+
+    public IntegrationTestWebAppFactory()
+    {
+        var containerName = GetUniqueContainerName("mongodb-test-container");
+
+        _mongoDBContainer = new MongoDbBuilder()
+            .WithName(containerName)
+            .WithImage("mongo:latest")
+            .WithUsername(null)
+            .WithPassword(null)
+            .WithPortBinding(MongoDbBuilder.MongoDbPort, assignRandomHostPort: true)
+            .WithCleanUp(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MongoDbBuilder.MongoDbPort))
+            .Build();
+    }
 
     public async Task InitializeAsync()
     {
@@ -49,5 +55,10 @@ public sealed class IntegrationTestWebAppFactory : WebApplicationFactory<Program
     {
         services.AddDatabaseFeatureManagement<FeatureStore>()
             .UseMongoDB(ConnectionString, _Database);
+    }
+
+    private static string GetUniqueContainerName(string baseName)
+    {
+        return $"{baseName}-{Guid.NewGuid().ToString("N")[..8]}";
     }
 }

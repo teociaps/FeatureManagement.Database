@@ -40,7 +40,7 @@ internal static class Seed
         };
 
         // Add settings to the feature
-        features[0].Settings = [ featureSetting ];
+        features[0].Settings = [featureSetting];
 
         // Save entities to the database
         await session.SaveAsync(featureSetting);

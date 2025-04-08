@@ -5,7 +5,7 @@ param(
 )
 
 # Get all test project files
-$testProjects = Get-ChildItem -Path "tests" -Recurse -Filter "*.csproj"
+$testProjects = Get-ChildItem -Path "tests" -Recurse -Filter "*.Tests.csproj"
 
 # Filter test projects based on the $TestType parameter, except for "All"
 if ($TestType -ne "All") {
