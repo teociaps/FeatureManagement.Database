@@ -19,8 +19,56 @@ public class NullFeatureStore : IFeatureStore
     }
 
     /// <inheritdoc/>
+    public Task<Feature> GetFeatureAsync(Guid featureId)
+    {
+        return Task.FromResult<Feature>(null);
+    }
+
+    /// <inheritdoc/>
     public Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
     {
         return Task.FromResult(_emptyFeatures);
+    }
+
+    /// <inheritdoc/>
+    public Task<Feature> CreateFeatureAsync(Feature feature)
+    {
+        return Task.FromResult<Feature>(null);
+    }
+
+    /// <inheritdoc/>
+    public Task<Feature> UpdateFeatureAsync(Feature feature)
+    {
+        return Task.FromResult<Feature>(null);
+    }
+
+    /// <inheritdoc/>
+    public Task DeleteFeatureAsync(Guid featureId)
+    {
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public Task<FeatureSettings> GetFeatureSettingAsync(Guid featureSettingId)
+    {
+        return Task.FromResult<FeatureSettings>(null);
+    }
+
+    /// <inheritdoc/>
+    public Task<FeatureSettings> CreateFeatureSettingAsync(FeatureSettings featureSetting)
+    {
+        return Task.FromResult<FeatureSettings>(null);
+    }
+
+    /// <inheritdoc/>
+    public Task<FeatureSettings> UpdateFeatureSettingAsync(FeatureSettings featureSetting)
+    {
+        return Task.FromResult<FeatureSettings>(null);
+    }
+
+    /// <inheritdoc/>
+    public Task DeleteFeatureSettingAsync(Guid featureSettingId)
+    {
+        return Task.CompletedTask;
     }
 }

@@ -175,4 +175,148 @@ public class CachedFeatureStoreTests
 
         Assert.True(feature.Settings.Count > 0);
     }
+
+    [Fact]
+    public async Task UpdateFeatureInvalidatesCache()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
+#if NET9_0_OR_GREATER
+        var cache = serviceProvider.GetRequiredService<HybridCache>();
+#else
+        var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+#endif
+
+        var feature = new Feature
+        {
+            Id = FeatureStore._firstFeatureId,
+            Name = "TestFeature",
+            Settings =
+            [
+                new FeatureSettings
+                {
+                    Id = Guid.NewGuid(),
+                    FilterType = FeatureFilterType.TimeWindow,
+                    Parameters = "{}"
+                }
+            ]
+        };
+
+        // Act
+        await cachedFeatureStore.UpdateFeatureAsync(feature);
+#if NET9_0_OR_GREATER
+        var cachedFeature = await cache.GetOrCreateAsync(FeatureCacheOptions.CachePrefix + feature.Name, static (_) => ValueTask.FromResult(default(Feature)));
+#else
+        var cachedFeature = await cache.GetAsync(FeatureCacheOptions.CachePrefix + feature.Name);
+#endif
+
+        // Assert
+        Assert.True(cachedFeature is null);
+    }
+
+    [Fact]
+    public async Task DeleteFeatureInvalidatesCache()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
+#if NET9_0_OR_GREATER
+        var cache = serviceProvider.GetRequiredService<HybridCache>();
+#else
+        var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+#endif
+
+        var feature = await cachedFeatureStore.GetFeatureAsync(FeatureStore._firstFeatureId);
+
+        // Act
+        await cachedFeatureStore.DeleteFeatureAsync(feature.Id);
+#if NET9_0_OR_GREATER
+        var cachedFeature = await cache.GetOrCreateAsync(FeatureCacheOptions.CachePrefix + feature.Name, static (_) => ValueTask.FromResult(default(Feature)));
+#else
+        var cachedFeature = await cache.GetAsync(FeatureCacheOptions.CachePrefix + feature.Name);
+#endif
+
+        // Assert
+        Assert.True(cachedFeature is null);
+    }
+
+    [Fact]
+    public async Task CreateFeatureSettingInvalidatesFeatureCache()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
+#if NET9_0_OR_GREATER
+        var cache = serviceProvider.GetRequiredService<HybridCache>();
+#else
+        var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+#endif
+
+        var featureSetting = new FeatureSettings
+        {
+            Id = Guid.NewGuid(),
+            FeatureId = FeatureStore._firstFeatureId,
+            FilterType = FeatureFilterType.TimeWindow,
+            Parameters = "{}"
+        };
+
+        // Act
+        await cachedFeatureStore.CreateFeatureSettingAsync(featureSetting);
+#if NET9_0_OR_GREATER
+        var cachedFeature = await cache.GetOrCreateAsync(FeatureCacheOptions.CachePrefix + FirstFeature, static (_) => ValueTask.FromResult(default(Feature)));
+#else
+        var cachedFeature = await cache.GetAsync(FeatureCacheOptions.CachePrefix + FirstFeature);
+#endif
+
+        // Assert
+        Assert.True(cachedFeature is null);
+    }
+
+    [Fact]
+    public async Task DeleteFeatureSettingInvalidatesFeatureCache()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddFeatureStore<FeatureStore>();
+        serviceCollection.ConfigureCachedFeatureStore();
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var cachedFeatureStore = serviceProvider.GetRequiredService<IFeatureStore>();
+#if NET9_0_OR_GREATER
+        var cache = serviceProvider.GetRequiredService<HybridCache>();
+#else
+        var cache = serviceProvider.GetRequiredService<IDistributedCache>();
+#endif
+
+        var feature = await cachedFeatureStore.GetFeatureAsync(FeatureStore._firstFeatureId);
+        var featureSettingId = feature.Settings.First().Id;
+
+        // Act
+        await cachedFeatureStore.DeleteFeatureSettingAsync(featureSettingId);
+#if NET9_0_OR_GREATER
+        var cachedFeature = await cache.GetOrCreateAsync(FeatureCacheOptions.CachePrefix + feature.Name, static (_) => ValueTask.FromResult(default(Feature)));
+#else
+        var cachedFeature = await cache.GetAsync(FeatureCacheOptions.CachePrefix + feature.Name);
+#endif
+
+        // Assert
+        Assert.True(cachedFeature is null);
+    }
 }

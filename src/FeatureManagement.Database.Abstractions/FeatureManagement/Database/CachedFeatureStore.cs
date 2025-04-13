@@ -69,6 +69,9 @@ public class CachedFeatureStore : IFeatureStore
     }
 
     /// <inheritdoc/>
+    public async Task<Feature> GetFeatureAsync(Guid featureId) => await _featureStore.GetFeatureAsync(featureId);
+
+    /// <inheritdoc/>
     public async Task<IReadOnlyCollection<Feature>> GetFeaturesAsync()
     {
         var features = await GetCacheAsync<IReadOnlyCollection<Feature>>(_cacheOptions.KeyNames.AllFeatures);
@@ -80,6 +83,68 @@ public class CachedFeatureStore : IFeatureStore
             await SetCacheAsync(_cacheOptions.KeyNames.AllFeatures, features);
 
         return features;
+    }
+
+    /// <inheritdoc/>
+    public async Task<Feature> CreateFeatureAsync([NotNull] Feature feature) => await _featureStore.CreateFeatureAsync(feature);
+
+    /// <inheritdoc/>
+    public async Task<Feature> UpdateFeatureAsync([NotNull] Feature feature)
+    {
+        var updatedFeature = await _featureStore.UpdateFeatureAsync(feature);
+        await RemoveCacheAsync(feature.Name);
+        return updatedFeature;
+    }
+
+    /// <inheritdoc/>
+    public async Task DeleteFeatureAsync(Guid featureId)
+    {
+        // Retrieve the feature name associated with the feature before deletion
+        var feature = await GetFeatureAsync(featureId);
+        await _featureStore.DeleteFeatureAsync(featureId);
+
+        if (feature is not null && !string.IsNullOrEmpty(feature.Name))
+            await RemoveCacheAsync(feature.Name);
+    }
+
+    /// <inheritdoc/>
+    public async Task<FeatureSettings> GetFeatureSettingAsync(Guid featureSettingId) => await _featureStore.GetFeatureSettingAsync(featureSettingId);
+
+    // TODO: include feature entity when getting feature settings in the methods below
+
+    /// <inheritdoc/>
+    public async Task<FeatureSettings> CreateFeatureSettingAsync([NotNull] FeatureSettings featureSetting)
+    {
+        var createdFeatureSetting = await _featureStore.CreateFeatureSettingAsync(featureSetting);
+
+        // Invalidate the cache for the associated feature
+        if (featureSetting.Feature is not null && !string.IsNullOrEmpty(featureSetting.Feature.Name))
+            await RemoveCacheAsync(featureSetting.Feature.Name);
+
+        return createdFeatureSetting;
+    }
+
+    /// <inheritdoc/>
+    public async Task<FeatureSettings> UpdateFeatureSettingAsync([NotNull] FeatureSettings featureSetting)
+    {
+        var updatedFeatureSetting = await _featureStore.UpdateFeatureSettingAsync(featureSetting);
+
+        // Invalidate the cache for the associated feature
+        if (featureSetting.Feature is not null && !string.IsNullOrEmpty(featureSetting.Feature.Name))
+            await RemoveCacheAsync(featureSetting.Feature.Name);
+
+        return updatedFeatureSetting;
+    }
+
+    /// <inheritdoc/>
+    public async Task DeleteFeatureSettingAsync(Guid featureSettingId)
+    {
+        // Retrieve the feature name associated with the feature setting before deletion
+        var featureSetting = await GetFeatureSettingAsync(featureSettingId);
+        await _featureStore.DeleteFeatureSettingAsync(featureSettingId);
+
+        if (featureSetting?.Feature is not null && !string.IsNullOrEmpty(featureSetting.Feature.Name))
+            await RemoveCacheAsync(featureSetting.Feature.Name);
     }
 
     #region Private
@@ -136,6 +201,12 @@ public class CachedFeatureStore : IFeatureStore
         };
         return _cache.SetAsync(cacheKey, JsonSerializer.SerializeToUtf8Bytes(data, _jsonOptions), options);
 #endif
+    }
+
+    private async Task RemoveCacheAsync(string key)
+    {
+        var cacheKey = FeatureCacheOptions.CachePrefix + key;
+        await _cache.RemoveAsync(cacheKey);
     }
 
     #endregion Private

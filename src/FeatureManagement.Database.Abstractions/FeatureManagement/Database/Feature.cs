@@ -30,5 +30,3 @@ public class Feature
     /// </summary>
     public ICollection<FeatureSettings> Settings { get; set; }
 }
-
-// TODO: softdelete + auditing?

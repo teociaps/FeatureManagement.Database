@@ -76,7 +76,7 @@ public class FeatureSettings
     internal string GetFilterType() =>
         FilterType is FeatureFilterType.Custom ? CustomFilterTypeName : FilterType.ToString();
 
-    private void ValidateCustomFilterType(FeatureFilterType filterType, string customFilterTypeName)
+    private static void ValidateCustomFilterType(FeatureFilterType filterType, string customFilterTypeName)
     {
         if (string.IsNullOrWhiteSpace(customFilterTypeName) && filterType is FeatureFilterType.Custom)
         {
