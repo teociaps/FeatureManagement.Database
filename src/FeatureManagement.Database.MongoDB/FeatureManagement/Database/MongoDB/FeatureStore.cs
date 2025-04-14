@@ -125,7 +125,7 @@ public class FeatureStore : IFeatureStore
         if (result.MatchedCount == 0)
             throw new KeyNotFoundException($"Feature with Id '{feature.Id}' not found.");
 
-        if (feature.Settings is not null)
+        if (feature.Settings?.Count > 0)
         {
             var settingsFilter = Builders<FeatureSettings>.Filter.Eq(fs => fs.FeatureId, feature.Id);
             await FeatureSettingsCollection.DeleteManyAsync(settingsFilter);
