@@ -123,6 +123,21 @@ public abstract class EFCoreFeatureStoreTests<TWebApplicationFactory> : IClassFi
     }
 
     [Fact]
+    public async Task GetFeatureSettingAsync_ReturnsFeatureSetting_WhenSettingExists()
+    {
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(FirstFeature);
+        var featureSettingId = feature.Settings.First().Id;
+
+        // Act
+        var featureSetting = await _featureStore.GetFeatureSettingAsync(featureSettingId);
+
+        // Assert
+        Assert.NotNull(featureSetting);
+        Assert.Equal(featureSettingId, featureSetting.Id);
+    }
+
+    [Fact]
     public async Task CreateFeatureSettingAsync_CreatesFeatureSettingSuccessfully()
     {
         // Arrange
