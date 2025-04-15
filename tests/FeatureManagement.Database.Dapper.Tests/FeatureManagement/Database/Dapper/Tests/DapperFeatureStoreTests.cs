@@ -1,118 +1,177 @@
 ﻿// Copyright (c) Matteo Ciapparelli.
 // Licensed under the MIT license.
 
-using Dapper;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
-using static Dapper.SqlMapper;
+using static FeatureManagement.Database.Features;
 
 namespace FeatureManagement.Database.Dapper.Tests;
 
-public class DapperFeatureStoreTests
+public class DapperFeatureStoreTests : IClassFixture<DapperFeatureStoreFixture>
 {
-    private const string _SqliteConnectionString = "DataSource=TestDb;Mode=Memory;Cache=Shared";
+    private readonly IFeatureStore _featureStore;
 
-    public DapperFeatureStoreTests()
+    public DapperFeatureStoreTests(DapperFeatureStoreFixture dapperFeatureStoreFixture)
     {
-        AddTypeHandler(new GuidTypeHandler());
+        _featureStore = dapperFeatureStoreFixture.FeatureStore;
     }
 
     [Fact]
-    public async Task TestFeatureStoreWithSqlite()
+    public async Task GetFeatureAsync_ReturnsFeature_WhenFeatureExists()
     {
-        var factory = new SqliteConnectionFactory(_SqliteConnectionString);
+        // Act
+        var featureByName = await _featureStore.GetFeatureAsync(FirstFeature);
 
-        var services = new ServiceCollection();
-        services.AddDatabaseFeatureManagement<FeatureStore>()
-            .UseDapper(factory);
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        await RunFeatureStoreTestsAsync(serviceProvider, factory);
+        // Assert
+        Assert.NotNull(featureByName);
+        Assert.Equal(FirstFeature, featureByName.Name);
     }
 
-    #region Private
-
-    private static async Task RunFeatureStoreTestsAsync(IServiceProvider serviceProvider, IDbConnectionFactory factory)
+    [Fact]
+    public async Task GetFeatureAsync_ReturnsFeature_WhenFeatureIdExists()
     {
-        // Arrange
-        var featureStore = serviceProvider.GetRequiredService<IFeatureStore>();
-
-        using var connection = factory.CreateConnection();
-        await SetupTestData((SqliteConnection)connection);
-
         // Act
-        var features = await featureStore.GetFeaturesAsync();
-        var feature = await featureStore.GetFeatureAsync("Feature1");
+        var featureById = await _featureStore.GetFeatureAsync(DapperFeatureStoreFixture._firstFeatureId);
+
+        // Assert
+        Assert.NotNull(featureById);
+        Assert.Equal(FirstFeature, featureById.Name);
+    }
+
+    [Fact]
+    public async Task GetFeaturesAsync_ReturnsAllFeatures()
+    {
+        // Act
+        var features = await _featureStore.GetFeaturesAsync();
 
         // Assert
         Assert.NotEmpty(features);
-        Assert.NotNull(feature);
-        Assert.Equal("Feature1", feature.Name);
     }
 
-    private static async Task SetupTestData(SqliteConnection connection)
+    [Fact]
+    public async Task CreateFeatureAsync_CreatesFeatureSuccessfully()
     {
-        await CreateTables(connection);
+        // Arrange
+        var featureId = Guid.NewGuid();
+        var newFeature = new Feature
+        {
+            Id = featureId,
+            Name = FeatureToCreate,
+            RequirementType = RequirementType.All,
+            Settings =
+            [
+                new FeatureSettings
+                {
+                    Id = Guid.NewGuid(),
+                    FilterType = FeatureFilterType.AlwaysOn,
+                    FeatureId = featureId
+                }
+            ]
+        };
 
-        await InsertTestData(connection);
+        // Act
+        var createdFeature = await _featureStore.CreateFeatureAsync(newFeature);
+
+        // Assert
+        Assert.NotNull(createdFeature);
+        Assert.Equal(newFeature.Name, createdFeature.Name);
+        Assert.NotEmpty(createdFeature.Settings);
     }
 
-    private static async Task CreateTables(SqliteConnection connection)
+    [Fact]
+    public async Task UpdateFeatureAsync_UpdatesFeatureSuccessfully()
     {
-        // Create Features table
-        await connection.ExecuteAsync(@"
-            CREATE TABLE IF NOT EXISTS Features (
-                Id TEXT PRIMARY KEY,
-                Name TEXT NOT NULL,
-                RequirementType INTEGER NOT NULL
-            )");
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(FeatureToUpdate);
+        feature.Name = "UpdatedFeature";
 
-        // Create FeatureSettings table
-        await connection.ExecuteAsync(@"
-            CREATE TABLE IF NOT EXISTS FeatureSettings (
-                Id TEXT PRIMARY KEY,
-                CustomFilterTypeName TEXT,
-                FilterType INTEGER NOT NULL,
-                Parameters TEXT,
-                FeatureId TEXT NOT NULL,
-                FOREIGN KEY (FeatureId) REFERENCES Features(Id)
-            )");
+        // Act
+        var updatedFeature = await _featureStore.UpdateFeatureAsync(feature);
+
+        // Assert
+        Assert.NotNull(updatedFeature);
+        Assert.Equal("UpdatedFeature", updatedFeature.Name);
     }
 
-    private static async Task InsertTestData(SqliteConnection connection)
+    [Fact]
+    public async Task DeleteFeatureAsync_DeletesFeatureSuccessfully()
     {
-        var feature = new Feature
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(FeatureToDelete);
+
+        // Act
+        await _featureStore.DeleteFeatureAsync(feature.Id);
+
+        var deletedFeature = await _featureStore.GetFeatureAsync(FeatureToDelete);
+
+        // Assert
+        Assert.Null(deletedFeature);
+    }
+
+    [Fact]
+    public async Task GetFeatureSettingAsync_ReturnsFeatureSetting_WhenSettingExists()
+    {
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(FirstFeature);
+        var featureSettingId = feature.Settings.First().Id;
+
+        // Act
+        var featureSetting = await _featureStore.GetFeatureSettingAsync(featureSettingId);
+
+        // Assert
+        Assert.NotNull(featureSetting);
+        Assert.Equal(featureSettingId, featureSetting.Id);
+    }
+
+    [Fact]
+    public async Task CreateFeatureSettingAsync_CreatesFeatureSettingSuccessfully()
+    {
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(SecondFeature);
+        var newSetting = new FeatureSettings
         {
             Id = Guid.NewGuid(),
-            Name = "Feature1",
-            RequirementType = RequirementType.All
-        };
-        var settings = new List<FeatureSettings>()
-        {
-            new() {
-                Id = Guid.NewGuid(),
-                FilterType = FeatureFilterType.AlwaysOn,
-                FeatureId = feature.Id
-            }
+            FilterType = FeatureFilterType.Percentage,
+            Parameters = "50",
+            FeatureId = feature.Id
         };
 
-        // Insert Features data
-        await connection.ExecuteAsync(@"
-            INSERT INTO Features (Id, Name, RequirementType)
-            VALUES (@Id, @Name, @RequirementType)",
-            feature);
+        // Act
+        var createdSetting = await _featureStore.CreateFeatureSettingAsync(newSetting);
 
-        // Insert FeatureSettings data
-        foreach (var setting in settings)
-        {
-            await connection.ExecuteAsync(@"
-                INSERT INTO FeatureSettings (Id, CustomFilterTypeName, FilterType, Parameters, FeatureId)
-                VALUES (@Id, @CustomFilterTypeName, @FilterType, @Parameters, @FeatureId)",
-                setting);
-        }
+        // Assert
+        Assert.NotNull(createdSetting);
+        Assert.Equal(newSetting.FilterType, createdSetting.FilterType);
     }
 
-    #endregion Private
+    [Fact]
+    public async Task UpdateFeatureSettingAsync_UpdatesFeatureSettingSuccessfully()
+    {
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(FirstFeature);
+        var setting = feature.Settings.First();
+        setting.Parameters = "UpdatedParameters";
+
+        // Act
+        var updatedSetting = await _featureStore.UpdateFeatureSettingAsync(setting);
+
+        // Assert
+        Assert.NotNull(updatedSetting);
+        Assert.Equal("UpdatedParameters", updatedSetting.Parameters);
+    }
+
+    [Fact]
+    public async Task DeleteFeatureSettingAsync_DeletesFeatureSettingSuccessfully()
+    {
+        // Arrange
+        var feature = await _featureStore.GetFeatureAsync(SecondFeature);
+        var setting = feature.Settings.First();
+
+        // Act
+        await _featureStore.DeleteFeatureSettingAsync(setting.Id);
+
+        var deletedSetting = await _featureStore.GetFeatureSettingAsync(setting.Id);
+
+        // Assert
+        Assert.Null(deletedSetting);
+    }
 }
