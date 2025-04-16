@@ -26,7 +26,7 @@ public class SqlServerConnectionFactory : NHibernateConnectionFactory
             {
                 cfg.Proxy(x => x.Validation = false);
                 cfg.Proxy(x => x.ProxyFactoryFactory<StaticProxyFactoryFactory>());
-                new SchemaUpdate(cfg).Execute(false, true);
+                new SchemaUpdate(cfg).Execute(true, true);
             })
             .BuildSessionFactory();
     }

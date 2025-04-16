@@ -79,17 +79,18 @@ public class FeatureStore : IFeatureStore
         using var transaction = session.BeginTransaction();
         try
         {
-            await session.SaveAsync(feature);
-
-            if (feature.Settings is not null)
+            if (feature.Settings?.Count > 0)
             {
                 foreach (var setting in feature.Settings)
                 {
-                    setting.Feature = feature; // Ensure the relationship is set
+                    setting.FeatureId = feature.Id;
                     await session.SaveAsync(setting);
                 }
             }
 
+            await session.SaveAsync(feature);
+
+            await session.FlushAsync();
             await transaction.CommitAsync();
             return feature;
         }
@@ -115,15 +116,17 @@ public class FeatureStore : IFeatureStore
         {
             await session.UpdateAsync(feature);
 
-            if (feature.Settings is not null)
+            if (feature.Settings?.Count > 0)
             {
                 foreach (var setting in feature.Settings)
                 {
                     setting.Feature = feature; // Ensure the relationship is set
+                    setting.FeatureId = feature.Id;
                     await session.MergeAsync(setting); // Handle new or existing settings
                 }
             }
 
+            await session.FlushAsync();
             await transaction.CommitAsync();
             return feature;
         }
@@ -156,6 +159,7 @@ public class FeatureStore : IFeatureStore
 
             await session.DeleteAsync(feature);
 
+            await session.FlushAsync();
             await transaction.CommitAsync();
         }
         catch (Exception ex)
@@ -185,6 +189,7 @@ public class FeatureStore : IFeatureStore
 #endif
         using var session = SessionFactory.OpenSession();
         await session.SaveAsync(featureSetting);
+        await session.FlushAsync();
         return featureSetting;
     }
 
@@ -199,6 +204,7 @@ public class FeatureStore : IFeatureStore
 #endif
         using var session = SessionFactory.OpenSession();
         await session.UpdateAsync(featureSetting);
+        await session.FlushAsync();
         return featureSetting;
     }
 
@@ -206,10 +212,12 @@ public class FeatureStore : IFeatureStore
     public virtual async Task DeleteFeatureSettingAsync(Guid featureSettingId)
     {
         using var session = SessionFactory.OpenSession();
-        var featureSetting = await session.Query<FeatureSettings>()
-                                          .SingleOrDefaultAsync(fs => fs.Id == featureSettingId)
+        var featureSetting = await session.QueryOver<FeatureSettings>()
+                                          .Where(fs => fs.Id == featureSettingId)
+                                          .SingleOrDefaultAsync()
                                           ?? throw new KeyNotFoundException($"Feature setting with Id '{featureSettingId}' not found.");
 
         await session.DeleteAsync(featureSetting);
+        await session.FlushAsync();
     }
 }

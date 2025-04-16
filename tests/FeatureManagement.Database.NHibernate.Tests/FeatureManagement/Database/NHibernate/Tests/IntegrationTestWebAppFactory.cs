@@ -22,7 +22,6 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             .WithName(containerName)
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
             .WithEnvironment("ACCEPT_EULA", "Y")
-            .WithEnvironment("SA_USERNAME", MsSqlBuilder.DefaultUsername)
             .WithEnvironment("SA_PASSWORD", MsSqlBuilder.DefaultPassword)
             .WithPortBinding(MsSqlBuilder.MsSqlPort, assignRandomHostPort: true)
             .WithCleanUp(true)

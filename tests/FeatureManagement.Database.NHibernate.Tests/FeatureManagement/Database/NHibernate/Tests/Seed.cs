@@ -13,41 +13,66 @@ internal static class Seed
         using var session = sessionFactory.OpenSession();
         using var transaction = session.BeginTransaction();
 
-        // Create your feature and feature settings entities
         List<Feature> features =
         [
             new()
             {
                 Id = Guid.Parse("7C81E846-DC77-4AFF-BF03-8DD8BB2D3194"),
                 Name = FirstFeature,
-                RequirementType = Microsoft.FeatureManagement.RequirementType.All
+                RequirementType = Microsoft.FeatureManagement.RequirementType.All,
             },
             new()
             {
                 Id = Guid.Parse("D3C82992-2F12-4008-9376-DA37695A2747"),
                 Name = SecondFeature,
-                RequirementType = Microsoft.FeatureManagement.RequirementType.All
+                RequirementType = Microsoft.FeatureManagement.RequirementType.All,
+            },
+            new()
+            {
+                Id = Guid.Parse("0ECE94E6-75A0-4257-9E8E-180A297FA7D8"),
+                Name = FeatureToUpdate,
+                RequirementType = Microsoft.FeatureManagement.RequirementType.Any,
+            },
+            new()
+            {
+                Id = Guid.Parse("DD323F34-2ED5-49C1-ACB7-D3B4A99BAD4B"),
+                Name = FeatureToDelete,
+                RequirementType = Microsoft.FeatureManagement.RequirementType.All,
             }
         ];
 
-        var featureSetting = new FeatureSettings
-        {
-            Id = Guid.Parse("672DC1BD-9C5B-44CE-8461-234B262A8395"),
-            CustomFilterTypeName = null,
-            FilterType = FeatureFilterType.TimeWindow,
-            Parameters = "{\"Start\": \"Mon, 01 May 2023 13:59:59 GMT\", \"End\": \"Sat, 01 July 2023 00:00:00 GMT\"}",
-            //Feature = features[0]
-        };
+        List<FeatureSettings> settings =
+        [
+            new()
+            {
+                Id = Guid.Parse("672DC1BD-9C5B-44CE-8461-234B262A8395"),
+                FeatureId = features[0].Id,
+                FilterType = FeatureFilterType.TimeWindow,
+                Parameters = """{"Start": "Mon, 01 May 2023 13:59:59 GMT", "End": "Sat, 01 July 2023 00:00:00 GMT"}"""
+            },
+            new()
+            {
+                Id = Guid.Parse("8190CC07-7499-46F0-93FC-FE45BF828DF3"),
+                FeatureId = features[1].Id,
+                FilterType = FeatureFilterType.TimeWindow,
+                Parameters = """{"Start": "Mon, 01 May 2023 13:59:59 GMT", "End": "Sat, 01 July 2023 00:00:00 GMT"}"""
+            }
+        ];
 
         // Add settings to the feature
-        features[0].Settings = [featureSetting];
+        features[0].Settings = [settings[0]];
+        features[1].Settings = [settings[1]];
 
         // Save entities to the database
-        await session.SaveAsync(featureSetting);
+        await session.SaveAsync(settings[0]);
+        await session.SaveAsync(settings[1]);
         await session.SaveAsync(features[0]);
         await session.SaveAsync(features[1]);
+        await session.SaveAsync(features[2]);
+        await session.SaveAsync(features[3]);
 
         // Commit the transaction
         await transaction.CommitAsync();
+        session.Close();
     }
 }
