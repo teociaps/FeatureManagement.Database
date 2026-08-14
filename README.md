@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+>  08/14/2026: This repo is no longer actively maintained.
+
 # <img height="55" src="\build\icon.png" align="center"> .NET Database Feature Management
 
 
